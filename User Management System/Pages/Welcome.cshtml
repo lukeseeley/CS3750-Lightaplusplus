@@ -1,0 +1,8 @@
+﻿@page
+@model User_Management_System.Pages.WelcomeModel
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<h1>Welcome</h1>
+<h4>@Html.DisplayFor(model => model.Users.firstname) @Html.DisplayFor(model => model.Users.lastname)</h4>

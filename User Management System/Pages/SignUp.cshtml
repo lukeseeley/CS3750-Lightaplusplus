@@ -1,0 +1,45 @@
+﻿@page
+@model User_Management_System.Pages.SignUpModel
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div>
+    <h1>Sign Up</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Users.email" class="control-label"></label>
+                    <input asp-for="Users.email" class="form-control" type="email"/>
+                    <span asp-validation-for="Users.email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Users.password" class="control-label"></label>
+                    <input asp-for="Users.password" class="form-control" type="password"/>
+                    <span asp-validation-for="Users.password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Users.birthday" class="control-label"></label>
+                    <input asp-for="Users.birthday" class="form-control" type="date"/>
+                    <span asp-validation-for="Users.birthday" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Users.firstname" class="control-label"></label>
+                    <input asp-for="Users.firstname" class="form-control" />
+                    <span asp-validation-for="Users.firstname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Users.lastname" class="control-label"></label>
+                    <input asp-for="Users.lastname" class="form-control" />
+                    <span asp-validation-for="Users.lastname" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+                <a class="btn btn-danger" asp-page="Index">Cancel</a>
+            </form>
+        </div>
+    </div>
+    <br />
+</div>
+
