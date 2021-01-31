@@ -43,8 +43,10 @@ namespace User_Management_System.Pages
                 return Page();
             }
 
+            Encryptor encryptor = new Encryptor();
+
             string email = Users.email;
-            string password = Users.password;
+            string password = encryptor.encrypt(Users.password);
 
             var User = await _context.Users.Where(u => u.email == email).Where(u => u.password == password).FirstOrDefaultAsync();
 

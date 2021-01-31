@@ -28,11 +28,14 @@ namespace User_Management_System.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Encryptor encryptor = new Encryptor();
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
+            Users.password = encryptor.encrypt(Users.password);
             _context.Users.Add(Users);
             await _context.SaveChangesAsync();
 
