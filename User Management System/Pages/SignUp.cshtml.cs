@@ -40,6 +40,16 @@ namespace User_Management_System.Pages
             Encryptor encryptor = new Encryptor();
             Users.email = Email;
 
+            switch(UserType)
+            {
+                case ("Student"):
+                    Users.usertype = 'S';
+                    break;
+                case ("Instructor"):
+                    Users.usertype = 'I';
+                    break;
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();

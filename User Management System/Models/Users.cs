@@ -16,5 +16,6 @@ namespace User_Management_System.Models
         public DateTime birthday { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
+        public char usertype { get; set; }
     }
 }
