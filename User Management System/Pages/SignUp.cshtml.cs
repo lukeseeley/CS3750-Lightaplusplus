@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,6 +20,13 @@ namespace User_Management_System.Pages
             _context = context;
         }
 
+        [BindProperty, Required(ErrorMessage ="An email address is required"), EmailAddress(ErrorMessage ="Invalid Email Address")]
+        public string Email { get; set; }
+
+        [BindProperty, Required(ErrorMessage ="You must select what type of user you are.")]
+        public string UserType { get; set; }
+        public string[] UserTypes = new string[] { "Student", "Instructor" };
+
         [BindProperty]
         public Users Users { get; set; }
 
@@ -29,6 +38,7 @@ namespace User_Management_System.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             Encryptor encryptor = new Encryptor();
+            Users.email = Email;
 
             if (!ModelState.IsValid)
             {
