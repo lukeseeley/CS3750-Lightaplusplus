@@ -8820,19 +8820,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\luke\\.nuget\\packages\\": {}
+    "C:\\Users\\Thell\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\luke\\Dropbox\\School Stuff\\CS 3750\\Assignment 1 (ASP)\\User Management System\\User Management System.csproj",
+      "projectUniqueName": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\User Management System.csproj",
       "projectName": "User Management System",
-      "projectPath": "C:\\Users\\luke\\Dropbox\\School Stuff\\CS 3750\\Assignment 1 (ASP)\\User Management System\\User Management System.csproj",
-      "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\luke\\Dropbox\\School Stuff\\CS 3750\\Assignment 1 (ASP)\\User Management System\\obj\\",
+      "projectPath": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\User Management System.csproj",
+      "packagesPath": "C:\\Users\\Thell\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Thell\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8844,6 +8844,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -8855,6 +8856,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
@@ -8885,12 +8887,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[3.1.2, 3.1.2]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -8899,7 +8895,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
