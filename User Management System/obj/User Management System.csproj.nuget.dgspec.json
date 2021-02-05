@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\User Management System.csproj": {}
+    "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\User Management System.csproj": {
+    "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\User Management System.csproj",
+        "projectUniqueName": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj",
         "projectName": "User Management System",
-        "projectPath": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\User Management System.csproj",
-        "packagesPath": "C:\\Users\\Thell\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\obj\\",
+        "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj",
+        "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Thell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
