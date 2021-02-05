@@ -27,8 +27,22 @@ namespace User_Management_System.Pages
         public string UserType { get; set; }
         public string[] UserTypes = new string[] { "Student", "Instructor" };
 
+        [MinimumAge(18)]
+        [BindProperty, Required(ErrorMessage = "A birthday is required")]
+        [DataType(DataType.Date)]
+        public DateTime Birthday { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "You must enter your password.")]
+        public string Password { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "You must enter your password.")]
+        public string ConfirmPassword { get; set; }
+
         [BindProperty]
         public Users Users { get; set; }
+
+        [BindProperty]
+        public string ErrorMessage { get; set; }
 
         public IActionResult OnGet()
         {
@@ -39,6 +53,7 @@ namespace User_Management_System.Pages
         {
             Encryptor encryptor = new Encryptor();
             Users.email = Email;
+            Users.birthday = Birthday;
 
             switch(UserType)
             {
@@ -49,6 +64,21 @@ namespace User_Management_System.Pages
                     Users.usertype = 'I';
                     break;
             }
+
+            // check to see if the passwords match
+            if (ConfirmPassword.CompareTo(Password) != 0)
+            {
+                // if they don't display message and refresh the page
+                ErrorMessage = "Passwords do not match.";
+                return Page();
+            }
+            else
+            {
+                // if they do match set message to empty
+                ErrorMessage = string.Empty;
+            }
+
+            Users.password = ConfirmPassword;
 
             if (!ModelState.IsValid)
             {
