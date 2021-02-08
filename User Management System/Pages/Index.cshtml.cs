@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -24,16 +25,17 @@ namespace User_Management_System.Pages
         [BindProperty]
         public Users Users { get; set; }
 
+        [BindProperty, Required(ErrorMessage = "An email address is required"), EmailAddress(ErrorMessage = "Please enter a valid Email Address")]
+        public string Email { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "You must enter your password.")]
+        public string Password { get; set; }
+
+        [BindProperty]
+        public string ErrorMessage { get; set; }
+
         public void OnGet(int? result)
         {
-            if (result == -1)
-            {
-                ViewData["error"] = "The email you entered does not exist or you entered the wrong password";
-            } 
-            else
-            {
-                ViewData["error"] = "";
-            }
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -45,38 +47,20 @@ namespace User_Management_System.Pages
 
             Encryptor encryptor = new Encryptor();
 
-            string email = Users.email;
-            string password = encryptor.encrypt(Users.password);
+            string password = encryptor.encrypt(Password);
 
-            var User = await _context.Users.Where(u => u.email == email).Where(u => u.password == password).FirstOrDefaultAsync();
+            var User = await _context.Users.Where(u => u.email == Email).Where(u => u.password == password).FirstOrDefaultAsync();
 
             if (User == null)
             {
-                return RedirectToPage("./Index", new { result = -1 });
+                ErrorMessage = "Either the email or password you entered was incorrect";
+                return Page();
             } 
             else
             {
                 return RedirectToPage("./Welcome", new { id = User.ID });
             }
 
-        }
-
-        public int checkUser(string email, string password)
-        {
-        var user = from u in _context.Users
-                   where u.email.Equals(email)
-                   select u;
-
-        var validUser = _context.Users.Where(u => u.password == password).FirstOrDefault();
-
-        if (validUser == null)
-        {
-            return -1;
-        }
-        else
-        {
-            return validUser.ID;
-        }
         }
     }
 }

@@ -11,17 +11,17 @@
         <div class="col-md-4">
             <form method="post">
                 <div class="form-group">
-                    <label asp-for="Users.email" class="control-label"></label>
-                    <input asp-for="Users.email" class="form-control" type="email"/>
-                    <span asp-validation-for="Users.email" class="text-danger"></span>
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control" type="email"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Users.password" class="control-label"></label>
-                    <input asp-for="Users.password" class="form-control" type="password"/>
-                    <span asp-validation-for="Users.password" class="text-danger"></span>
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" type="password"/>
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <span class="text-danger">@ViewData["error"]</span>
+                    <span class="text-danger">@Model.ErrorMessage</span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Login" class="btn btn-primary" />
