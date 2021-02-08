@@ -8820,19 +8820,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\luke\\.nuget\\packages\\": {}
+    "C:\\Users\\Ben\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj",
+      "projectUniqueName": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj",
       "projectName": "User Management System",
-      "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj",
-      "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\obj\\",
+      "projectPath": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\User Management System.csproj",
+      "packagesPath": "C:\\Users\\Ben\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ben\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
