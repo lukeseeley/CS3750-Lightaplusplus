@@ -4,11 +4,8 @@
 .vs/
 *.g.cs
 *.cache
-User Management System/obj/project.assets.json
-User Management System/obj/User Management System.csproj.nuget.dgspec.json
-User Management System/obj/Debug/netcoreapp3.1/User Management System.csproj.FileListAbsolute.txt
-User Management System/obj/Debug/*
 User Management System/bin/Debug/*
+User Management System/obj/*
 # Compiled source #
 ###################
 *.com
