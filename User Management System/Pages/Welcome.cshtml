@@ -34,8 +34,42 @@
 
 </head>
 <body>
-    <h1>Welcome</h1>
-    <h4>@Html.DisplayFor(model => model.Users.firstname) @Html.DisplayFor(model => model.Users.lastname)</h4>
-    <div id='calendar'></div>
+    <div class="row">
+        <div class="col-9">
+            <h1>Welcome</h1>
+            <h4>@Html.DisplayFor(model => model.Users.firstname) @Html.DisplayFor(model => model.Users.lastname)</h4>
+        </div>
+        <div class="col-2">
+            <h4>To-Do List</h4>
+            <div class="card" style="width:100%">
+                <a href="redirect to class goes here">CS3750</a>
+                <a href="redirect to assignment goes here">Exam 1</a>
+                <a>Due: 06/9/42</a>
+            </div>
+            <div class="card" style="width:100%">
+                <a href="redirect to class goes here">CS3750</a>
+                <a href="redirect to assignment goes here">Impossible Quiz # 12</a>
+                <a>Due: 04/20/69</a>
+            </div>
+            <div class="card" style="width:100%">
+                <a href="redirect to class goes here">OSRS2007</a>
+                <a href="redirect to assignment goes here">Get 99 fletching</a>
+                <a>Due: Jan 22, 1998</a>
+            </div>
+            <div class="card" style="width:100%">
+                <a href="redirect to class goes here">OSRS2007</a>
+                <a href="redirect to assignment goes here">Get 99 Strength</a>
+                <a>Due: Jan 22, 1998</a>
+            </div>
+            <div class="card" style="width:100%">
+                <a href="redirect to class goes here">OSRS2007</a>
+                <a href="redirect to assignment goes here">Get 365 Zulrah KC</a>
+                <a>Due: Jan 22, 1998</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id='calendar'></div>
+    </div>
 </body>
 </html>
