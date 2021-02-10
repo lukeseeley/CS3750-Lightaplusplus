@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace User_Management_System.Models
+namespace Lightaplusplus.Models
 {
     public class Encryptor
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User Management System", "User Management System\User Management System.csproj", "{7B8D169B-FE4D-4CAB-92C5-B2E2B3A17063}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lighta++", "User Management System\Lighta++.csproj", "{7B8D169B-FE4D-4CAB-92C5-B2E2B3A17063}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

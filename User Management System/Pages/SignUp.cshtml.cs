@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using User_Management_System.Models;
+using Lightaplusplus.Models;
 
-namespace User_Management_System.Pages
+namespace Lightaplusplus.Pages
 {
     public class SignUpModel : PageModel
     {
-        private readonly User_Management_System.Data.User_Management_SystemContext _context;
+        private readonly Lightaplusplus.Data.Lightaplusplus_SystemContext _context;
 
-        public SignUpModel(User_Management_System.Data.User_Management_SystemContext context)
+        public SignUpModel(Lightaplusplus.Data.Lightaplusplus_SystemContext context)
         {
             _context = context;
         }

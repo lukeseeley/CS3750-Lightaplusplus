@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using User_Management_System.Data;
+using Lightaplusplus.Data;
 
-namespace User_Management_System.Migrations
+namespace Lightaplusplus.Migrations
 {
-    [DbContext(typeof(User_Management_SystemContext))]
+    [DbContext(typeof(Lightaplusplus_SystemContext))]
     [Migration("20210121010223_InitialCreate")]
     partial class InitialCreate
     {
@@ -21,7 +21,7 @@ namespace User_Management_System.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("User_Management_System.Models.Users", b =>
+            modelBuilder.Entity("Lightaplusplus.Models.Users", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()

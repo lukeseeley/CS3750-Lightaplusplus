@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using User_Management_System.Data;
-using User_Management_System.Models;
+using Lightaplusplus.Data;
+using Lightaplusplus.Models;
 
-namespace User_Management_System.Pages.CRUD
+namespace Lightaplusplus.Pages.Admin
 {
     public class EditModel : PageModel
     {
-        private readonly User_Management_System.Data.User_Management_SystemContext _context;
+        private readonly Lightaplusplus.Data.Lightaplusplus_SystemContext _context;
 
-        public EditModel(User_Management_System.Data.User_Management_SystemContext context)
+        public EditModel(Lightaplusplus.Data.Lightaplusplus_SystemContext context)
         {
             _context = context;
         }

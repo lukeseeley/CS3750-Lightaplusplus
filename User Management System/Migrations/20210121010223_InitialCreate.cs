@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace User_Management_System.Migrations
+namespace Lightaplusplus.Migrations
 {
     public partial class InitialCreate : Migration
     {

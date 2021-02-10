@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using User_Management_System.Models;
+using Lightaplusplus.Models;
 
-namespace User_Management_System.Pages
+namespace Lightaplusplus.Pages
 {
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly User_Management_System.Data.User_Management_SystemContext _context;
+        private readonly Lightaplusplus.Data.Lightaplusplus_SystemContext _context;
 
-        public IndexModel(ILogger<IndexModel> logger, User_Management_System.Data.User_Management_SystemContext context)
+        public IndexModel(ILogger<IndexModel> logger, Lightaplusplus.Data.Lightaplusplus_SystemContext context)
         {
             _logger = logger;
             _context = context;

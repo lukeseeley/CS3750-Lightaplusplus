@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace User_Management_System.Models
+namespace Lightaplusplus.Models
 {
     public class Users
     {

@@ -9,9 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using User_Management_System.Data;
+using Lightaplusplus.Data;
 
-namespace User_Management_System
+namespace Lightaplusplus
 {
     public class Startup
     {
@@ -27,8 +27,8 @@ namespace User_Management_System
         {
             services.AddRazorPages();
 
-            services.AddDbContext<User_Management_SystemContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("User_Management_SystemContext")));
+            services.AddDbContext<Lightaplusplus_SystemContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("Lightaplusplus_SystemContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
