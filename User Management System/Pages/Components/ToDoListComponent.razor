@@ -1,0 +1,16 @@
+﻿<div class="card" style="width:100%; padding:5px">
+    <a style="padding:2px,5px" href="redirect to class goes here">@ClassNumber</a>
+    <a style="padding:2px,5px" href="redirect to assignment goes here">@AssignmentName</a>
+    <a style="padding:2px,5px">Due: @DueDate</a>
+</div>
+
+@code {
+    [Parameter]
+    public string ClassNumber { get; set; }
+    [Parameter]
+    public string AssignmentName { get; set; }
+    [Parameter]
+    public string DueDate { get; set; }
+    [Parameter]
+    public string Link { get; set; }
+}
