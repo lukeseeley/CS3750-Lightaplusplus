@@ -38,38 +38,35 @@
         <div class="col-9">
             <h1>Welcome</h1>
             <h4>@Html.DisplayFor(model => model.Users.firstname) @Html.DisplayFor(model => model.Users.lastname)</h4>
+            <div class="row">
+                @for (var i = 0; i < 6; i++)@* Will need to repalce with for each*@
+                {
+                    <div class="col-4" style="padding-bottom:5%">
+                        <component type="typeof(Components.ClassComponent)" render-mode="Static" param-ClassNumber='"CS 0000"'
+                        param-ClassName='"Class Name"' param-Instructor='"Instructor Name"'
+                        param-StartTime='Convert.ToDateTime("10:00")' param-EndTime='Convert.ToDateTime("12:00")'
+                        param-Link='"/Welcome?id=3"' /> @* Will need to repalce Class information*@
+                    </div>
+                 }
+            </div>
         </div>
-        <div class="col-2">
+        <div class="col-3">
             <h4>To-Do List</h4>
-            <div class="card" style="width:100%">
-                <a href="redirect to class goes here">CS3750</a>
-                <a href="redirect to assignment goes here">Exam 1</a>
-                <a>Due: 06/9/42</a>
-            </div>
-            <div class="card" style="width:100%">
-                <a href="redirect to class goes here">CS3750</a>
-                <a href="redirect to assignment goes here">Impossible Quiz # 12</a>
-                <a>Due: 04/20/69</a>
-            </div>
-            <div class="card" style="width:100%">
-                <a href="redirect to class goes here">OSRS2007</a>
-                <a href="redirect to assignment goes here">Get 99 fletching</a>
-                <a>Due: Jan 22, 1998</a>
-            </div>
-            <div class="card" style="width:100%">
-                <a href="redirect to class goes here">OSRS2007</a>
-                <a href="redirect to assignment goes here">Get 99 Strength</a>
-                <a>Due: Jan 22, 1998</a>
-            </div>
-            <div class="card" style="width:100%">
-                <a href="redirect to class goes here">OSRS2007</a>
-                <a href="redirect to assignment goes here">Get 365 Zulrah KC</a>
-                <a>Due: Jan 22, 1998</a>
-            </div>
+            
+            @for (var i = 0; i < 5; i++)
+            {
+                    <component type="typeof(Components.ToDoListComponent)" render-mode="Static" param-ClassNumber='"CS 0000"'
+                    param-AssignmentName='"Impossible Quiz #12"'
+                    param-DueDate='"2/12/21 at 11:59"'
+                    param-Link='"/Welcome?id=3"' /> @* Will need to repalce Class information*@
+            }
         </div>
     </div>
     <div class="row">
-        <div id='calendar'></div>
+        <div class="col-9">
+            <div id='calendar'></div>
+        </div>
+        
     </div>
 </body>
 </html>
