@@ -6,6 +6,28 @@
     <title>@ViewData["Title"] - Lighta++</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/Dropdown.css" />
+    <script src="https://kit.fontawesome.com/62e23687bf.js"></script>
+    <script>
+        // Shows the dropdown list when user clicks on bell
+        function dropdownFunction() {
+            document.getElementById("dropdown-list").classList.toggle("show");
+        }
+
+        // Closes the list when user clicks away from list
+        window.onclick = function (event) {
+            if (!event.target.matches('.bell-button')) {
+                var dropdowns = document.getElementsByClassName("bell-list");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="row">
@@ -50,6 +72,17 @@
                             <ul class="navbar-nav @*flex-grow-1*@ ml-auto">
                                 @if (Context.Request.Query.ContainsKey("id"))
                                 {
+                                    <li>
+                                        <button onclick="dropdownFunction()" class="bell-button">
+                                            <i class="fas fa-bell fa-fw"></i>
+                                        </button>
+                                        <div id="dropdown-list" class="bell-list">
+                                            <a href="#">Assignment 1 graded</a>
+                                            <a href="#">Assignment 2 posted</a>
+                                            <a href="#">dummy item 3</a>
+                                            <a href="#">dummy item 4</a>
+                                        </div>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-page="">Profile</a>
                                     </li>
