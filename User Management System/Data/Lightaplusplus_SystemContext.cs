@@ -18,5 +18,11 @@ namespace Lightaplusplus.Data
         public DbSet<UserLinks> UserLinks { get; set; }
         public DbSet<Courses> Courses { get; set; }
         public DbSet<Sections> Sections { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Users>()
+                .HasAlternateKey(u => u.email);
+        }
     }
 }

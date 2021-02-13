@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label asp-for="Email" class="control-label">Email</label>
                     <input asp-for="Email" class="form-control" type="email" required/>
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <span asp-validation-for="Email" class="text-danger">@Model.EmailErrorMessage</span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Password" class="control-label">Password</label>
@@ -24,7 +24,7 @@
                     <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
                     <input asp-for="ConfirmPassword" class="form-control ConfirmPassword" type="password" required />
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    <div class="text-danger"> @Model.ErrorMessage </div>
+                    <div class="text-danger"> @Model.ConfirmErrorErrorMessage </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="Birthday" class="control-label">Birthday</label>

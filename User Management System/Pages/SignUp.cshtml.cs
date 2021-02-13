@@ -21,7 +21,6 @@ namespace Lightaplusplus.Pages
         }
 
         [BindProperty, Required(ErrorMessage ="An email address is required"), EmailAddress(ErrorMessage ="Invalid Email Address")]
-        [UniqueEmail]
         public string Email { get; set; }
 
         [BindProperty, Required(ErrorMessage ="You must select what type of user you are.")]
@@ -43,7 +42,10 @@ namespace Lightaplusplus.Pages
         public Users Users { get; set; }
 
         [BindProperty]
-        public string ErrorMessage { get; set; }
+        public string ConfirmErrorErrorMessage { get; set; }
+
+        [BindProperty]
+        public string EmailErrorMessage { get; set; }
 
         public IActionResult OnGet()
         {
@@ -53,6 +55,19 @@ namespace Lightaplusplus.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             Encryptor encryptor = new Encryptor();
+
+            var existingEmail = _context.Users.FirstOrDefault(u => u.email == Email);
+
+            if (existingEmail != null)
+            {
+                EmailErrorMessage = "This email is already in use";
+                return Page();
+            }
+            else
+            {
+                EmailErrorMessage = string.Empty;
+            }
+
             Users.email = Email;
             Users.birthday = Birthday;
 
@@ -70,13 +85,13 @@ namespace Lightaplusplus.Pages
             if (ConfirmPassword.CompareTo(Password) != 0)
             {
                 // if they don't display message and refresh the page
-                ErrorMessage = "Passwords do not match.";
+                ConfirmErrorErrorMessage = "Passwords do not match.";
                 return Page();
             }
             else
             {
                 // if they do match set message to empty
-                ErrorMessage = string.Empty;
+                ConfirmErrorErrorMessage = string.Empty;
             }
 
             Users.password = ConfirmPassword;
@@ -98,24 +113,6 @@ namespace Lightaplusplus.Pages
         }
 
         
-    }
-
-    public class UniqueEmail : ValidationAttribute
-    {
-
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            var _context = (Data.Lightaplusplus_SystemContext)validationContext.GetService(typeof(Data.Lightaplusplus_SystemContext));
-            var email = (string)validationContext.ObjectInstance;
-            var existingEmail = _context.Users.Where(u => u.email == email).FirstOrDefault();
-
-            if (existingEmail != null)
-            {
-                return new ValidationResult("That email is already taken");
-            }
-
-            return ValidationResult.Success;
-        }
     }
 
 }
