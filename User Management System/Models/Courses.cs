@@ -16,6 +16,7 @@ namespace Lightaplusplus.Models
         /// <summary>
         /// The Id for the course
         /// </summary>
+        [Key]
         public int CourseId { get; set; }
 
         /// <summary>

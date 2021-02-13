@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210121010223_InitialCreate.cs" />
+    <Compile Remove="Migrations\20210121010223_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210202010016_AddedUserType.cs" />
+    <Compile Remove="Migrations\20210202010016_AddedUserType.Designer.cs" />
+    <Compile Remove="Migrations\20210212234225_AddSectionsCourses.cs" />
+    <Compile Remove="Migrations\20210212234225_AddSectionsCourses.Designer.cs" />
+    <Compile Remove="Migrations\20210212234731_RedoMigration.cs" />
+    <Compile Remove="Migrations\20210212234731_RedoMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\lib\fullcalendar\examples\js\theme-chooser.js" />
     <None Include="wwwroot\lib\fullcalendar\examples\resource-add-remove.html" />
     <None Include="wwwroot\lib\fullcalendar\examples\resource-event-json.html" />

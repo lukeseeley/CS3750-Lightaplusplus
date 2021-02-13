@@ -40,10 +40,11 @@ namespace Lightaplusplus.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            //TODO For some reason this is currently broken
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}
 
             Encryptor encryptor = new Encryptor();
 

@@ -11,6 +11,7 @@ namespace Lightaplusplus.Models
         public Users()
         {
             this.Links = new HashSet<UserLinks>();
+            this.InstructorSections = new HashSet<Sections>();
         }
 
         /// <summary>
@@ -39,13 +40,13 @@ namespace Lightaplusplus.Models
         /// <summary>
         /// The first name of the user
         /// </summary>
-        [Required]
+        [Required, MaxLength(50)]
         public string firstname { get; set; }
 
         /// <summary>
         /// The last name of the user
         /// </summary>
-        [Required]
+        [Required, MaxLength(50)]
         public string lastname { get; set; }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace Lightaplusplus.Models
         /// <summary>
         /// The phone number of the user
         /// </summary>
-        [DataType(DataType.PhoneNumber), MaxLength(15)]
+        [DataType(DataType.PhoneNumber), MaxLength(30)]
         public string phonenumber { get; set; }
 
         /// <summary>

@@ -11,6 +11,7 @@ namespace Lightaplusplus.Models
         /// <summary>
         /// The Id for the specific link entry
         /// </summary>
+        [Key]
         public int LinkId { get; set; }
 
         /// <summary>

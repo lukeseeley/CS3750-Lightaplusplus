@@ -11,6 +11,7 @@ namespace Lightaplusplus.Models
         /// <summary>
         /// The Id for the section
         /// </summary>
+        [Key]
         public int SectionId { get; set; }
 
         /// <summary>
