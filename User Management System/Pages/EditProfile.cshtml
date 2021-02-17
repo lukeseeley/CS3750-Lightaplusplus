@@ -18,37 +18,67 @@
         <img src="img/placeholder.png" alt="Avatar" style="border-radius: 50%; height: 225px; width: 225px; margin:auto " />
     </div>
     <div class="col-8 center">
-        <form>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label>First Name</label>
-                    <input class="form-control" placeholder="Jonathan" value=@Html.DisplayFor(model => model.Users.firstname)>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Last Name</label>
-                    <input class="form-control" placeholder="Smith" value=@Html.DisplayFor(model => model.Users.lastname)>
-                </div>
-            </div>
+        <form method="post">
             <div class="form-group">
-                <label for="inputAddress">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St." value=@Html.DisplayFor(model => model.Users.addressline1)>
-            </div>
-            <div class="form-group">
-                <label for="inputAddress2">Address 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" value=@Html.DisplayFor(model => model.Users.addressline2)>
+                <label asp-for="Users.email" class="control-label">Email</label> 
+                <input asp-for="Users.email" type="email" class="form-control" readonly/>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="inputCity">City</label>
-                    <input type="text" class="form-control" id="inputCity" placeholder="Downtown Coolsville" value=@Html.DisplayFor(model => model.Users.addresscity)>
+                    <label asp-for="Firstname">First Name</label>
+                    <input asp-for="Firstname" type="text" class="form-control" placeholder="Jonathan" required>
+                    <span asp-validation-for="Firstname" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Lastname">Last Name</label>
+                    <input asp-for="Lastname" type="text" class="form-control" placeholder="Smith" required>
+                    <span asp-validation-for="Lastname" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Birthday" class="control-label">Birthday</label>
+                    <input asp-for="Birthday" class="form-control" type="date" required />
+                    <span asp-validation-for="Birthday" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Phonenumber">Phone Number</label>
+                    <input asp-for="Phonenumber" type="text" class="form-control">
+                    <span asp-validation-for="Phonenumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Addressline1">Address</label>
+                <input asp-for="Addressline1" type="text" class="form-control" placeholder="1234 Main St.">
+                <span asp-validation-for="Addressline1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Addressline2">Address 2</label>
+                <input asp-for="Addressline2" type="text" class="form-control" placeholder="Apartment, studio, or floor">
+                <span asp-validation-for="Addressline2" class="text-danger"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Addresscity">City</label>
+                    <input asp-for="Addresscity" type="text" class="form-control" placeholder="Downtown Coolsville">
+                    <span asp-validation-for="Addresscity" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="inputState">State</label>
-                    <input type="text" class="form-control" id="inputState" placeholder="Alberta" value=@Html.DisplayFor(model => model.Users.addressstate)>
+                    <label asp-for="Addressstate">State</label>
+                    <input asp-for="Addressstate" type="text" class="form-control" placeholder="Alberta">
+                    <span asp-validation-for="Addressstate" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="inputZip">Zip</label>
-                    <input type="text" class="form-control" id="inputZip" placeholder="12345" value=@Html.DisplayFor(model => model.Users.addresszip)>
+                    <label asp-for="Addresszip">Zip</label>
+                    <input asp-for="Addresszip" type="text" class="form-control" placeholder="12345">
+                    <span asp-validation-for="Addresszip" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label asp-for="Bio">Biography</label>
+                    <textarea asp-for="Bio" class="form-control" placeholder="Your Bio Here" )></textarea>
+                    <span asp-validation-for="Bio" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-row">
@@ -69,14 +99,8 @@
                     <input type="text" class="form-control" id="inputLink3">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="inputBio">Biography</label>
-                    <textarea class="form-control" placeholder="Your Bio Here" value=@Html.DisplayFor(model => model.Users.bio))></textarea>
-                </div>
-            </div>
             <button type="submit" class="btn btn-primary">Update Information</button>
-            <button class="btn btn-danger">Cancel</button>
+            <button class="btn btn-danger" asp-page="/Profile" asp-route-id="@Model.id">Cancel</button>
         </form>
     </div>
 </div>

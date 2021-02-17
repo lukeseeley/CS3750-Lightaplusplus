@@ -106,8 +106,8 @@ namespace Lightaplusplus.Pages
             _context.Users.Add(Users);
             await _context.SaveChangesAsync();
 
-            var UserList = await _context.Users.ToListAsync();
-            var id = UserList.Last().ID;
+            var user = _context.Users.FirstOrDefault(u => u.email == Email);
+            var id = user.ID;
 
             return RedirectToPage("./Welcome", new { id = id});
         }
