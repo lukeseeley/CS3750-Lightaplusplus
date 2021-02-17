@@ -62,6 +62,7 @@ namespace Lightaplusplus.Pages
 
         public IFormFile FileUpload { get; set; }
 
+        [BindProperty]
         public byte[] Image { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -88,6 +89,8 @@ namespace Lightaplusplus.Pages
             Addressstate = Users.addressstate;
             Addresszip = Users.addresszip;
             Bio = Users.bio;
+            var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
+            Image = image.profilepic;
 
             //byte[] byteArray = Users.Picture.profilepic;
             //Image = new FileContentResult(byteArray, "image/jpeg");
