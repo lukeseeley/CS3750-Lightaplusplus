@@ -33,10 +33,13 @@ namespace Lightaplusplus.Models
         public string SectionLocation { get; set; }
 
         /// <summary>
-        /// The time of day this class takes place
+        /// The time of day this class stars
         /// </summary>
         [DataType(DataType.Date), Required]
-        public DateTime SectionTime { get; set; }
+        public DateTime SectionTimeStart { get; set; }
+
+        [DataType(DataType.Date), Required]
+        public DateTime SectionTimeEnd { get; set; }
 
         /// <summary>
         /// This stores a string for the days of the week it is taught for example: "MTW for Monday Tuesday and Wednesday"

@@ -4,14 +4,16 @@ using Lightaplusplus.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Lightaplusplus.Migrations
 {
     [DbContext(typeof(Lightaplusplus_SystemContext))]
-    partial class Lightaplusplus_SystemContextModelSnapshot : ModelSnapshot
+    [Migration("20210217035914_ModifySectionTimes")]
+    partial class ModifySectionTimes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
