@@ -63,6 +63,9 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public string Bio { get; set; }
 
+        [BindProperty]
+        public List<UserLinks> Links { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -88,6 +91,15 @@ namespace Lightaplusplus.Pages
             Addresszip = Users.addresszip;
             Bio = Users.bio;
 
+            Links = _context.UserLinks.Where(u => u.UserId == (int)id).ToList();
+
+            while(Links.Count < 3)
+            {
+                var link = new UserLinks();
+                link.UserId = (int)id;
+                Links.Add(link);
+            }
+
             this.id = (int)id;
             return Page();
         }
@@ -106,6 +118,16 @@ namespace Lightaplusplus.Pages
             Users.addressstate = Addressstate;
             Users.addresszip = Addresszip;
             Users.bio = Bio;
+
+            foreach (var link in Links)
+            {
+                if (link.link != null)
+                {
+                    link.UserId = Users.ID;
+                    link.User = Users;
+                    Users.Links.Add(link);
+                }
+            }
 
             if (!Regex.IsMatch(Addresszip.ToString(), "[\\d-]{5,}"))
             {
@@ -135,6 +157,7 @@ namespace Lightaplusplus.Pages
                 notValid = false;
                 return Page();
             }
+            
 
             _context.Attach(Users).State = EntityState.Modified;
 
@@ -156,6 +179,11 @@ namespace Lightaplusplus.Pages
 
             return RedirectToPage("./Profile", new { id = id });
         }
+
+        //public async Task OnPostAddLink()
+        //{
+
+        //}
 
         private bool UsersExists(int id)
         {
