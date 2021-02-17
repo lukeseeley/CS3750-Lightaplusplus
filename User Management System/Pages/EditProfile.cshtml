@@ -44,7 +44,7 @@
                 <div class="form-group col-md-6">
                     <label asp-for="Phonenumber">Phone Number</label>
                     <input asp-for="Phonenumber" type="text" class="form-control">
-                    <span asp-validation-for="Phonenumber" class="text-danger"></span>
+                    <span asp-validation-for="Phonenumber" class="text-danger">@Model.phoneErrorMessage</span>
                 </div>
             </div>
             <div class="form-group">
@@ -68,10 +68,10 @@
                     <input asp-for="Addressstate" type="text" class="form-control" placeholder="Alberta">
                     <span asp-validation-for="Addressstate" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2">
+                <div id="zip" class="form-group col-md-2">
                     <label asp-for="Addresszip">Zip</label>
                     <input asp-for="Addresszip" type="text" class="form-control" placeholder="12345">
-                    <span asp-validation-for="Addresszip" class="text-danger"></span>
+                    <span asp-validation-for="Addresszip" class="text-danger">@Model.zipErrorMessage</span>
                 </div>
             </div>
             <div class="form-row">

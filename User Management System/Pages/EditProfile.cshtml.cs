@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Lightaplusplus.Pages
 {
@@ -35,7 +36,7 @@ namespace Lightaplusplus.Pages
         [DataType(DataType.Date)]
         public DateTime Birthday { get; set; }
 
-        [BindProperty, Phone(ErrorMessage ="Please enter a valid phone number"), MinLength(10, ErrorMessage = "Please enter a valid phone number")]
+        [BindProperty]
         public string Phonenumber { get; set; }
 
         [BindProperty]
@@ -52,6 +53,12 @@ namespace Lightaplusplus.Pages
 
         [BindProperty]
         public int Addresszip { get; set; }
+
+        [BindProperty]
+        public string phoneErrorMessage { get; set; }
+
+        [BindProperty]
+        public string zipErrorMessage { get; set; }
 
         [BindProperty]
         public string Bio { get; set; }
@@ -87,6 +94,7 @@ namespace Lightaplusplus.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            bool notValid = false;
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             Users.firstname = Firstname;
             Users.lastname = Lastname;
@@ -98,6 +106,35 @@ namespace Lightaplusplus.Pages
             Users.addressstate = Addressstate;
             Users.addresszip = Addresszip;
             Users.bio = Bio;
+
+            if (!Regex.IsMatch(Addresszip.ToString(), "[\\d-]{5,}"))
+            {
+                zipErrorMessage = "Invalid Zipcode";
+                notValid = true;
+            }
+            else
+            {
+                // if they do match set message to empty
+                zipErrorMessage = string.Empty;
+            }
+
+            if (!Regex.IsMatch(Phonenumber, "^(\\d{10,}|[0 - 9 -]{10,}|[0 - 9\\.]{10,}|[0 - 9\\s]{10,}$)"))
+            {
+ 
+                phoneErrorMessage = "Invalid Phone Number.";
+                notValid = true;
+            }
+            else
+            {
+                // if they do match set message to empty
+                zipErrorMessage = string.Empty;
+            }
+
+            if (notValid)
+            {
+                notValid = false;
+                return Page();
+            }
 
             _context.Attach(Users).State = EntityState.Modified;
 
