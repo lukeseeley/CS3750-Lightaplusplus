@@ -108,5 +108,10 @@ namespace Lightaplusplus.Models
         /// </summary>
         public virtual ICollection<Sections> InstructorSections { get; set; }
 
+        /// <summary>
+        /// The profile picture for the users
+        /// </summary>
+        public virtual UserPictures Picture { get; set; }
+
     }
 }

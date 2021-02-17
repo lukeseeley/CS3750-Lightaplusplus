@@ -15,13 +15,27 @@
 
 <div class="row">
     <div class="col-4">
-        <img src="img/placeholder.png" alt="Avatar" style="border-radius: 50%; height: 225px; width: 225px; margin:auto " />
+        @{
+            if (Model.Image != null)
+            {
+                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" alt="Avatar" style="border-radius: 50%; height: 225px; width: 225px; margin:auto " />
+            }
+            else
+            {
+                <img src="/placeholder.png"/>
+            }
+        }
+        <form method="post" enctype="multipart/form-data">
+            <input asp-for="FileUpload" type="file">
+            <input asp-page-handler="Upload" class="btn" type="submit" value="Upload" />
+            <input asp-for="id" type="text" hidden>
+        </form>
     </div>
     <div class="col-8 center">
         <form method="post">
             <div class="form-group">
-                <label asp-for="Users.email" class="control-label">Email</label> 
-                <input asp-for="Users.email" type="email" class="form-control" readonly/>
+                <label asp-for="Users.email" class="control-label">Email</label>
+                <input asp-for="Users.email" type="email" class="form-control" readonly />
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">

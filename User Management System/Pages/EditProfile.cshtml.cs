@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Lightaplusplus.Pages
 {
@@ -30,7 +34,7 @@ namespace Lightaplusplus.Pages
         [BindProperty, Required]
         public string Lastname { get; set; }
 
-        [MinimumAge(18)]
+        //[MinimumAge(18)]
         [BindProperty, Required(ErrorMessage = "A birthday is required")]
         [DataType(DataType.Date)]
         public DateTime Birthday { get; set; }
@@ -55,6 +59,10 @@ namespace Lightaplusplus.Pages
 
         [BindProperty]
         public string Bio { get; set; }
+
+        public IFormFile FileUpload { get; set; }
+
+        public byte[] Image { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -81,6 +89,9 @@ namespace Lightaplusplus.Pages
             Addresszip = Users.addresszip;
             Bio = Users.bio;
 
+            //byte[] byteArray = Users.Picture.profilepic;
+            //Image = new FileContentResult(byteArray, "image/jpeg");
+
             this.id = (int)id;
             return Page();
         }
@@ -99,6 +110,8 @@ namespace Lightaplusplus.Pages
             Users.addresszip = Addresszip;
             Users.bio = Bio;
 
+            Image = Users.Picture.profilepic;
+
             _context.Attach(Users).State = EntityState.Modified;
 
             try
@@ -114,6 +127,60 @@ namespace Lightaplusplus.Pages
                 else
                 {
                     throw;
+                }
+            }
+
+            return RedirectToPage("./Profile", new { id = id });
+        }
+
+        public async Task<IActionResult> OnPostUploadAsync()
+        {
+            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await FileUpload.CopyToAsync(memoryStream);
+
+                // Upload the file if less than 2 MB
+                if (memoryStream.Length < 2097152)
+                {
+                    if (Users.Picture == null)
+                    {
+                        UserPictures picture = new UserPictures();
+                        picture.UserID = Users.ID;
+                        picture.User = Users;
+                        picture.profilepic = memoryStream.ToArray();
+                        Users.Picture = picture;
+                        Image = memoryStream.ToArray();
+                        return Page();
+                    }
+                    else
+                    {
+                        Users.Picture.profilepic = memoryStream.ToArray();
+                    }
+
+                    _context.Attach(Users).State = EntityState.Modified;
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!UsersExists(Users.ID))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large.");
                 }
             }
 

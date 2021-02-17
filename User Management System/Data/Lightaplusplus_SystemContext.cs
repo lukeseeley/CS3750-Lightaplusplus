@@ -16,6 +16,7 @@ namespace Lightaplusplus.Data
 
         public DbSet<Users> Users { get; set; }
         public DbSet<UserLinks> UserLinks { get; set; }
+        public DbSet<UserPictures> UserPictures { get; set; }
         public DbSet<Courses> Courses { get; set; }
         public DbSet<Sections> Sections { get; set; }
 
