@@ -129,7 +129,7 @@ namespace Lightaplusplus.Pages
                 }
             }
 
-            if (!Regex.IsMatch(Addresszip.ToString(), "[\\d-]{5,}"))
+            if (!Regex.IsMatch(Addresszip.ToString(), "[\\d-]{5,}") && Addresszip.ToString() != "" && Addresszip.ToString() != "0")
             {
                 zipErrorMessage = "Invalid Zipcode";
                 notValid = true;
@@ -140,7 +140,7 @@ namespace Lightaplusplus.Pages
                 zipErrorMessage = string.Empty;
             }
 
-            if (!Regex.IsMatch(Phonenumber, "^(\\d{10,}|[0 - 9 -]{10,}|[0 - 9\\.]{10,}|[0 - 9\\s]{10,}$)"))
+            if (Phonenumber != null && !Regex.IsMatch(Phonenumber, "^(\\d{10,}|[0 - 9 -]{10,}|[0 - 9\\.]{10,}|[0 - 9\\s]{10,}$)"))
             {
  
                 phoneErrorMessage = "Invalid Phone Number.";
@@ -149,7 +149,7 @@ namespace Lightaplusplus.Pages
             else
             {
                 // if they do match set message to empty
-                zipErrorMessage = string.Empty;
+                phoneErrorMessage = string.Empty;
             }
 
             if (notValid)
