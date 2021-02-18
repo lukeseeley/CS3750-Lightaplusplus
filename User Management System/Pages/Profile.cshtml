@@ -1,78 +1,110 @@
 ﻿@page
 @model Lightaplusplus.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
 
-
-    <a class="nav-link text-dark" asp-page="/EditProfile" new { id=7 }><i class="fas fa-user-circle"></i>Edit Profile</a>
-
-@*<style>
+<style>
     .center {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
     }
 
-    .control-label {
-        width: 45%;
-        text-align: left;
+    .edit-link{
+        float: right;
     }
 </style>
 
-
+<div class="edit-link">
+    <a class="nav-link text-dark" asp-page="/EditProfile" asp-route-id="Model.id"><i class="fas fa-user-circle"></i>Edit Profile</a>
+</div>
 
 <div class="row">
-    <div class="col">
-        <img src="img/placeholder.png" alt="Avatar" class="center" style="border-radius: 50%; height: 225px; width: 225px; margin:auto " />
-        <br />
-        <div class="form-group center">
-            <span class="control-label">First Name</span>
-            <input style="width:45%;" class="form-control" required />
-            <span class="text-danger"></span>
-        </div>
-        <div class="form-group center">
-            <span class="control-label">Last Name</span>
-            <input style="width:45%;" class="form-control" required />
-            <span class="text-danger"></span>
-        </div>
-        <div class="form-group center">
-            <span class="control-label">Address Line 1</span>
-            <input style="width:45%;" class="form-control" />
-            <span class="text-danger"></span>
-        </div>
-        <div class="form-group center">
-            <span class="control-label">Address Line 2</span>
-            <input style="width:45%;" class="form-control" />
-            <span class="text-danger"></span>
-        </div>
-        <div class="form-group center">
-            <span class="control-label">City</span>
-            <input style="width:45%;" class="form-control" />
-            <span class="text-danger"></span>
-        </div>
-        <div class="form-group center">
-            <span class="control-label">State</span>
-            <input style="width:45%;" class="form-control" />
-            <span class="text-danger"></span>
-        </div>
-        <div class="form-group center">
-            <span class="control-label">Zipcode</span>
-            <input style="width:45%;" class="form-control" />
-            <span class="text-danger"></span>
-        </div>
-        <div class="form-group center">
-            <span class="control-label">Phone Number</span>
-            <input style="width:45%;" class="form-control" />
-            <span class="text-danger"></span>
-        </div>
-        <div>
-            <button>Cancel</button>
-            <button class="btn btn-success">Submit</button>
-        </div>
+    <div class="col-4">
+        @{
+            if (Model.Image != null)
+            {
+                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" alt="Avatar" style="border-radius: 50%; height: 225px; width: 225px; margin:auto " />
+            }
+            else
+            {
+                <img src="img/placeholder.png" style="border-radius: 50%; height: 225px; width: 225px; margin:auto " />
+            }
+        }
     </div>
-    <div class="col">
-        <div class="form-group">
-            <span class="control-label">Biography</span>
-            <textarea style="width:100%;" rows="15" class="form-control"></textarea>
-            <span class="text-danger"></span>
-        </div>
+    <div class="col-8 center">
+        <dl class="row">
+            <dt class="col-sm-2">
+                First Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.firstname)
+            </dd>
+            <dt class="col-sm-2">
+                Last Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.lastname)
+            </dd>
+            <dt class="col-sm-2">
+                Email
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.email)
+            </dd>
+            <dt class="col-sm-2">
+                Address Line 1
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.addressline1)
+            </dd>
+            <dt class="col-sm-2">
+                Address Line 2
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.addressline2)
+            </dd>
+            <dt class="col-sm-2">
+                City
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.addresscity)
+            </dd>
+            <dt class="col-sm-2">
+                State
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.addressstate)
+            </dd>
+            <dt class="col-sm-2">
+                Zip
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.addresszip)
+            </dd>
+            <dt class="col-sm-2">
+                Phone Number
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.phonenumber)
+            </dd>
+            <dt class="col-sm-2">
+                Bio
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Users.bio)
+            </dd>
+            <dt class="col-sm-2">Links</dt>
+            <dd class="col-sm-10">
+                @for (var i = 0; i < Model.Links.Count; i++)
+                {
+
+                    @Html.DisplayFor(model => model.Links[i].link)<br />
+
+                }
+            </dd>
+        </dl>
     </div>
-</div>*@
+</div>
