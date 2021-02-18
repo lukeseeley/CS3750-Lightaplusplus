@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace Lightaplusplus.Pages
 {
@@ -39,7 +40,7 @@ namespace Lightaplusplus.Pages
         [DataType(DataType.Date)]
         public DateTime Birthday { get; set; }
 
-        [BindProperty, Phone(ErrorMessage ="Please enter a valid phone number"), MinLength(10, ErrorMessage = "Please enter a valid phone number")]
+        [BindProperty]
         public string Phonenumber { get; set; }
 
         [BindProperty]
@@ -58,6 +59,12 @@ namespace Lightaplusplus.Pages
         public int Addresszip { get; set; }
 
         [BindProperty]
+        public string phoneErrorMessage { get; set; }
+
+        [BindProperty]
+        public string zipErrorMessage { get; set; }
+
+        [BindProperty]
         public string Bio { get; set; }
 
         [BindProperty]
@@ -67,6 +74,8 @@ namespace Lightaplusplus.Pages
         public byte[] Image { get; set; }
         [BindProperty]
         public string PictureErrorMessage { get; set; }
+        
+        public List<UserLinks> Links { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -95,12 +104,22 @@ namespace Lightaplusplus.Pages
             var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
             Image = image != null ? image.profilepic : null;
 
+            Links = _context.UserLinks.Where(u => u.UserId == (int)id).ToList();
+
+            while(Links.Count < 3)
+            {
+                var link = new UserLinks();
+                link.UserId = (int)id;
+                Links.Add(link);
+            }
+
             this.id = (int)id;
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            bool notValid = false;
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             Users.firstname = Firstname;
             Users.lastname = Lastname;
@@ -114,6 +133,46 @@ namespace Lightaplusplus.Pages
             Users.bio = Bio;
 
             Image = Users.Picture.profilepic;
+            
+            foreach (var link in Links)
+            {
+                if (link.link != null)
+                {
+                    link.UserId = Users.ID;
+                    link.User = Users;
+                    Users.Links.Add(link);
+                }
+            }
+
+            if (!Regex.IsMatch(Addresszip.ToString(), "[\\d-]{5,}") && Addresszip.ToString() != "" && Addresszip.ToString() != "0")
+            {
+                zipErrorMessage = "Invalid Zipcode";
+                notValid = true;
+            }
+            else
+            {
+                // if they do match set message to empty
+                zipErrorMessage = string.Empty;
+            }
+
+            if (Phonenumber != null && !Regex.IsMatch(Phonenumber, "^(\\d{10,}|[0 - 9 -]{10,}|[0 - 9\\.]{10,}|[0 - 9\\s]{10,}$)"))
+            {
+ 
+                phoneErrorMessage = "Invalid Phone Number.";
+                notValid = true;
+            }
+            else
+            {
+                // if they do match set message to empty
+                phoneErrorMessage = string.Empty;
+            }
+
+            if (notValid)
+            {
+                notValid = false;
+                return Page();
+            }
+            
 
             _context.Attach(Users).State = EntityState.Modified;
 
@@ -216,6 +275,11 @@ namespace Lightaplusplus.Pages
                 return Page();
             }
         }
+        
+        //public async Task OnPostAddLink()
+        //{
+
+        //}
 
         private bool UsersExists(int id)
         {
