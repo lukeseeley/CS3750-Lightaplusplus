@@ -93,7 +93,7 @@ namespace Lightaplusplus.Pages
             Addresszip = Users.addresszip;
             Bio = Users.bio;
             var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
-            Image = image.profilepic;
+            Image = image != null ? image.profilepic : null;
 
             this.id = (int)id;
             return Page();
