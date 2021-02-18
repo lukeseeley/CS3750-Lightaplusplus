@@ -18,10 +18,13 @@ namespace Lightaplusplus.Pages
             _context = context;
         }
 
+        [BindProperty]
         public Users Users { get; set; }
 
+        [BindProperty]
         public byte[] Image { get; set; }
 
+        [BindProperty]
         public List<UserLinks> Links { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -42,13 +45,6 @@ namespace Lightaplusplus.Pages
             Image = image != null ? image.profilepic : null;
 
             Links = _context.UserLinks.Where(u => u.UserId == (int)id).ToList();
-
-            while (Links.Count < 3)
-            {
-                var link = new UserLinks();
-                link.UserId = (int)id;
-                Links.Add(link);
-            }
 
             return Page();
         }
