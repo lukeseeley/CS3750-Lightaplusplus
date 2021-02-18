@@ -1,0 +1,47 @@
+﻿@page
+@model Lightaplusplus.Pages.Courses.AddCourseModel
+@{
+    ViewData["Title"] = "Create New Course";
+}
+
+<div>
+    <h1>Create a New Course</h1>
+    <div class="row">
+        <form method="post" class="w-100">
+            <div class="col-8 center">
+                <div class="form-row">
+                    <div class="col-2 form-group">
+                        <label asp-for="Courses.CourseCode" class="control-label">Course Code</label>
+                        <input asp-for="Courses.CourseCode" class="form-control" type="text" placeholder="CS" required />
+                        <span asp-validation-for="Courses.CourseCode" class="text-danger"></span>
+                    </div>
+                    <div class="col-3 form-group">
+                        <label asp-for="Courses.CourseNumber" class="control-label">Course Number</label>
+                        <input asp-for="Courses.CourseNumber" class="form-control" type="text" placeholder="1010" required />
+                        <span asp-validation-for="Courses.CourseNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Courses.CourseName" class="control-label">Course Name</label>
+                    <input asp-for="Courses.CourseName" class="form-control" type="text" placeholder="Intro to Computer Science" required />
+                    <span asp-validation-for="Courses.CourseName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Courses.CourseDescription">Course Description</label>
+                    <textarea asp-for="Courses.CourseDescription" class="form-control" required></textarea>
+                    <span asp-validation-for="Courses.CourseDescription" class="text-danger"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <label asp-for="Courses.CourseCreditHours" class="control-label">Course Credit Hours</label>
+                        <input asp-for="Courses.CourseCreditHours" class="form-control" type="number" required />
+                        <span asp-validation-for="Courses.CourseCreditHours" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add Course</button>
+                <a class="btn btn-danger" asp-page="/Welcome" asp-route-id="@Model.id">Cancel</a> @*Todo: Change this to redirect to the Courses overview page*@
+            </div>
+        </form>
+    </div>
+</div>
