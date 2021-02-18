@@ -11,31 +11,31 @@
             <div class="col-8 center">
                 <div class="form-row">
                     <div class="col-2 form-group">
-                        <label asp-for="Courses.CourseCode" class="control-label">Course Code</label>
-                        <input asp-for="Courses.CourseCode" class="form-control" type="text" placeholder="CS" required />
-                        <span asp-validation-for="Courses.CourseCode" class="text-danger"></span>
+                        <label asp-for="CourseCode" class="control-label">Course Code</label>
+                        <input asp-for="CourseCode" class="form-control" type="text" placeholder="CS" required />
+                        <span asp-validation-for="CourseCode" class="text-danger">@Model.ExistingCourseError</span>
                     </div>
                     <div class="col-3 form-group">
-                        <label asp-for="Courses.CourseNumber" class="control-label">Course Number</label>
-                        <input asp-for="Courses.CourseNumber" class="form-control" type="text" placeholder="1010" required />
-                        <span asp-validation-for="Courses.CourseNumber" class="text-danger"></span>
+                        <label asp-for="CourseNumber" class="control-label">Course Number</label>
+                        <input asp-for="CourseNumber" class="form-control" type="text" placeholder="1010" required />
+                        <span asp-validation-for="CourseNumber" class="text-danger">@Model.CourseError</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Courses.CourseName" class="control-label">Course Name</label>
-                    <input asp-for="Courses.CourseName" class="form-control" type="text" placeholder="Intro to Computer Science" required />
-                    <span asp-validation-for="Courses.CourseName" class="text-danger"></span>
+                    <label asp-for="CourseName" class="control-label">Course Name</label>
+                    <input asp-for="CourseName" class="form-control" type="text" placeholder="Intro to Computer Science" required />
+                    <span asp-validation-for="CourseName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Courses.CourseDescription">Course Description</label>
-                    <textarea asp-for="Courses.CourseDescription" class="form-control" required></textarea>
-                    <span asp-validation-for="Courses.CourseDescription" class="text-danger"></span>
+                    <label asp-for="CourseDescription">Course Description</label>
+                    <textarea asp-for="CourseDescription" class="form-control" required></textarea>
+                    <span asp-validation-for="CourseDescription" class="text-danger"></span>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-2">
-                        <label asp-for="Courses.CourseCreditHours" class="control-label">Course Credit Hours</label>
-                        <input asp-for="Courses.CourseCreditHours" class="form-control" type="number" required />
-                        <span asp-validation-for="Courses.CourseCreditHours" class="text-danger"></span>
+                        <label asp-for="CourseCreditHours" class="control-label">Course Credit Hours</label>
+                        <input asp-for="CourseCreditHours" class="form-control" type="number" required />
+                        <span asp-validation-for="CourseCreditHours" class="text-danger"></span>
                     </div>
                 </div>
                 

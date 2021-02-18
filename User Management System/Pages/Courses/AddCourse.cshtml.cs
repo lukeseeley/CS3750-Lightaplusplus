@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Lightaplusplus.Pages.Courses
 {
@@ -24,6 +25,28 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public Models.Courses Courses { get; set; }
 
+        [BindProperty, Required, MaxLength(10)]
+        public string CourseCode { get; set; }
+
+        [BindProperty, Required]
+        public int CourseNumber { get; set; }
+
+        [BindProperty, Required, MaxLength(50)]
+        public string CourseName { get; set; }
+
+        [BindProperty, Required]
+        public string CourseDescription { get; set; }
+
+        [BindProperty, Required]
+        public int CourseCreditHours { get; set; }
+
+        [BindProperty]
+        public string ExistingCourseError { get; set; }
+
+        [BindProperty]
+        public string CourseError { get; set; }
+
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if(id == null)
@@ -39,8 +62,45 @@ namespace Lightaplusplus.Pages.Courses
             }
 
             this.id = (int)id;
+            CourseCreditHours = 3;
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var errors = false;
+            var existingCourse = await _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).FirstOrDefaultAsync();
+            if(existingCourse != null)
+            {
+                ExistingCourseError = "That Course already exists.";
+                errors = true;
+            }
+            else ExistingCourseError = string.Empty;
+
+            if(CourseNumber < 100)
+            {
+                CourseError = "Please enter a valid Course Number";
+                errors = true;
+            } 
+            else CourseError = string.Empty;
+
+            Courses.CourseCode = CourseCode;
+            Courses.CourseNumber = CourseNumber;
+
+            Courses.CourseName = CourseName;
+            Courses.CourseDescription = CourseDescription;
+
+            
+
+            Courses.CourseCreditHours = CourseCreditHours;
+
+            if (errors) return Page();
+
+            _context.Courses.Add(Courses);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
         }
     }
 }
