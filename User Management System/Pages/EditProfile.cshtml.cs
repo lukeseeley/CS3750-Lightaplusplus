@@ -60,10 +60,13 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public string Bio { get; set; }
 
+        [BindProperty]
         public IFormFile FileUpload { get; set; }
 
         [BindProperty]
         public byte[] Image { get; set; }
+        [BindProperty]
+        public string PictureErrorMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -91,9 +94,6 @@ namespace Lightaplusplus.Pages
             Bio = Users.bio;
             var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
             Image = image.profilepic;
-
-            //byte[] byteArray = Users.Picture.profilepic;
-            //Image = new FileContentResult(byteArray, "image/jpeg");
 
             this.id = (int)id;
             return Page();
@@ -140,54 +140,81 @@ namespace Lightaplusplus.Pages
         {
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
+            var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
 
-            using (var memoryStream = new MemoryStream())
+            // check to see if the field is blank
+            if (FileUpload != null)
             {
-                await FileUpload.CopyToAsync(memoryStream);
-
-                // Upload the file if less than 2 MB
-                if (memoryStream.Length < 2097152)
+                // check file type
+                if (FileUpload.ContentType == "image/jpeg" || FileUpload.ContentType == "image/png")
                 {
-                    if (Users.Picture == null)
-                    {
-                        UserPictures picture = new UserPictures();
-                        picture.UserID = Users.ID;
-                        picture.User = Users;
-                        picture.profilepic = memoryStream.ToArray();
-                        Users.Picture = picture;
-                        Image = memoryStream.ToArray();
-                        return Page();
-                    }
-                    else
-                    {
-                        Users.Picture.profilepic = memoryStream.ToArray();
-                    }
 
-                    _context.Attach(Users).State = EntityState.Modified;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await FileUpload.CopyToAsync(memoryStream);
 
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!UsersExists(Users.ID))
+                        // Upload the file if less than 2 MB
+                        if (memoryStream.Length < 2097152)
                         {
-                            return NotFound();
+                            // check to see if a user already has a profile picture
+                            if (image == null)
+                            {
+                                // create a picture
+                                UserPictures picture = new UserPictures();
+                                picture.UserID = Users.ID;
+                                picture.User = Users;
+                                picture.profilepic = memoryStream.ToArray();
+                                Users.Picture = picture;
+                            }
+                            else
+                            {
+                                // update profile pic
+                                image.profilepic = memoryStream.ToArray();
+                            }
+
+                            PictureErrorMessage = string.Empty;
+
+                            _context.Attach(Users).State = EntityState.Modified;
+
+                            try
+                            {
+                                await _context.SaveChangesAsync();
+                            }
+                            catch (DbUpdateConcurrencyException)
+                            {
+                                if (!UsersExists(Users.ID))
+                                {
+                                    return NotFound();
+                                }
+                                else
+                                {
+                                    throw;
+                                }
+                            }
                         }
                         else
                         {
-                            throw;
+                            PictureErrorMessage = "File size is too big.  It needs to be less than 2 MB.";
+                            Image = Users.Picture.profilepic;
+                            return Page();
                         }
                     }
+
+                    return RedirectToPage("./EditProfile", new { id = id });
                 }
                 else
                 {
-                    ModelState.AddModelError("File", "The file is too large.");
+                    PictureErrorMessage = "Incorrect file type.";
+                    Image = Users.Picture.profilepic;
+                    return Page();
                 }
             }
-
-            return RedirectToPage("./Profile", new { id = id });
+            else
+            {
+                PictureErrorMessage = "No image is selected.";
+                Image = Users.Picture.profilepic;
+                return Page();
+            }
         }
 
         private bool UsersExists(int id)

@@ -22,13 +22,14 @@
             }
             else
             {
-                <img src="/placeholder.png"/>
+                <img src="img/placeholder.png" style="border-radius: 50%; height: 225px; width: 225px; margin:auto "/>
             }
         }
         <form method="post" enctype="multipart/form-data">
             <input asp-for="FileUpload" type="file">
             <input asp-page-handler="Upload" class="btn btn-primary" type="submit" value="Upload" />
             <input asp-for="id" type="text" hidden>
+            <div class="text-danger"> @Model.PictureErrorMessage</div>
         </form>
     </div>
     <div class="col-8 center">
