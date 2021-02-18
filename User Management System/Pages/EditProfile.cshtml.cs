@@ -75,6 +75,7 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public string PictureErrorMessage { get; set; }
         
+        [BindProperty]
         public List<UserLinks> Links { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -132,7 +133,8 @@ namespace Lightaplusplus.Pages
             Users.addresszip = Addresszip;
             Users.bio = Bio;
 
-            Image = Users.Picture.profilepic;
+            var img = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == Users.ID);
+            Image = img.profilepic;
             
             foreach (var link in Links)
             {
