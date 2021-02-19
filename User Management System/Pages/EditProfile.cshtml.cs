@@ -138,7 +138,7 @@ namespace Lightaplusplus.Pages
             
             foreach (var link in Links)
             {
-                if (link.link != null)
+                if (link.LinkId != 0 || link.link != null)
                 {
                     link.UserId = Users.ID;
                     link.User = Users;
