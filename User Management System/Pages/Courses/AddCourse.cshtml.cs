@@ -51,14 +51,18 @@ namespace Lightaplusplus.Pages.Courses
         {
             if(id == null)
             {
-                return RedirectToPage("./Index");
+                return RedirectToPage("/Index");
             }
             
             var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-            
-            if(user.usertype != 'I') //Ensure that only an instructor can add a new course
+
+            if (user == null)
             {
-                return RedirectToPage("./Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
+                return RedirectToPage("/Index");
+            }
+            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
+            {
+                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
             }
 
             this.id = (int)id;

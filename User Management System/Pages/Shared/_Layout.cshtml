@@ -6,8 +6,13 @@
     <title>@ViewData["Title"] - Lighta++</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css" />
     <link rel="stylesheet" href="~/css/Dropdown.css" />
     <script src="https://kit.fontawesome.com/62e23687bf.js"></script>
+    <script language="JavaScript" type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
     <script>
         // Shows the dropdown list when user clicks on bell
         function dropdownFunction() {
@@ -110,10 +115,6 @@
             &copy; 2021 - User Management System - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>
