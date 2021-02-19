@@ -31,14 +31,18 @@ namespace Lightaplusplus.Pages
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/Index");
             }
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
             if (Users == null)
             {
-                return NotFound();
+                return RedirectToPage("/Index");
+            }
+            if (Users.usertype != 'I') //Ensure that only an instructor can add a new course
+            {
+                return RedirectToPage("/Welcome", new { id = id });
             }
             var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
 

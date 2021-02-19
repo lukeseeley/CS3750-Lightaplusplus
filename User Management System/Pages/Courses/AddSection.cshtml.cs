@@ -117,7 +117,7 @@ namespace Lightaplusplus.Pages.Courses
             }
             if (user.usertype != 'I') //Ensure that only an instructor can add a new course
             {
-                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
+                return RedirectToPage("/Welcome", new { id = id });
             }
 
             Sections.InstructorId = (int)id;
@@ -198,7 +198,7 @@ namespace Lightaplusplus.Pages.Courses
             _context.Sections.Add(Sections);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Courses/Index", new { id = id }); //Todo: Redirect to courses overview page instead
+            return RedirectToPage("/Courses/Index", new { id = id });
         }
     }
 }

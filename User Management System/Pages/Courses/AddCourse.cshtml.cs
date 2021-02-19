@@ -107,7 +107,7 @@ namespace Lightaplusplus.Pages.Courses
             }
             if (user.usertype != 'I') //Ensure that only an instructor can add a new course
             {
-                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
+                return RedirectToPage("/Welcome", new { id = id });
             }
 
             //Handle Validation checks
@@ -141,7 +141,7 @@ namespace Lightaplusplus.Pages.Courses
             _context.Courses.Add(Courses);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Courses/Index", new { id = id }); //Todo: Redirect to courses overview page instead
+            return RedirectToPage("/Courses/Index", new { id = id });
         }
     }
 }
