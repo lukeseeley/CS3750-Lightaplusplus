@@ -43,14 +43,16 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty, Required]
         public string CourseDepartment { get; set; }
 
-        [BindProperty]
-        public List<string> Departments { get; set; }
+        public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
 
         [BindProperty]
         public string ExistingCourseError { get; set; }
 
         [BindProperty]
         public string CourseError { get; set; }
+
+        [BindProperty]
+        public string CreditError { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -73,26 +75,12 @@ namespace Lightaplusplus.Pages.Courses
             this.id = (int)id;
             CourseCreditHours = 3;
 
-            Departments = new List<string>();
-            Departments.Add("Accounting");
-            Departments.Add("Art");
-            Departments.Add("Biology");
-            Departments.Add("Chemistry");
-            Departments.Add("Computer Science");
-            Departments.Add("Engineering");
-            Departments.Add("English");
-            Departments.Add("Health Science");
-            Departments.Add("History");
-            Departments.Add("Mathematics");
-            Departments.Add("Music");
-            Departments.Add("Social Science");
-            Departments.Add("Physics");
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
-        {
+        {   
             //Handle security checks first
             if (id == null)
             {
@@ -127,6 +115,15 @@ namespace Lightaplusplus.Pages.Courses
             } 
             else CourseError = string.Empty;
 
+            if (CourseCreditHours < 0)
+            {
+                CreditError = "You must enter a positive number of credits";
+                errors = true;
+            }
+            else CreditError = string.Empty;
+
+            if (errors) return Page();
+
             Courses.CourseCode = CourseCode;
             Courses.CourseNumber = CourseNumber;
 
@@ -136,7 +133,6 @@ namespace Lightaplusplus.Pages.Courses
 
             Courses.CourseCreditHours = CourseCreditHours;
 
-            if (errors) return Page();
 
             _context.Courses.Add(Courses);
             await _context.SaveChangesAsync();

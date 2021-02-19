@@ -45,7 +45,7 @@
                     <div class="form-group col-2">
                         <label asp-for="CourseCreditHours" class="control-label">Course Credit Hours</label>
                         <input asp-for="CourseCreditHours" class="form-control" type="number" required />
-                        <span asp-validation-for="CourseCreditHours" class="text-danger"></span>
+                        <span asp-validation-for="CourseCreditHours" class="text-danger">@Model.CreditError</span>
                     </div>
                 </div>
 
