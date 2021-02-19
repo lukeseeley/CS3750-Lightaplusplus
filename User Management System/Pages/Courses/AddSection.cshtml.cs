@@ -198,7 +198,7 @@ namespace Lightaplusplus.Pages.Courses
             _context.Sections.Add(Sections);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
+            return RedirectToPage("/Courses/Index", new { id = id }); //Todo: Redirect to courses overview page instead
         }
     }
 }
