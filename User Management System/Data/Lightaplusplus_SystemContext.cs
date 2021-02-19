@@ -24,6 +24,8 @@ namespace Lightaplusplus.Data
         {
             modelBuilder.Entity<Users>()
                 .HasAlternateKey(u => u.email);
+            modelBuilder.Entity<SectionStudents>()
+                .HasKey(ss => new { ss.SectionId, ss.StudentId });
         }
     }
 }

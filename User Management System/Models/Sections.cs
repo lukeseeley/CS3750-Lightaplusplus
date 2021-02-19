@@ -8,6 +8,11 @@ namespace Lightaplusplus.Models
 {
     public class Sections
     {
+        public Sections()
+        {
+            this.SectionStudents = new HashSet<SectionStudents>();
+        }
+        
         /// <summary>
         /// The Id for the section
         /// </summary>
@@ -62,5 +67,10 @@ namespace Lightaplusplus.Models
         /// The Instructor for this course
         /// </summary>
         public virtual Users Instructor { get; set; }
+
+        /// <summary>
+        /// The collection of students that belong to a section
+        /// </summary>
+        public virtual ICollection<SectionStudents> SectionStudents { get; set; }
     }
 }

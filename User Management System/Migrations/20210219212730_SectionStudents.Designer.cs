@@ -4,14 +4,16 @@ using Lightaplusplus.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Lightaplusplus.Migrations
 {
     [DbContext(typeof(Lightaplusplus_SystemContext))]
-    partial class Lightaplusplus_SystemContextModelSnapshot : ModelSnapshot
+    [Migration("20210219212730_SectionStudents")]
+    partial class SectionStudents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,6 +129,19 @@ namespace Lightaplusplus.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserLinks");
+                });
+
+            modelBuilder.Entity("Lightaplusplus.Models.UserPictures", b =>
+                {
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("profilepic")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("UserID");
+
+                    b.ToTable("UserPictures");
                 });
 
             modelBuilder.Entity("Lightaplusplus.Models.Users", b =>
