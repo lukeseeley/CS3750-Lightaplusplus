@@ -49,6 +49,9 @@ namespace Lightaplusplus.Models
         [Required]
         public int CourseCreditHours { get; set; }
 
+        [Required, MaxLength(200)]
+        public string CourseDepartment { get; set; }
+
         //FK links
         /// <summary>
         /// The sections made of this course
