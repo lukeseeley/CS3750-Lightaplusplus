@@ -61,6 +61,8 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public string CourseError { get; set; }
         [BindProperty]
+        public string DaysError { get; set; }
+        [BindProperty]
         public string CapacityError { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -166,7 +168,6 @@ namespace Lightaplusplus.Pages.Courses
             Sections.CourseId = CourseId;
             Sections.SectionCapacity = Capacity;
 
-            if (errors) return Page();
 
             //Assign Days Taught
             string daysTaught = "";
@@ -177,6 +178,15 @@ namespace Lightaplusplus.Pages.Courses
             if (isOnFriday) daysTaught += "F";
             if (isOnSaturday) daysTaught += "S";
             if (isOnSunday) daysTaught += "U";
+
+            if (daysTaught == string.Empty)
+            {
+                DaysError = "You must teach at least one day a week";
+                errors = true;
+            }
+            else DaysError = string.Empty;
+
+            if (errors) return Page();
 
             Sections.DaysTaught = daysTaught;
 
