@@ -31,6 +31,16 @@
                     <textarea asp-for="CourseDescription" class="form-control" required></textarea>
                     <span asp-validation-for="CourseDescription" class="text-danger"></span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="CourseDepartment">Course Description</label>
+                    <select asp-for="CourseDepartment" class="form-control" required>
+                        <option value="">Select Department</option>
+                        @foreach(var department in Model.Departments) {
+                            <option value="@department">@department</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CourseDepartment" class="text-danger"></span>
+                </div>
                 <div class="form-row">
                     <div class="form-group col-2">
                         <label asp-for="CourseCreditHours" class="control-label">Course Credit Hours</label>
@@ -38,7 +48,7 @@
                         <span asp-validation-for="CourseCreditHours" class="text-danger"></span>
                     </div>
                 </div>
-                
+
                 <button type="submit" class="btn btn-primary">Add Course</button>
                 <a class="btn btn-danger" asp-page="/Welcome" asp-route-id="@Model.id">Cancel</a> @*Todo: Change this to redirect to the Courses overview page*@
             </div>

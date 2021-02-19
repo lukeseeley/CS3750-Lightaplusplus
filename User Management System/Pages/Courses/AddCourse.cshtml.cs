@@ -40,12 +40,17 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty, Required]
         public int CourseCreditHours { get; set; }
 
+        [BindProperty, Required]
+        public string CourseDepartment { get; set; }
+
+        [BindProperty]
+        public List<string> Departments { get; set; }
+
         [BindProperty]
         public string ExistingCourseError { get; set; }
 
         [BindProperty]
         public string CourseError { get; set; }
-
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -67,6 +72,21 @@ namespace Lightaplusplus.Pages.Courses
 
             this.id = (int)id;
             CourseCreditHours = 3;
+
+            Departments = new List<string>();
+            Departments.Add("Accounting");
+            Departments.Add("Art");
+            Departments.Add("Biology");
+            Departments.Add("Chemistry");
+            Departments.Add("Computer Science");
+            Departments.Add("Engineering");
+            Departments.Add("English");
+            Departments.Add("Health Science");
+            Departments.Add("History");
+            Departments.Add("Mathematics");
+            Departments.Add("Music");
+            Departments.Add("Social Science");
+            Departments.Add("Physics");
 
             return Page();
         }
@@ -94,8 +114,7 @@ namespace Lightaplusplus.Pages.Courses
 
             Courses.CourseName = CourseName;
             Courses.CourseDescription = CourseDescription;
-
-            
+            Courses.CourseDepartment = CourseDepartment;
 
             Courses.CourseCreditHours = CourseCreditHours;
 
