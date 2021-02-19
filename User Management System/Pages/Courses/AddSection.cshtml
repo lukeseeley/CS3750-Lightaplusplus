@@ -11,24 +11,24 @@
             <div class="col-8 center">
                 <div class="form-group">
                     <label asp-for="Course" class="control-label">Course</label>
-                    <input asp-for="Course" class="form-control" id="courseName" type="text" required />
-                    <span asp-validation-for="Course" class="text-danger"></span>
+                    <input asp-for="Course" class="form-control" id="courseName" type="text" required  placeholder="Start typing to search"/>
+                    <span asp-validation-for="Course" class="text-danger">@Model.CourseError</span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Sections.SectionLocation" class="control-label">Location</label>
-                    <input asp-for="Sections.SectionLocation" class="form-control" type="text" required />
-                    <span asp-validation-for="Sections.SectionLocation" class="text-danger"></span>
+                    <label asp-for="Location" class="control-label">Location</label>
+                    <input asp-for="Location" class="form-control" type="text" required />
+                    <span asp-validation-for="Location" class="text-danger"></span>
                 </div>
                 <div class="form-row">
-                    <div class="col-2 form-group">
-                        <label asp-for="Sections.SectionTimeStart" class="control-label">Start Time</label>
-                        <input asp-for="Sections.SectionTimeStart" class="form-control" type="time" required />
-                        <span asp-validation-for="Sections.SectionTimeStart" class="text-danger"></span>
+                    <div class="col-3 form-group">
+                        <label asp-for="StartTime" class="control-label">Start Time</label>
+                        <input asp-for="StartTime" class="form-control" type="time" required />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
-                    <div class="col-2 form-group">
-                        <label asp-for="Sections.SectionTimeEnd" class="control-label">End Time</label>
-                        <input asp-for="Sections.SectionTimeEnd" class="form-control" type="time" required />
-                        <span asp-validation-for="Sections.SectionTimeEnd" class="text-danger"></span>
+                    <div class="col-3 form-group">
+                        <label asp-for="EndTime" class="control-label">End Time</label>
+                        <input asp-for="EndTime" class="form-control" type="time" required />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -65,9 +65,9 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-4">
-                        <label asp-for="Sections.SectionCapacity" class="control-label">Student Capacity</label>
-                        <input asp-for="Sections.SectionCapacity" class="form-control" type="number" required />
-                        <span asp-validation-for="Sections.SectionCapacity" class="text-danger"></span>
+                        <label asp-for="Capacity" class="control-label">Student Capacity</label>
+                        <input asp-for="Capacity" class="form-control" type="number" required />
+                        <span asp-validation-for="Capacity" class="text-danger">@Model.CapacityError</span>
                     </div>
                 </div>
 

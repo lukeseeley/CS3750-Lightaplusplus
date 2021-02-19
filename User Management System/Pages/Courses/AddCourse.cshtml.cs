@@ -91,8 +91,26 @@ namespace Lightaplusplus.Pages.Courses
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
+            //Handle security checks first
+            if (id == null)
+            {
+                return RedirectToPage("/Index");
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+
+            if (user == null)
+            {
+                return RedirectToPage("/Index");
+            }
+            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
+            {
+                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
+            }
+
+            //Handle Validation checks
             var errors = false;
             var existingCourse = await _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).FirstOrDefaultAsync();
             if(existingCourse != null)
