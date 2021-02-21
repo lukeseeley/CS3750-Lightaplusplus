@@ -40,10 +40,10 @@ namespace Lightaplusplus.Models
         /// <summary>
         /// The time of day this class stars
         /// </summary>
-        [DataType(DataType.Date), Required]
+        [DataType(DataType.Time), Required]
         public DateTime SectionTimeStart { get; set; }
 
-        [DataType(DataType.Date), Required]
+        [DataType(DataType.Time), Required]
         public DateTime SectionTimeEnd { get; set; }
 
         /// <summary>

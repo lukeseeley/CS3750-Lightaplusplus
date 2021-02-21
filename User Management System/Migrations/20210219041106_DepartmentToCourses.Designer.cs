@@ -4,14 +4,16 @@ using Lightaplusplus.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Lightaplusplus.Migrations
 {
     [DbContext(typeof(Lightaplusplus_SystemContext))]
-    partial class Lightaplusplus_SystemContextModelSnapshot : ModelSnapshot
+    [Migration("20210219041106_DepartmentToCourses")]
+    partial class DepartmentToCourses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,21 +56,6 @@ namespace Lightaplusplus.Migrations
                     b.HasKey("CourseId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("Lightaplusplus.Models.SectionStudents", b =>
-                {
-                    b.Property<int>("SectionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SectionId", "StudentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("SectionStudents");
                 });
 
             modelBuilder.Entity("Lightaplusplus.Models.Sections", b =>
@@ -134,6 +121,19 @@ namespace Lightaplusplus.Migrations
                     b.ToTable("UserLinks");
                 });
 
+            modelBuilder.Entity("Lightaplusplus.Models.UserPictures", b =>
+                {
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("profilepic")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("UserID");
+
+                    b.ToTable("UserPictures");
+                });
+
             modelBuilder.Entity("Lightaplusplus.Models.Users", b =>
                 {
                     b.Property<int>("ID")
@@ -197,21 +197,6 @@ namespace Lightaplusplus.Migrations
                     b.HasAlternateKey("email");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Lightaplusplus.Models.SectionStudents", b =>
-                {
-                    b.HasOne("Lightaplusplus.Models.Sections", "Section")
-                        .WithMany("SectionStudents")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Lightaplusplus.Models.Users", "Student")
-                        .WithMany("StudentSections")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lightaplusplus.Models.Sections", b =>

@@ -1,0 +1,42 @@
+﻿<style>
+    .CourseCard:hover {
+        box-shadow: 0 5px 15px grey;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .CourseCard {
+        box-shadow: 0 0 0 grey;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+</style>
+
+<a href=" @Link" style="color:inherit; text-decoration: inherit;">
+    <div class="CourseCard" style="border: 2px solid black; border-radius: 25px; height: 90%">
+        <div class="card-header">
+            <h2>@ClassCode @ClassNumber</h2>
+            <h3> @ClassName</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                Class Time: @DaysTaught @StartTime.ToString("h:mm tt") - @EndTime.ToString("h:mm tt")
+            </p>
+        </div>
+    </div>
+</a>
+
+@code {
+    [Parameter]
+    public string ClassCode { get; set; }
+    [Parameter]
+    public int ClassNumber { get; set; }
+    [Parameter]
+    public string ClassName { get; set; }
+    [Parameter]
+    public string DaysTaught { get; set; }
+    [Parameter]
+    public DateTime StartTime { get; set; }
+    [Parameter]
+    public DateTime EndTime { get; set; }
+    [Parameter]
+    public string Link { get; set; }
+}
