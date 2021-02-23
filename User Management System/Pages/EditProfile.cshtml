@@ -110,7 +110,7 @@
                     <div class="form-group col-md-12">
                         <input asp-for="@Model.Links[i].LinkId" hidden/>
                         <input asp-for="@Model.Links[i].link" type="url" class="form-control" id="inputLink1">
-                        <span asp-validation-for="@Model.Links[i].link" class="text-danger"></span>
+                        @*<span asp-validation-for="@Model.Links[i].link" class="text-danger"></span>*@
                     </div>
                 }
             </div>
