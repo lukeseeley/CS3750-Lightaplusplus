@@ -1,0 +1,91 @@
+﻿@page
+@model Lightaplusplus.Pages.Registration.RegistrationModel
+
+@{
+    ViewData["Title"] = "Registration";
+}
+
+<head>
+    <script>
+        function register() {
+            var x = document.getElementsById("hide-if-registered Button");
+            if (x.style.display == "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+        function drop() {
+            var x = document.getElementsById("show-if-registered Button");
+            if (x.style.display == "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+</head>
+
+<h1>Registration</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Course Subject
+            </th>
+            <th>
+                Course Number
+            </th>
+            <th>
+                Course Name
+            </th>
+            <th>
+                Instructor
+            </th>
+            <th>
+                Meeting Time
+            </th>
+            <th>
+                Location
+            </th>
+            <th>
+                Capacity
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Sections)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.CourseCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.CourseNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Instructor.firstname) @Html.DisplayFor(modelItem => item.Instructor.lastname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysTaught)  @Html.DisplayFor(modelItem => item.SectionTimeStart)-@Html.DisplayFor(modelItem => item.SectionTimeEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SectionLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SectionCapacity)
+                </td>
+                <td>
+                    <button onclick="register()" class="btn btn-primary"
+                        id="hide-if-registered Button">Register</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
