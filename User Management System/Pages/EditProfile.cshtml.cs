@@ -135,15 +135,27 @@ namespace Lightaplusplus.Pages
 
             var img = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == Users.ID);
             Image = img.profilepic;
-            
+
+            var contextChanged = false;
             foreach (var link in Links)
             {
-                if (link.LinkId != 0 || link.link != null)
+                if(link.LinkId != 0 && link.link == null)
+                {
+                    link.UserId = Users.ID;
+                    link.User = Users;
+                    _context.UserLinks.Remove(link);
+                    contextChanged = true;
+                }
+                else if (link.LinkId != 0 && link.link != null)
                 {
                     link.UserId = Users.ID;
                     link.User = Users;
                     Users.Links.Add(link);
                 }
+            }
+            if (contextChanged)
+            {
+                await _context.SaveChangesAsync();
             }
 
             if (!Regex.IsMatch(Addresszip.ToString(), "[\\d-]{5,}") && Addresszip.ToString() != "" && Addresszip.ToString() != "0")
