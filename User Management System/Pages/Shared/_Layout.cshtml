@@ -45,19 +45,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Welcome" asp-route-id="@Context.Request.Query["id"]">Home</a>
                         </li>
-                        @{
-                            if (Model.Users.usertype == 'S')
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Registration</a>
-                                </li>
-                            }
-                            else if (Model.Users.usertype == 'I')
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Courses/AddCourse">Courses</a>
-                                </li>
-                            }
+                        @if (Model.Users.usertype == 'I')
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Courses/AddCourse">Courses</a>
+                            </li>
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Calender</a>
@@ -65,9 +57,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Grades</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Register</a>
-                        </li>
+                        @if (Model.Users.usertype == 'S')
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Registration">Registration</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Help</a>
                         </li>
