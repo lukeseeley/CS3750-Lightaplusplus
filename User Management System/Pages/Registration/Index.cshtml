@@ -5,87 +5,120 @@
     ViewData["Title"] = "Registration";
 }
 
+@*
+    TODO:
+        Register button functionality
+            - Check if class is full
+                - if full -> show error message and disable button
+            - Else add confirmation to add class
+                - Add UserId and SectionId to SectionStudents table
+                - Change button to visually show that the class was added like Green with checkmark
+        Unregister:
+            - Hover over button shows 'Drop X' and turn red or something
+            - Pop up message to ask if user is sure they want to drop course
+            - if yes, remove that UserId/SectionId from SectionStudents table
+        Dropdown:
+            - Make each department button filter accordingly
+            - Fix button layout
+        Check if user is a student (this wasn't working properly)
+        Have buttons reflect which classes are already added or full on page load
+        Search bar is too long
+        Need to change spacing between search bar, button, and table
+*@
+
 <head>
-    <script>
-        function register() {
-            var x = document.getElementsById("hide-if-registered Button");
-            if (x.style.display == "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
-        }
-
-        function drop() {
-            var x = document.getElementsById("show-if-registered Button");
-            if (x.style.display == "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
-        }
-    </script>
+    <style>
+    </style>
 </head>
+<body>
+    <h1>Registration</h1> <br><br>
 
-<h1>Registration</h1>
+    <div class="row">
+        <form>
+            <input class="form-control" id="courseSearch" type="text" placeholder="Course Search.." />
+        </form>
+        <button id="department-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            Department<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" id="department-list">
+            @foreach (var department in Model.Departments)
+            {
+                <li>@department</li>
+            }
+        </ul>
+    </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                Course Subject
-            </th>
-            <th>
-                Course Number
-            </th>
-            <th>
-                Course Name
-            </th>
-            <th>
-                Instructor
-            </th>
-            <th>
-                Meeting Time
-            </th>
-            <th>
-                Location
-            </th>
-            <th>
-                Capacity
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Sections)
-        {
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Course.CourseCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Course.CourseNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Course.CourseName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Instructor.firstname) @Html.DisplayFor(modelItem => item.Instructor.lastname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DaysTaught)  @Html.DisplayFor(modelItem => item.SectionTimeStart)-@Html.DisplayFor(modelItem => item.SectionTimeEnd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SectionLocation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SectionCapacity)
-                </td>
-                <td>
-                    <button onclick="register()" class="btn btn-primary"
-                        id="hide-if-registered Button">Register</button>
-                </td>
+                <th>
+                    Course Code
+                </th>
+                <th>
+                    Course Number
+                </th>
+                <th>
+                    Course Name
+                </th>
+                <th>
+                    Instructor
+                </th>
+                <th>
+                    Meeting Time
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Capacity
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody id="section-table-body">
+            @foreach (var item in Model.SectionsList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.CourseCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.CourseNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.CourseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Instructor.firstname) @Html.DisplayFor(modelItem => item.Instructor.lastname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DaysTaught)  @Html.DisplayFor(modelItem => item.SectionTimeStart)-@Html.DisplayFor(modelItem => item.SectionTimeEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SectionLocation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SectionCapacity)
+                    </td>
+                    <td>
+                        <button onclick="" class="btn btn-primary">Register</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>
+        // Search bar script
+        $(document).ready(function () {
+            $("#courseSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#section-table-body tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+    </script>
+
+</body>
