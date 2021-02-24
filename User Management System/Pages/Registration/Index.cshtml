@@ -20,10 +20,10 @@
         Dropdown:
             - Make each department button filter accordingly
             - Fix button layout
-        Check if user is a student (this wasn't working properly)
-        Have buttons reflect which classes are already added or full on page load
-        Search bar is too long
-        Need to change spacing between search bar, button, and table
+        Check if user is a student (this wasn't working properly) //Seems to work to me?
+        Have buttons reflect which classes are already added or full on page load //Added
+        Search bar is too long //Fixed? If not just adjust the col-# in the class
+        Need to change spacing between search bar, button, and table //Should be working
 *@
 
 <head>
@@ -33,19 +33,23 @@
 <body>
     <h1>Registration</h1> <br><br>
 
-    <div class="row">
-        <form>
-            <input class="form-control" id="courseSearch" type="text" placeholder="Course Search.." />
-        </form>
-        <button id="department-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-            Department<span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" id="department-list">
-            @foreach (var department in Model.Departments)
-            {
-                <li>@department</li>
-            }
-        </ul>
+    <div class="row d-flex justify-content-between" style="margin-bottom: 16px">
+        <div class="col-5">
+            <form>
+                <input class="form-control" id="courseSearch" type="text" placeholder="Course Search.." />
+            </form>
+        </div>
+        <div class="col-2 d-flex" style="flex-direction: row-reverse">
+            <button id="department-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                Department<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="department-list">
+                @foreach (var department in Model.Departments)
+                {
+                    <li>@department</li>
+                }
+            </ul>
+        </div>
     </div>
 
     <table class="table table-striped">
@@ -70,38 +74,51 @@
                     Location
                 </th>
                 <th>
-                    Capacity
+                    Enrollment
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody id="section-table-body">
-            @foreach (var item in Model.SectionsList)
+            @foreach (var item in Model.SectionRegistrations)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Course.CourseCode)
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Course.CourseNumber)
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseNumber)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Course.CourseName)
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Instructor.firstname) @Html.DisplayFor(modelItem => item.Instructor.lastname)
+                        @Html.DisplayFor(modelItem => item.Section.Instructor.firstname) @Html.DisplayFor(modelItem => item.Section.Instructor.lastname)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DaysTaught)  @Html.DisplayFor(modelItem => item.SectionTimeStart)-@Html.DisplayFor(modelItem => item.SectionTimeEnd)
+                        @Html.DisplayFor(modelItem => item.Section.DaysTaught)  @Html.DisplayFor(modelItem => item.Section.SectionTimeStart)-@Html.DisplayFor(modelItem => item.Section.SectionTimeEnd)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.SectionLocation)
+                        @Html.DisplayFor(modelItem => item.Section.SectionLocation)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.SectionCapacity)
+                        @Html.DisplayFor(modelItem => item.StudentRegistry.Count) / @Html.DisplayFor(modelItem => item.Section.SectionCapacity)
                     </td>
                     <td>
-                        <button onclick="" class="btn btn-primary">Register</button>
+                        @{
+                            if (item.RegistrationStatus == 'R')
+                            {
+                                <button onclick="" class="btn btn-danger">Drop</button>
+                            }
+                            else if (item.RegistrationStatus == 'F')
+                            {
+                                <button onclick="" class="btn btn-secondary" disabled>Full</button>
+                            }
+                            else
+                            {
+                                <button onclick="" class="btn btn-primary">Register</button>
+                            }
+                        }
                     </td>
                 </tr>
             }

@@ -24,7 +24,10 @@ namespace Lightaplusplus.Pages.Registration
         public int StudentId { get; set; }
 
         [BindProperty]
-        public List<Models.Sections> SectionsList { get; set; }
+        public List<Sections> SectionsList { get; set; }
+
+        [BindProperty]
+        public List<SectionRegistration> SectionRegistrations { get; set; }
 
         public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
         
@@ -55,7 +58,59 @@ namespace Lightaplusplus.Pages.Registration
                 .AsNoTracking()
                 .ToListAsync();
 
+            SectionRegistrations = new List<SectionRegistration>();
+            foreach (var section in SectionsList)
+            {
+                var sectionRegistry = await _context.SectionStudents.Where(sr => sr.SectionId == section.SectionId).ToListAsync();
+                var isEnrolled = await _context.SectionStudents.Where(ss => ss.SectionId == section.SectionId).Where(ss => ss.StudentId == StudentId).FirstOrDefaultAsync();
+                char registrationStatus;
+                if(isEnrolled != null) //Meaning this student is already registered in this section
+                {
+                    registrationStatus = 'R';
+                }
+                else if (sectionRegistry.Count() >= section.SectionCapacity) //Meaning the class is at full capacity
+                {
+                    registrationStatus = 'F';
+                }
+                else //Meaning the student is not enrolled in this class, and the class is not full
+                {
+                    registrationStatus = 'N';
+                }
+                SectionRegistrations.Add(new SectionRegistration(section, sectionRegistry, registrationStatus));
+            }
+
+
+
             return Page();
+        }
+    }
+
+    /// <summary>
+    /// This is a data class for organizing the information related to a section
+    /// </summary>
+    public class SectionRegistration
+    {
+        /// <summary>
+        /// This is the Section associated with this section
+        /// </summary>
+        public Sections Section { get; set; }
+
+        /// <summary>
+        /// This is the registry of students related to this section
+        /// </summary>
+        public List<SectionStudents> StudentRegistry { get; set; }
+
+        /// <summary>
+        /// This is the current registration status for this particular section
+        /// R -> Registered; F -> Full capacity;  N -> Not registered
+        /// </summary>
+        public char RegistrationStatus { get; set; }
+
+        public SectionRegistration(Sections section, List<SectionStudents> sectionStudents, char registrationStatus)
+        {
+            Section = section;
+            StudentRegistry = sectionStudents;
+            RegistrationStatus = registrationStatus;
         }
     }
 }
