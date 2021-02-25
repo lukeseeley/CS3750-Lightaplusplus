@@ -98,7 +98,7 @@ namespace Lightaplusplus.Pages.Registration
         public async Task<IActionResult> OnPostRegisterAsync(int studentId, int sectionId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
             var doesExist = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
             var sectionList = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).ToListAsync();
 
@@ -110,19 +110,19 @@ namespace Lightaplusplus.Pages.Registration
             }
             else if (section == null)
             {
-                RegisterError = "Error: Invalid Class.";
+                RegisterError = "Invalid Class.";
                 isError = true;
                 return Page();
             }
             else if (doesExist != null)
             {
-                RegisterError = "You are already registered in that class.";
+                RegisterError = "You are already registered in the class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
                 isError = true;
                 return Page();
             }
             else if (section.SectionCapacity < sectionList.Count())
             {
-                RegisterError = "That class is full.";
+                RegisterError = "The class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + " is full.";
                 isError = true;
                 return Page();
             }
@@ -155,7 +155,7 @@ namespace Lightaplusplus.Pages.Registration
         public async Task<IActionResult> OnPostDropAsync(int studentId, int sectionId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
             var sectionStudents = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
 
             if (user == null)
@@ -172,7 +172,7 @@ namespace Lightaplusplus.Pages.Registration
             }
             else if (sectionStudents == null)
             {
-                RegisterError = "You are not registered for that course.";
+                RegisterError = "You are not registered for the course: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
                 isError = true;
                 return Page();
             }
