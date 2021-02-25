@@ -20,8 +20,15 @@ namespace Lightaplusplus.Pages.Registration
             _context = context;
         }
 
+        public Users Users { get; set; }
+
+        public SectionStudents SectionStudents { get; set; }
+
         [BindProperty]
         public int StudentId { get; set; }
+
+        [BindProperty]
+        public int SectionId { get; set; }
 
         [BindProperty]
         public List<Sections> SectionsList { get; set; }
@@ -30,7 +37,6 @@ namespace Lightaplusplus.Pages.Registration
         public List<SectionRegistration> SectionRegistrations { get; set; }
 
         public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
-        
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -47,7 +53,7 @@ namespace Lightaplusplus.Pages.Registration
             }
             if (user.usertype != 'S') // Make sure only the student is viewing registration
             {
-                return RedirectToPage("/Welcome", new { id= id });
+                return RedirectToPage("/Welcome", new { id = id });
             }
 
             StudentId = (int)id;
@@ -64,7 +70,7 @@ namespace Lightaplusplus.Pages.Registration
                 var sectionRegistry = await _context.SectionStudents.Where(sr => sr.SectionId == section.SectionId).ToListAsync();
                 var isEnrolled = await _context.SectionStudents.Where(ss => ss.SectionId == section.SectionId).Where(ss => ss.StudentId == StudentId).FirstOrDefaultAsync();
                 char registrationStatus;
-                if(isEnrolled != null) //Meaning this student is already registered in this section
+                if (isEnrolled != null) //Meaning this student is already registered in this section
                 {
                     registrationStatus = 'R';
                 }
@@ -79,12 +85,54 @@ namespace Lightaplusplus.Pages.Registration
                 SectionRegistrations.Add(new SectionRegistration(section, sectionRegistry, registrationStatus));
             }
 
-
-
             return Page();
         }
-    }
 
+        public async Task<IActionResult> OnPostRegisterAsync(int studentId, int sectionId)
+        {
+            SectionStudents sectionStudents = new SectionStudents
+            {
+                StudentId = studentId,
+                SectionId = sectionId
+            };
+
+            _context.SectionStudents.Add(sectionStudents);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return RedirectToPage("./Index", new { id = studentId });
+        }
+
+        public async Task<IActionResult> OnPostDropAsync(int studentId, int sectionId)
+        {
+            SectionStudents sectionStudents = new SectionStudents
+            {
+                StudentId = studentId,
+                SectionId = sectionId
+            };
+
+            _context.SectionStudents.Remove(sectionStudents);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return RedirectToPage("./Index", new { id = studentId });
+        }
+
+    }
     /// <summary>
     /// This is a data class for organizing the information related to a section
     /// </summary>

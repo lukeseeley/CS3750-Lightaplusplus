@@ -7,35 +7,16 @@
 
 @*
     TODO:
-        Register button functionality
-            - Check if class is full
-                - if full -> show error message and disable button
-            - Else add confirmation to add class
-                - Add UserId and SectionId to SectionStudents table
-                - Change button to visually show that the class was added like Green with checkmark
-        Unregister:
-            - Hover over button shows 'Drop X' and turn red or something
-            - Pop up message to ask if user is sure they want to drop course
-            - if yes, remove that UserId/SectionId from SectionStudents table
         Dropdown:
             - Make each department button filter accordingly
-            - Fix button layout
-        Check if user is a student (this wasn't working properly) //Seems to work to me?
-        Have buttons reflect which classes are already added or full on page load //Added
-        Search bar is too long //Fixed? If not just adjust the col-# in the class
-        Need to change spacing between search bar, button, and table //Should be working
 *@
 
-<head>
-    <style>
-    </style>
-</head>
 <body>
     <h1>Registration</h1> <br><br>
 
     <div class="row d-flex justify-content-between" style="margin-bottom: 16px">
         <div class="col-5">
-            <form>
+            <form onsubmit="return false;">
                 <input class="form-control" id="courseSearch" type="text" placeholder="Course Search.." />
             </form>
         </div>
@@ -43,12 +24,12 @@
             <button id="department-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                 Department<span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" id="department-list">
+            <div class="dropdown-menu" id="department-list">
                 @foreach (var department in Model.Departments)
                 {
-                    <li>@department</li>
+                    <button class="dropdown-item" type="button">@department</button>
                 }
-            </ul>
+            </div>
         </div>
     </div>
 
@@ -108,7 +89,11 @@
                         @{
                             if (item.RegistrationStatus == 'R')
                             {
-                                <button onclick="" class="btn btn-danger">Drop</button>
+                                <form asp-page-handler="Drop" method="post">
+                                    <button class="btn btn-danger">Drop</button>
+                                    <input name="sectionId" value="@item.Section.SectionId" hidden />
+                                    <input name="studentId" value="@Model.StudentId" hidden />
+                                </form>
                             }
                             else if (item.RegistrationStatus == 'F')
                             {
@@ -116,7 +101,11 @@
                             }
                             else
                             {
-                                <button onclick="" class="btn btn-primary">Register</button>
+                                <form asp-page-handler="Register" method="post">
+                                    <button class="btn btn-primary">Register</button>
+                                    <input name="sectionId" value="@item.Section.SectionId" hidden/>
+                                    <input name="studentId" value="@Model.StudentId" hidden/>
+                                </form>
                             }
                         }
                     </td>
@@ -135,7 +124,6 @@
                 });
             });
         });
-
     </script>
 
 </body>
