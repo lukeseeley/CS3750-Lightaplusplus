@@ -5,12 +5,6 @@
     ViewData["Title"] = "Registration";
 }
 
-@*
-    TODO:
-        Dropdown:
-            - Make each department button filter accordingly
-*@
-
 <body>
     <h1>Registration</h1> <br><br>
 
@@ -25,6 +19,8 @@
                 Department<span class="caret"></span>
             </button>
             <div class="dropdown-menu" id="department-list">
+                <button id="clear-filter" class="dropdown-item" type="button">Clear Filter</button>
+                <div class="dropdown-divider"></div>
                 @foreach (var department in Model.Departments)
                 {
                     <button class="dropdown-item" type="button">@department</button>
@@ -109,6 +105,9 @@
                             }
                         }
                     </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseDepartment)
+                    </td>
                 </tr>
             }
         </tbody>
@@ -122,6 +121,23 @@
                 $("#section-table-body tr").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
+            });
+        });
+
+        // Dept Filter script
+        $(document).ready(function () {
+            $("button.dropdown-item").on("click", function () {
+                var value = $(this).text();
+                $("#section-table-body tr").filter(function () {
+                    $(this).toggle($(this).text().indexOf(value) > -1)
+                });
+            });
+        });
+
+        // Clear filter script
+        $(document).ready(function () {
+            $("#clear-filter").on("click", function () {
+                $("#section-table-body tr").show();
             });
         });
     </script>
