@@ -63,6 +63,7 @@ namespace Lightaplusplus.Pages.Registration
             }
 
             StudentId = (int)id;
+            Users = user;
 
             SectionsList = await _context.Sections
                 .Include(s => s.Instructor)
