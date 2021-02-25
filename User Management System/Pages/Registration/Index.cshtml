@@ -29,6 +29,15 @@
         </div>
     </div>
 
+    @if (Model.isError)
+    {
+        <div class="alert alert-danger" role="alert">
+            <strong>Error:</strong>
+            @Model.RegisterError
+            Return to registration <a class="alert-link" asp-page="/Registration/Index" asp-route-id="@Model.StudentId">here</a>.
+        </div>
+    }
+
     <table class="table table-striped">
         <thead>
             <tr>

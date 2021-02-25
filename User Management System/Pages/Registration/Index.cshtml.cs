@@ -36,6 +36,12 @@ namespace Lightaplusplus.Pages.Registration
         [BindProperty]
         public List<SectionRegistration> SectionRegistrations { get; set; }
 
+        [BindProperty]
+        public bool isError { get; set; }
+
+        [BindProperty]
+        public string RegisterError { get; set; }
+
         public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -85,11 +91,47 @@ namespace Lightaplusplus.Pages.Registration
                 SectionRegistrations.Add(new SectionRegistration(section, sectionRegistry, registrationStatus));
             }
 
+            isError = false;
             return Page();
         }
 
         public async Task<IActionResult> OnPostRegisterAsync(int studentId, int sectionId)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            var doesExist = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
+            var sectionList = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).ToListAsync();
+
+            if (user == null)
+            {
+                RegisterError = "Invalid Student Account.";
+                isError = true;
+                return Page();
+            }
+            else if (section == null)
+            {
+                RegisterError = "Error: Invalid Class.";
+                isError = true;
+                return Page();
+            }
+            else if (doesExist != null)
+            {
+                RegisterError = "You are already registered in that class.";
+                isError = true;
+                return Page();
+            }
+            else if (section.SectionCapacity < sectionList.Count())
+            {
+                RegisterError = "That class is full.";
+                isError = true;
+                return Page();
+            }
+            else
+            {
+                isError = false;
+                RegisterError = string.Empty;
+            }
+
             SectionStudents sectionStudents = new SectionStudents
             {
                 StudentId = studentId,
@@ -112,11 +154,33 @@ namespace Lightaplusplus.Pages.Registration
 
         public async Task<IActionResult> OnPostDropAsync(int studentId, int sectionId)
         {
-            SectionStudents sectionStudents = new SectionStudents
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            var sectionStudents = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
+
+            if (user == null)
             {
-                StudentId = studentId,
-                SectionId = sectionId
-            };
+                RegisterError = "Invalid Student Account.";
+                isError = true;
+                return Page();
+            }
+            else if (section == null)
+            {
+                RegisterError = "Invalid Class.";
+                isError = true;
+                return Page();
+            }
+            else if (sectionStudents == null)
+            {
+                RegisterError = "You are not registered for that course.";
+                isError = true;
+                return Page();
+            }
+            else
+            {
+                isError = false;
+                RegisterError = string.Empty;
+            }
 
             _context.SectionStudents.Remove(sectionStudents);
 
