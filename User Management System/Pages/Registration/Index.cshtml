@@ -1,0 +1,154 @@
+﻿@page
+@model Lightaplusplus.Pages.Registration.RegistrationModel
+
+@{
+    ViewData["Title"] = "Registration";
+}
+
+<body>
+    <h1>Registration</h1> <br><br>
+
+    <div class="row d-flex justify-content-between" style="margin-bottom: 16px">
+        <div class="col-5">
+            <form onsubmit="return false;">
+                <input class="form-control" id="courseSearch" type="text" placeholder="Course Search.." />
+            </form>
+        </div>
+        <div class="col-2 d-flex" style="flex-direction: row-reverse">
+            <button id="department-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                Department<span class="caret"></span>
+            </button>
+            <div class="dropdown-menu" id="department-list">
+                <button id="clear-filter" class="dropdown-item" type="button">Clear Filter</button>
+                <div class="dropdown-divider"></div>
+                @foreach (var department in Model.Departments)
+                {
+                    <button class="dropdown-item" type="button">@department</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (Model.isError)
+    {
+        <div class="alert alert-danger" role="alert">
+            <strong>Error:</strong>
+            @Model.RegisterError
+            Return to registration <a class="alert-link" asp-page="/Registration/Index" asp-route-id="@Model.StudentId">here</a>.
+        </div>
+    }
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Course Code
+                </th>
+                <th>
+                    Course Number
+                </th>
+                <th>
+                    Course Name
+                </th>
+                <th>
+                    Instructor
+                </th>
+                <th>
+                    Meeting Time
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Enrollment
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="section-table-body">
+            @foreach (var item in Model.SectionRegistrations)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Instructor.firstname) @Html.DisplayFor(modelItem => item.Section.Instructor.lastname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.DaysTaught)  @Html.DisplayFor(modelItem => item.Section.SectionTimeStart)-@Html.DisplayFor(modelItem => item.Section.SectionTimeEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.SectionLocation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentRegistry.Count) / @Html.DisplayFor(modelItem => item.Section.SectionCapacity)
+                    </td>
+                    <td>
+                        @{
+                            if (item.RegistrationStatus == 'R')
+                            {
+                                <form asp-page-handler="Drop" method="post">
+                                    <button class="btn btn-danger">Drop</button>
+                                    <input name="sectionId" value="@item.Section.SectionId" hidden />
+                                    <input name="studentId" value="@Model.StudentId" hidden />
+                                </form>
+                            }
+                            else if (item.RegistrationStatus == 'F')
+                            {
+                                <button onclick="" class="btn btn-secondary" disabled>Full</button>
+                            }
+                            else
+                            {
+                                <form asp-page-handler="Register" method="post">
+                                    <button class="btn btn-primary">Register</button>
+                                    <input name="sectionId" value="@item.Section.SectionId" hidden/>
+                                    <input name="studentId" value="@Model.StudentId" hidden/>
+                                </form>
+                            }
+                        }
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.Section.Course.CourseDepartment)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>
+        // Search bar script
+        $(document).ready(function () {
+            $("#courseSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#section-table-body tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        // Dept Filter script
+        $(document).ready(function () {
+            $("button.dropdown-item").on("click", function () {
+                var value = $(this).text();
+                $("#section-table-body tr").filter(function () {
+                    $(this).toggle($(this).text().indexOf(value) > -1)
+                });
+            });
+        });
+
+        // Clear filter script
+        $(document).ready(function () {
+            $("#clear-filter").on("click", function () {
+                $("#section-table-body tr").show();
+            });
+        });
+    </script>
+
+</body>
