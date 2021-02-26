@@ -145,12 +145,21 @@ namespace Lightaplusplus.Pages
                     link.User = Users;
                     _context.UserLinks.Remove(link);
                     contextChanged = true;
+
                 }
                 else if (link.LinkId != 0 && link.link != null)
                 {
                     link.UserId = Users.ID;
                     link.User = Users;
                     Users.Links.Add(link);
+                    contextChanged = true;
+                }
+                else if (link.LinkId == 0 && link.link != null)
+                {
+                    link.UserId = Users.ID;
+                    link.User = Users;
+                    Users.Links.Add(link);
+                    contextChanged = true;
                 }
             }
             if (contextChanged)
