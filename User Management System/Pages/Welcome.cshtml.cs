@@ -42,7 +42,7 @@ namespace Lightaplusplus.Pages
                 List<Sections> sectionsList = new List<Sections>();
                 foreach (var section in StudentSections)
                 {
-                    var sections = await _context.Sections.Where(s => s.SectionId == section.SectionId).FirstOrDefaultAsync();
+                    var sections = await _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefaultAsync();
                     sectionsList.Add(sections);
                 }
 
