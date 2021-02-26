@@ -20,6 +20,9 @@ namespace Lightaplusplus.Pages.Courses
         }
 
         [BindProperty]
+        public Users Users { get; set; }
+        
+        [BindProperty]
         public int InstructorId { get; set; }
 
         [BindProperty]
@@ -84,6 +87,7 @@ namespace Lightaplusplus.Pages.Courses
             }
 
             InstructorId = (int)id;
+            Users = user;
 
             CourseList = await _context.Courses.ToListAsync();
 

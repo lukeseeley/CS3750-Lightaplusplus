@@ -20,6 +20,9 @@ namespace Lightaplusplus.Pages.Courses
         }
 
         [BindProperty]
+        public Users Users { get; set; }
+
+        [BindProperty]
         public int id { get; set; }
 
         [BindProperty]
@@ -74,7 +77,7 @@ namespace Lightaplusplus.Pages.Courses
 
             this.id = (int)id;
             CourseCreditHours = 3;
-
+            Users = user;
 
             return Page();
         }
