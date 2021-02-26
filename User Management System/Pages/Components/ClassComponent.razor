@@ -18,7 +18,7 @@
         <div class="card-body">
             <p>
                 Instructor: @Instructor <br>
-                Class Time: @StartTime.TimeOfDay - @EndTime.TimeOfDay
+                Class Time: @DaysTaught @StartTime.ToString("h:mm tt") - @EndTime.ToString("h:mm tt")
             </p>
         </div>
     </div>
@@ -31,6 +31,8 @@
     public string ClassName { get; set; }
     [Parameter]
     public string Instructor { get; set; }
+    [Parameter]
+    public string DaysTaught { get; set; }
     [Parameter]
     public DateTime StartTime { get; set; }
     [Parameter]
