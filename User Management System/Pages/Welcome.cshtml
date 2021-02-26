@@ -39,15 +39,34 @@
             <h1>Welcome</h1>
             <h4>@Html.DisplayFor(model => model.Users.firstname) @Html.DisplayFor(model => model.Users.lastname)</h4>
             <div class="row">
-                @for (var i = 0; i < 6; i++)@* Will need to repalce with for each*@
-                {
-                    <div class="col-4" style="padding-bottom:5%">
-                        <component type="typeof(Components.ClassComponent)" render-mode="Static" param-ClassNumber='"CS 0000"'
-                        param-ClassName='"Class Name"' param-Instructor='"Instructor Name"'
-                        param-StartTime='Convert.ToDateTime("10:00")' param-EndTime='Convert.ToDateTime("12:00")'
-                        param-Link='"/Welcome?id=7"' /> @* Will need to repalce Class information*@
-                    </div>
-                 }
+                @{ 
+                    if (Model.Users.usertype == 'I')
+                    {
+                        foreach (var card in Model.SectionsArray)
+                        {
+                            <div class="col-4" style="padding-bottom:5%">
+                                <component type="typeof(Components.InstructorClassComponent)" render-mode="Static" param-ClassNumber='card.Course.CourseNumber'
+                                    param-ClassName='card.Course.CourseName'
+                                    param-StartTime='Convert.ToDateTime(card.SectionTimeStart)' param-EndTime='Convert.ToDateTime(card.SectionTimeEnd)'
+                                    param-DaysTaught='card.DaysTaught' param-ClassCode='card.Course.CourseCode'
+                                    param-Link='"/Welcome?id=7"' /> @* Will need to repalce link*@
+                            </div>
+                        }
+                    }
+                    else if (Model.Users.usertype == 'S')
+                    {
+                        foreach (var card in Model.SectionsArray)
+                        {
+                            <div class="col-4" style="padding-bottom:5%">
+                                <component type="typeof(Components.ClassComponent)" render-mode="Static" param-ClassNumber='card.Course.CourseNumber'
+                                param-ClassName='card.Course.CourseName' param-Instructor='card.Instructor.firstname + " " + card.Instructor.lastname'
+                                param-DaysTaught='card.DaysTaught' param-StartTime='Convert.ToDateTime(card.SectionTimeStart)' param-EndTime='Convert.ToDateTime(card.SectionTimeEnd)'
+                                param-Link='"/Welcome?id=7"' /> @* Will need to repalce link*@
+                            </div>
+                        }
+
+                    }
+                }
             </div>
         </div>
         <div class="col-3">

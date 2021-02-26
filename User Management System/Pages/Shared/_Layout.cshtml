@@ -45,7 +45,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Welcome" asp-route-id="@Context.Request.Query["id"]">Home</a>
                         </li>
-                        @if (Model.Users.usertype == 'I')
+                        @if (Model.Users.usertype == 'S')
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Registration/Index" asp-route-id="@Context.Request.Query["id"]">Registration</a>
+                            </li>
+                        }
+                        else if (Model.Users.usertype == 'I')
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Courses/Index" asp-route-id="@Context.Request.Query["id"]">Courses</a>
@@ -57,12 +63,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Grades</a>
                         </li>
-                        @if (Model.Users.usertype == 'S')
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Registration/Index" asp-route-id="@Context.Request.Query["id"]">Registration</a>
-                            </li>
-                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Help</a>
                         </li>
