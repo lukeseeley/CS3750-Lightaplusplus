@@ -11,6 +11,7 @@ namespace Lightaplusplus.Models
         public Sections()
         {
             this.SectionStudents = new HashSet<SectionStudents>();
+            this.Assignments = new HashSet<Assignments>();
         }
         
         /// <summary>
@@ -72,5 +73,10 @@ namespace Lightaplusplus.Models
         /// The collection of students that belong to a section
         /// </summary>
         public virtual ICollection<SectionStudents> SectionStudents { get; set; }
+
+        /// <summary>
+        /// The collection of assignments for a section
+        /// </summary>
+        public virtual ICollection<Assignments> Assignments { get; set; }
     }
 }

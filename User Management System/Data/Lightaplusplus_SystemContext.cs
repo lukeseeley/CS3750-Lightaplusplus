@@ -20,6 +20,8 @@ namespace Lightaplusplus.Data
         public DbSet<Courses> Courses { get; set; }
         public DbSet<Sections> Sections { get; set; }
         public DbSet<SectionStudents> SectionStudents { get; set; }
+        public DbSet<Assignments> Assignments { get; set; }
+        public DbSet<Payments> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

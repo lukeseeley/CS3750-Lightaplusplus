@@ -19,6 +19,43 @@ namespace Lightaplusplus.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Lightaplusplus.Models.Assignments", b =>
+                {
+                    b.Property<int>("AssignmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AssignmentDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignmentDueDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("AssignmentMaxPoints")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AssignmentSubmissionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("AssignmentTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("SectionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AssignmentId");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("Assignments");
+                });
+
             modelBuilder.Entity("Lightaplusplus.Models.Courses", b =>
                 {
                     b.Property<int>("CourseId")
@@ -54,6 +91,30 @@ namespace Lightaplusplus.Migrations
                     b.HasKey("CourseId");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("Lightaplusplus.Models.Payments", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("PaymentAmount")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PaymentDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Lightaplusplus.Models.SectionStudents", b =>
@@ -197,6 +258,24 @@ namespace Lightaplusplus.Migrations
                     b.HasAlternateKey("email");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Lightaplusplus.Models.Assignments", b =>
+                {
+                    b.HasOne("Lightaplusplus.Models.Sections", "Section")
+                        .WithMany("Assignments")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Lightaplusplus.Models.Payments", b =>
+                {
+                    b.HasOne("Lightaplusplus.Models.Users", "User")
+                        .WithMany("Payments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lightaplusplus.Models.SectionStudents", b =>

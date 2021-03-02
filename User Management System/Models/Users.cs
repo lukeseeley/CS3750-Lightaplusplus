@@ -13,6 +13,7 @@ namespace Lightaplusplus.Models
             this.Links = new HashSet<UserLinks>();
             this.InstructorSections = new HashSet<Sections>();
             this.StudentSections = new HashSet<SectionStudents>();
+            this.Payments = new HashSet<Payments>();
         }
 
         /// <summary>
@@ -113,6 +114,11 @@ namespace Lightaplusplus.Models
         /// This is the collection of sections a student is enrolled in
         /// </summary>
         public virtual ICollection<SectionStudents> StudentSections { get; set; }
+
+        /// <summary>
+        /// This is a collection of payments made by the student
+        /// </summary>
+        public virtual ICollection<Payments> Payments { get; set; }
 
         /// <summary>
         /// The profile picture for the users
