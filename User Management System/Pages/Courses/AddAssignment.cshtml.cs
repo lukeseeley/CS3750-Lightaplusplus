@@ -24,7 +24,6 @@ namespace Lightaplusplus.Pages.Courses
 
         public Users Users { get; set; }
 
-        [BindProperty]
         public int SectionId { get; set; }
 
         [BindProperty]
@@ -56,56 +55,97 @@ namespace Lightaplusplus.Pages.Courses
         public Assignments Assignments { get; set; }
 
         [BindProperty]
-        public bool IsError { get; set; }
+        public string TitleError { get; set; }
 
         [BindProperty]
-        public string AssignmentsError { get; set; }
+        public string DescriptionError { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id, int sectionId)
+        [BindProperty]
+        public string DueDateError { get; set; }
+
+        [BindProperty]
+        public string PointsError { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? sectionId)
         {
-            if (id == null)
+            if (sectionId == null)
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Courses/Index", new { InstructorId });
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'I') //Ensure that only an instructor can add a new assignment
-            {
-                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
-            }
-            if(section == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            InstructorId = (int)id;
             SectionId = (int)sectionId;
-            Users = user;
 
-
-
-            IsError = false;
-            //ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "DaysTaught");
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? sectionId)
         {
-            if (!ModelState.IsValid)
+            if (sectionId == null)
+            {
+                return RedirectToPage("/Courses/Index", new { InstructorId });
+            }
+
+            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
+
+            SectionId = (int)sectionId;
+
+            // Data validation
+            var errors = false;
+
+            if(AssignmentTitle == string.Empty)
+            {
+                TitleError = "Please enter an assignment title.";
+                errors = true;
+            }
+            else if(AssignmentTitle.Length > 50)
+            {
+                TitleError = "Please enter a title that's less than 50 characters.";
+                errors = true;
+            }
+
+            if(AssignmentDescription == string.Empty)
+            {
+                DescriptionError = "Please enter an assignment description.";
+                errors = true;
+            }
+
+            if(AssignmentDueDateTime == null)
+            {
+                DueDateError = "Please enter a due date for the assignment.";
+                errors = true;
+            }
+
+            if(AssignmentMaxPoints <= 0)
+            {
+                PointsError = "Please enter a positive amount for points.";
+                errors = true;
+            }
+
+            if (errors)
             {
                 return Page();
             }
 
+
+            // Data assignment
+            Assignments.SectionId = SectionId;
+            Assignments.AssignmentTitle = AssignmentTitle;
+            Assignments.AssignmentDescription = AssignmentDescription;
+            Assignments.AssignmentDueDateTime = AssignmentDueDateTime;
+            Assignments.AssignmentMaxPoints = AssignmentMaxPoints;
+            Assignments.AssignmentSubmissionType = AssignmentSubmissionType;
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}
+
             _context.Assignments.Add(Assignments);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Courses/Index", new { InstructorId });
         }
     }
 }
