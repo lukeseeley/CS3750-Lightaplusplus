@@ -31,6 +31,11 @@ namespace Lightaplusplus.Pages
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
+            if (Users == null)
+            {
+                return RedirectToPage("/Index");
+            }
+
             if (Users.usertype == 'S')
             {
                 // get all the sections the student is in

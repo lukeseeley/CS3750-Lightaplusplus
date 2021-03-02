@@ -49,7 +49,7 @@
                                     param-ClassName='card.Course.CourseName'
                                     param-StartTime='Convert.ToDateTime(card.SectionTimeStart)' param-EndTime='Convert.ToDateTime(card.SectionTimeEnd)'
                                     param-DaysTaught='card.DaysTaught' param-ClassCode='card.Course.CourseCode'
-                                    param-Link='"/Welcome?id=7"' /> @* Will need to repalce link*@
+                                    param-Link='$"/Courses/View/{card.SectionId}?id={Model.Users.ID}"' />
                             </div>
                         }
                     }
@@ -61,7 +61,7 @@
                                 <component type="typeof(Components.ClassComponent)" render-mode="Static" param-ClassNumber='card.Course.CourseNumber'
                                 param-ClassName='card.Course.CourseName' param-Instructor='card.Instructor.firstname + " " + card.Instructor.lastname'
                                 param-DaysTaught='card.DaysTaught' param-StartTime='Convert.ToDateTime(card.SectionTimeStart)' param-EndTime='Convert.ToDateTime(card.SectionTimeEnd)'
-                                param-Link='"/Welcome?id=7"' /> @* Will need to repalce link*@
+                                param-Link='$"/Courses/View/{card.SectionId}?id={Model.Users.ID}"' />
                             </div>
                         }
 
@@ -77,7 +77,7 @@
                     <component type="typeof(Components.ToDoListComponent)" render-mode="Static" param-ClassNumber='"CS 0000"'
                     param-AssignmentName='"Impossible Quiz #12"'
                     param-DueDate='"2/12/21 at 11:59"'
-                    param-Link='"/Welcome?id=3"' /> @* Will need to repalce Class information*@
+                    param-Link='"/Welcome?id=3"' /> @* Will need to replace Class information*@
             }
         </div>
     </div>
