@@ -31,11 +31,18 @@
                 <tbody id="section-table-body">
                     @foreach (var assignment in Model.Assignments)
                     {
-                        <tr>
-                            <td>@assignment.AssignmentTitle</td>
-                            <td>@assignment.AssignmentDescription</td>
+                    <tr>
+                        <td>@assignment.AssignmentTitle</td>
+                        <td>@assignment.AssignmentDescription</td>
+                        @if (@assignment.AssignmentDueDateTime.Year == DateTime.Today.Year)
+                        {
                             <td>@assignment.AssignmentDueDateTime.ToString("MMMM d") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
-                        </tr>
+                        }
+                        else
+                        {
+                            <td>@assignment.AssignmentDueDateTime.ToString("MMMM d, yyyy") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
+                        }
+                    </tr>
                     }
                 </tbody>
 

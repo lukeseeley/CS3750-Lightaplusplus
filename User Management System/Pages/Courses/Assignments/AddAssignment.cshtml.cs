@@ -93,16 +93,32 @@ namespace Lightaplusplus.Pages.Courses
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? sectionId)
+        public async Task<IActionResult> OnPostAsync(int sectionId, int? id)
         {
-            if (sectionId == null)
+            SectionId = sectionId;
+
+            if (id == null)
             {
-                return RedirectToPage("/Courses/Index", new { id = Users.ID });
+                return RedirectToPage("/Index");
             }
 
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
-            SectionId = (int)sectionId;
+            if (Users == null)
+            {
+                return RedirectToPage("/Index");
+            }
+            else if (Users.usertype != 'I')
+            {
+                return RedirectToPage("/Welcome", new { id = id });
+            }
+
+            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == SectionId);
+
+            if (section.InstructorId != Users.ID)
+            {
+                return RedirectToPage("/Courses/Index", new { id = id });
+            }
 
             // Data validation
             var errors = false;
@@ -158,7 +174,7 @@ namespace Lightaplusplus.Pages.Courses
             _context.Assignments.Add(Assignments);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Courses/Index", new { id = Users.ID });
+            return RedirectToPage("/Courses/View/Index", new { sectionId = SectionId, id = Users.ID });
         }
     }
 }
