@@ -42,7 +42,21 @@ namespace Lightaplusplus.Pages.Courses.View
                 return RedirectToPage("/Index");
             }
 
-            Section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == SectionId);
+            if (Users.usertype == 'I')
+            {
+                Section = await _context.Sections.Include(s => s.Course).Where(s => s.InstructorId == Users.ID).FirstOrDefaultAsync(s => s.SectionId == SectionId);
+            }
+            else if (Users.usertype == 'S')
+            {
+                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).FirstOrDefaultAsync(ss => ss.SectionId == SectionId);
+                if (StudentSections == null)
+                {
+                    return RedirectToPage("/Welcome", new { id = id });
+                }
+
+                Section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == SectionId);
+            }
+
 
             if (Section == null)
             {
@@ -52,7 +66,7 @@ namespace Lightaplusplus.Pages.Courses.View
                 }
                 else
                 {
-                    return RedirectToPage("/Courses", new { id = id });
+                    return RedirectToPage("/Courses/Index", new { id = id });
                 }
             }
 
