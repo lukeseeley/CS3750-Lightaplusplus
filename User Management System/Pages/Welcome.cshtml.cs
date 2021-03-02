@@ -24,6 +24,14 @@ namespace Lightaplusplus.Pages
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+
+            CreditCard mycard = new CreditCard();
+
+            mycard.cardNumber = "4242424242424242";
+            mycard.cvc = "314";
+            mycard.exp_month = "2";
+            mycard.exp_year = "2022";
+            PaymentProcessor.processPayment(mycard, 12.00);
             if (id == null)
             {
                 return NotFound();
