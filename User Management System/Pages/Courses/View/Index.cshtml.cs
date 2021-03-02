@@ -24,6 +24,8 @@ namespace Lightaplusplus.Pages.Courses.View
 
         public Sections Section { get; set; }
 
+        public List<Assignments> Assignments { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int sectionId, int? id)
         {
             SectionId = sectionId;
@@ -53,6 +55,8 @@ namespace Lightaplusplus.Pages.Courses.View
                     return RedirectToPage("/Courses", new { id = id });
                 }
             }
+
+            Assignments = await _context.Assignments.Where(a => a.SectionId == SectionId).ToListAsync();
 
             return Page();
         }

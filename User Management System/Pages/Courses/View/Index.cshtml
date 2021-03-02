@@ -1,6 +1,48 @@
-﻿@page "{sectionId:int}"
+﻿@page "/Courses/{sectionId:int}"
 @model Lightaplusplus.Pages.Courses.View.IndexModel
 @{
     <h1>@Model.Section.Course.CourseCode @Model.Section.Course.CourseNumber </h1>
     <h2>@Model.Section.Course.CourseName</h2>
+
+    <div class="row d-flex justify-content-between" style="margin-top: 20px">
+        <h4>Assignments</h4>
+        @if(Model.Users.usertype == 'I')
+        {
+            <div>
+                <a asp-page="/Courses/View" asp-route-sectionId="@Model.SectionId" class="btn btn-primary">Create Assignment</a>
+            </div>
+        }
+    </div>
+    <div class="row">
+        @if (Model.Assignments.Count > 0)
+        {
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+
+                <tbody id="section-table-body">
+                    @foreach (var assignment in Model.Assignments)
+                    {
+                        <tr>
+                            <td>@assignment.AssignmentTitle</td>
+                            <td>@assignment.AssignmentDescription</td>
+                            <td>@assignment.AssignmentDueDateTime.ToString("MMMM d at h:mm tt")</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <h5>It looks like you don't have any assignments yet.</h5>
+        }
+    </div>
+
+
 }

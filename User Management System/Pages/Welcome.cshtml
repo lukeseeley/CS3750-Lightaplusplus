@@ -49,7 +49,7 @@
                                     param-ClassName='card.Course.CourseName'
                                     param-StartTime='Convert.ToDateTime(card.SectionTimeStart)' param-EndTime='Convert.ToDateTime(card.SectionTimeEnd)'
                                     param-DaysTaught='card.DaysTaught' param-ClassCode='card.Course.CourseCode'
-                                    param-Link='$"/Courses/View/{card.SectionId}?id={Model.Users.ID}"' />
+                                    param-Link='$"/Courses/{card.SectionId}?id={Model.Users.ID}"' />
                             </div>
                         }
                     }
