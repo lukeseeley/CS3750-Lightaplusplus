@@ -9,7 +9,10 @@
         @if(Model.Users.usertype == 'I')
         {
             <div>
-                <a asp-page="/Courses/View" asp-route-sectionId="@Model.SectionId" class="btn btn-primary">Create Assignment</a>
+                <a asp-page="/Courses/AddAssignment" 
+                   asp-route-sectionId="@Model.SectionId" 
+                   asp-route-id="@Model.Users.ID" 
+                   class="btn btn-primary">Create Assignment</a>
             </div>
         }
     </div>
