@@ -26,9 +26,6 @@ namespace Lightaplusplus.Pages.Courses
 
         public int SectionId { get; set; }
 
-        [BindProperty]
-        public int InstructorId { get; set; }
-
         [BindProperty, Required, MaxLength(50)]
         public string AssignmentTitle { get; set; }
 
@@ -66,16 +63,32 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public string PointsError { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? sectionId)
+        public async Task<IActionResult> OnGetAsync(int sectionId, int? id)
         {
-            if (sectionId == null)
+            SectionId = sectionId;
+
+            if (id == null)
             {
-                return RedirectToPage("/Courses/Index", new { InstructorId });
+                return RedirectToPage("/Index");
             }
 
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
-            SectionId = (int)sectionId;
+            if (Users == null)
+            {
+                return RedirectToPage("/Index");
+            }
+            else if(Users.usertype != 'I')
+            {
+                return RedirectToPage("/Welcome", new { id = id });
+            }
+
+            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == SectionId);
+
+            if (section.InstructorId != Users.ID)
+            {
+                return RedirectToPage("/Courses/Index", new { id = id });
+            }
 
             return Page();
         }
@@ -84,7 +97,7 @@ namespace Lightaplusplus.Pages.Courses
         {
             if (sectionId == null)
             {
-                return RedirectToPage("/Courses/Index", new { InstructorId });
+                return RedirectToPage("/Courses/Index", new { id = Users.ID });
             }
 
             var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
@@ -145,7 +158,7 @@ namespace Lightaplusplus.Pages.Courses
             _context.Assignments.Add(Assignments);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Courses/Index", new { InstructorId });
+            return RedirectToPage("/Courses/Index", new { id = Users.ID });
         }
     }
 }
