@@ -9,10 +9,22 @@ namespace Lightaplusplus.Models
 {
     static public class PaymentProcessor
     {
+        /// <summary>
+        /// Client used to make requests
+        /// </summary>
         static HttpClient client = new HttpClient();
-        static private string key = "pk_test_51IOyT2GsHQoDsRIPnzHV6DcAWIGxPoonSWIvqWPWTyaY2EgtMj7ndIXotur6wwN81XtDmvtDjOF3RtfbY0o4vcss00WGYuhOQM";
+        /// <summary>
+        /// Stripe Secret
+        /// </summary>
         static private string secret = "sk_test_51IOyT2GsHQoDsRIPdQtyVoAL3hrGvoo5gv1Tig3Ab0hVmNqp9hagIzFdWXYNnpCm73KGvqboPVvHbhfuQ3btf0kc00NMejcBMV";
-        static public async void processPayment(CreditCard card, double paymentAmount)
+
+        /// <summary>
+        /// processPayment takes a CreditCard object and a double (the amount being paid) as arguments, and returns whether the charge was successful or not.
+        /// </summary>
+        /// <param name="card">CreditCard object, all fields are required</param>
+        /// <param name="paymentAmount">The amount being paid, as a double. (100.00)</param>
+        /// <returns>succeeded if the charge was successful, not successful if there was an error during processing</returns>
+        static public string processPayment(CreditCard card, double paymentAmount)
         {
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + secret);
             string requestUrl = "https://api.stripe.com/v1/tokens";
@@ -30,9 +42,9 @@ namespace Lightaplusplus.Models
             httpRequestMessage.Content = new FormUrlEncodedContent(data);
             try
             {
-                HttpResponseMessage responseMessage = await client.PostAsync(requestUrl, httpRequestMessage.Content);
+                HttpResponseMessage responseMessage = client.PostAsync(requestUrl, httpRequestMessage.Content).GetAwaiter().GetResult();
                 HttpContent content = responseMessage.Content;
-                string message = await content.ReadAsStringAsync();
+                string message = content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var test = JsonConvert.SerializeObject(message);
                 // Get Card Token
                 var json = JsonConvert.DeserializeObject<dynamic>(message);
@@ -46,23 +58,19 @@ namespace Lightaplusplus.Models
                 // Make API call
                 httpRequestMessage = new HttpRequestMessage();
                 httpRequestMessage.Content = new FormUrlEncodedContent(data);
-                responseMessage = await client.PostAsync(chargeUrl, httpRequestMessage.Content);
+                responseMessage = client.PostAsync(chargeUrl, httpRequestMessage.Content).GetAwaiter().GetResult();
                 content = responseMessage.Content;
-                message = await content.ReadAsStringAsync();
+                message = content.ReadAsStringAsync().GetAwaiter().GetResult();
                 json = JsonConvert.DeserializeObject<dynamic>(message);
                 string status = json.status.ToString();
 
-                // update DB if successful
-                if (status == "succeeded")
-                {
-
-                }
-
-                Console.WriteLine("test");
+                // return whether is was successful or not. "succeeded" returns if it was successful
+                return status;
             }
             catch (HttpRequestException exception)
             {
                 Console.WriteLine("An HTTP request exception occurred. {0}", exception.Message);
+                return "error";
             }
         }
     }
