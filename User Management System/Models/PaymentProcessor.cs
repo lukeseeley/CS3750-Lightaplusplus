@@ -55,7 +55,7 @@ namespace Lightaplusplus.Models
                 // update DB if successful
                 if (status == "succeeded")
                 {
-                    
+
                 }
 
                 Console.WriteLine("test");
