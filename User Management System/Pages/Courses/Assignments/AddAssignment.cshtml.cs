@@ -49,7 +49,7 @@ namespace Lightaplusplus.Pages.Courses
         public virtual Sections Section { get; set; }
 
         [BindProperty]
-        public Assignments Assignments { get; set; }
+        public Models.Assignments Assignments { get; set; }
 
         [BindProperty]
         public string TitleError { get; set; }
@@ -89,6 +89,8 @@ namespace Lightaplusplus.Pages.Courses
             {
                 return RedirectToPage("/Courses/Index", new { id = id });
             }
+
+            AssignmentDueDateTime = DateTime.Now;
 
             return Page();
         }
