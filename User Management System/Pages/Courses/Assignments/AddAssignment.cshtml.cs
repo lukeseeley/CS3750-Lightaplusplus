@@ -35,6 +35,12 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty, Required, DataType(DataType.DateTime)]
         public DateTime AssignmentDueDateTime { get; set; }
 
+        [BindProperty, Required, DataType(DataType.Date)]
+        public DateTime DueDate {get; set;}
+
+        [BindProperty, Required, DataType(DataType.Time)]
+        public DateTime DueTime { get; set; }
+
         [BindProperty, Required]
         public int? AssignmentMaxPoints { get; set; }
 
@@ -50,12 +56,6 @@ namespace Lightaplusplus.Pages.Courses
 
         [BindProperty]
         public Models.Assignments Assignments { get; set; }
-
-        [BindProperty]
-        public string TitleError { get; set; }
-
-        [BindProperty]
-        public string DescriptionError { get; set; }
 
         [BindProperty]
         public string DueDateError { get; set; }
@@ -90,7 +90,8 @@ namespace Lightaplusplus.Pages.Courses
                 return RedirectToPage("/Courses/Index", new { id = id });
             }
 
-            AssignmentDueDateTime = DateTime.Now;
+            DueDate = DateTime.Today.AddDays(1);
+            DueTime = new DateTime().AddHours(12).AddHours(11).AddMinutes(59);
 
             return Page();
         }
@@ -125,29 +126,6 @@ namespace Lightaplusplus.Pages.Courses
             // Data validation
             var errors = false;
 
-            if(AssignmentTitle == string.Empty)
-            {
-                TitleError = "Please enter an assignment title.";
-                errors = true;
-            }
-            else if(AssignmentTitle.Length > 50)
-            {
-                TitleError = "Please enter a title that's less than 50 characters.";
-                errors = true;
-            }
-
-            if(AssignmentDescription == string.Empty)
-            {
-                DescriptionError = "Please enter an assignment description.";
-                errors = true;
-            }
-
-            if(AssignmentDueDateTime == null)
-            {
-                DueDateError = "Please enter a due date for the assignment.";
-                errors = true;
-            }
-
             if(AssignmentMaxPoints <= 0)
             {
                 PointsError = "Please enter a positive amount for points.";
@@ -164,7 +142,7 @@ namespace Lightaplusplus.Pages.Courses
             Assignments.SectionId = SectionId;
             Assignments.AssignmentTitle = AssignmentTitle;
             Assignments.AssignmentDescription = AssignmentDescription;
-            Assignments.AssignmentDueDateTime = AssignmentDueDateTime;
+            Assignments.AssignmentDueDateTime = DueDate.Date.Add(DueTime.TimeOfDay);
             Assignments.AssignmentMaxPoints = AssignmentMaxPoints;
             Assignments.AssignmentSubmissionType = AssignmentSubmissionType;
 
