@@ -18,11 +18,17 @@ namespace Lightaplusplus.Models
             string requestUrl = "https://api.stripe.com/v1/tokens";
             string postdata = "card%5Bnumber%5D=" + card.cardNumber + "&card%5Bexp_month%5D=" + card.exp_month + "&card%5Bexp_year%5D=" + card.exp_year + "&card%5Bcvc%5D=" + card.cvc;
 
+            IDictionary<string, string> data = new Dictionary<string, string>();
 
+            data.Add("card[number]", card.cardNumber);
+            data.Add("card[exp_month]", card.exp_month);
+            data.Add("card[exp_year]", card.exp_year);
+            data.Add("card[cvc]", card.cvc);
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage();
-            httpRequestMessage.Headers.Add("Content-type", "www-url-form-encoded");
-            httpRequestMessage.Content = new StringContent(postdata);
+            //httpRequestMessage.Headers.Add("Content-type", "www-url-form-encoded");
+            //httpRequestMessage.Content = new StringContent(postdata);
+            httpRequestMessage.Content = new FormUrlEncodedContent(data);
             try
             {
                 HttpResponseMessage responseMessage = await client.PostAsync(requestUrl, httpRequestMessage.Content);
