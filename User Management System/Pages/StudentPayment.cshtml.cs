@@ -45,6 +45,8 @@ namespace Lightaplusplus.Pages
 
         public Users Users { get; set; }
 
+        public List<Payments> Payments { get; set; }
+
         public string ErrorCardNumber { get; set; }
         public string ErrorSecurityCode { get; set; }
         public string ErrorMonth { get; set; }
@@ -63,6 +65,8 @@ namespace Lightaplusplus.Pages
 
             RemainingBalance = await GetRemainingBalacne();
             PaymentAmount = RemainingBalance;
+
+            Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 
             if (Users == null)
             {
