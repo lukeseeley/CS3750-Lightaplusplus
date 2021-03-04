@@ -4,7 +4,7 @@
 }
 
 <style>
-    button {
+    button.sub {
         margin-top: 32px;
     }
 
@@ -30,6 +30,19 @@
 
     div.form-row{
         margin-left: 1%;
+    }
+
+    div.success {
+        color: green;
+        margin-top: 1%;
+        margin-left: 1%;
+        font-size: 22px;
+    }
+
+    div.fail {
+        margin-top: 1%;
+        margin-left: 1%;
+        font-size: 22px;
     }
 </style>
 
@@ -90,19 +103,29 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label asp-for="PaymentAmount">Payment Amount</label>
-                    <input asp-for="PaymentAmount" type="text" class="form-control" placeholder="Your Name Here">
-                    <span asp-validation-for="PaymentAmount" class="text-danger"></span>
+                    <input asp-for="PaymentAmount" type="text" class="form-control" placeholder="Your Amount Here">
+                    <span asp-validation-for="PaymentAmount" class="text-danger">@Model.ErrorPaymentAmount</span>
                 </div>
 
                 <div class="form-group col-md-3">
                     <label></label>
-                    <button type="submit" class="btn btn-primary">Submit Payment</button>
+                    <button type="submit" class="btn btn-primary sub">Submit Payment</button>
                 </div>
             </div>
 
-            <div>
-                <div class="text-danger"> @Model.Message </div>
-            </div>
+            @if (Model.Message == "Payment Successful")
+            {
+                <div>
+                    <div class="success"> @Model.Message </div>
+                </div>
+            }
+            @if (Model.Message == "Payment Failed")
+            {
+                <div>
+                    <div class="text-danger fail"> @Model.Message </div>
+                </div>
+            }
+
         </div>
     </form>
 }

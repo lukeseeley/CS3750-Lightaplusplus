@@ -139,7 +139,7 @@ namespace Lightaplusplus.Pages
             }
 
             //Validate PaymentAmount
-            if(PaymentAmount > RemainingBalance)
+            if(PaymentAmount < RemainingBalance)
             {
                 ErrorPaymentAmount = "Can't pay more than the remaining balance.";
             }
