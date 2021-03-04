@@ -1,0 +1,155 @@
+﻿@page
+@model Lightaplusplus.Pages.StudentPaymentModel
+@{
+}
+
+<style>
+    button.sub {
+        margin-top: 32px;
+    }
+
+    div.bord {
+        border-style: groove;
+        border-color: darkgrey;
+        border-radius: 20px;
+        box-shadow: 0 0 0 grey;
+        transition: box-shadow 0.3s ease-in-out;
+        background-color: #e9ecef;
+    }
+
+        div.bord:hover {
+            box-shadow: 0 5px 15px grey;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+    h3.Pay {
+        background-color: white;
+        margin-left: 1%;
+        margin-top: 10%;
+    }
+
+    div.form-row {
+        margin-left: 1%;
+    }
+
+    div.success {
+        color: green;
+        margin-top: 1%;
+        margin-left: 1%;
+        font-size: 22px;
+    }
+
+    div.fail {
+        margin-top: 1%;
+        margin-left: 1%;
+        font-size: 22px;
+    }
+</style>
+
+@if (Model.Message == "Payment Successful")
+{
+    <div class="alert alert-success" role="alert">
+        @Model.Message
+    </div>
+}
+@if (Model.Message == "Payment Failed")
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.Message
+    </div>
+}
+
+<div class="form-row">
+    <div class="col-md-6">
+        <h3>Remaining Balance</h3>
+        <input asp-for="RemainingBalance" type="text" class="form-control" disabled>
+    </div>
+</div>
+
+@if(Model.Payments.Count > 0)
+{
+    <div class="row" style="margin-top: 5%">
+        <h3>Payment History</h3>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Payment Amount</th>
+                    <th>Payment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var payment in Model.Payments)
+                {
+                    <tr>
+                        <td>$@payment.PaymentAmount</td>
+                        <td>@payment.PaymentDateTime.ToString("MM/dd/yyyy") at @payment.PaymentDateTime.ToString("h:mm tt")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (Model.RemainingBalance != 0)
+{
+    <form method="post">
+        <h3 class="Pay">Make A Payment</h3>
+        <div class="bord">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label asp-for="CardNumber">Card Number</label>
+                    <input asp-for="CardNumber" type="text" class="form-control" placeholder="4242424242424242">
+                    <span asp-validation-for="CardNumber" class="text-danger">@Model.ErrorCardNumber</span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="SecurityCode">Security Code (CVC)</label>
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <input asp-for="SecurityCode" type="text" class="form-control" placeholder="123">
+                            <span asp-validation-for="SecurityCode" class="text-danger">@Model.ErrorSecurityCode</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label asp-for="CardName">Name on Card</label>
+                    <input asp-for="CardName" class="form-control" placeholder="Your Name Here">
+                    <span asp-validation-for="CardName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="CardMonth">Expiration Date</label>
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <input asp-for="CardMonth" type="text" class="form-control" placeholder="8">
+                            <span asp-validation-for="CardMonth" class="text-danger">@Model.ErrorMonth</span>
+                        </div>
+                        <div>
+                            <label>/</label>
+                        </div>
+                        <div class="col-md-5">
+                            <input asp-for="CardYear" type="text" class="form-control" placeholder="2020">
+                            <span asp-validation-for="CardYear" class="text-danger">@Model.ErrorYear</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label asp-for="PaymentAmount">Payment Amount</label>
+                    <input asp-for="PaymentAmount" type="text" class="form-control" placeholder="Your Amount Here">
+                    <span asp-validation-for="PaymentAmount" class="text-danger">@Model.ErrorPaymentAmount</span>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label></label>
+                    <button type="submit" class="btn btn-primary sub">Submit Payment</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+}
+
