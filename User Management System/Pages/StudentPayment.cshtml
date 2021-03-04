@@ -17,10 +17,10 @@
         background-color: #e9ecef;
     }
 
-    div.bord:hover{
-        box-shadow: 0 5px 15px grey;
-        transition: box-shadow 0.3s ease-in-out;
-    }
+        div.bord:hover {
+            box-shadow: 0 5px 15px grey;
+            transition: box-shadow 0.3s ease-in-out;
+        }
 
     h3.Pay {
         background-color: white;
@@ -28,7 +28,7 @@
         margin-top: 10%;
     }
 
-    div.form-row{
+    div.form-row {
         margin-left: 1%;
     }
 
@@ -46,6 +46,18 @@
     }
 </style>
 
+@if (Model.Message == "Payment Successful")
+{
+    <div class="alert alert-success" role="alert">
+        @Model.Message
+    </div>
+}
+@if (Model.Message == "Payment Failed")
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.Message
+    </div>
+}
 
 <div class="form-row">
     <div class="col-md-6">
@@ -112,19 +124,6 @@
                     <button type="submit" class="btn btn-primary sub">Submit Payment</button>
                 </div>
             </div>
-
-            @if (Model.Message == "Payment Successful")
-            {
-                <div>
-                    <div class="success"> @Model.Message </div>
-                </div>
-            }
-            @if (Model.Message == "Payment Failed")
-            {
-                <div>
-                    <div class="text-danger fail"> @Model.Message </div>
-                </div>
-            }
 
         </div>
     </form>

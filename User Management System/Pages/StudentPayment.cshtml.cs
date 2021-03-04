@@ -75,6 +75,8 @@ namespace Lightaplusplus.Pages
         {
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
+            RemainingBalance = await GetRemainingBalacne();
+
             if (!ModelState.IsValid)
             {
                 RemainingBalance = await GetRemainingBalacne();
@@ -139,9 +141,9 @@ namespace Lightaplusplus.Pages
             }
 
             //Validate PaymentAmount
-            if(PaymentAmount < RemainingBalance)
+            if(PaymentAmount > RemainingBalance)
             {
-                ErrorPaymentAmount = "Can't pay more than the remaining balance.";
+                ErrorPaymentAmount = "Enter a payment amount that is less than the remaining balance.";
             }
             else if(PaymentAmount <= 0)
             {
