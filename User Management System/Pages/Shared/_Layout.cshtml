@@ -45,10 +45,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Welcome" asp-route-id="@Context.Request.Query["id"]">Home</a>
                         </li>
-                        @if (Model.Users.usertype == 'S')
+                       @if (Model.Users.usertype == 'S')
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Registration/Index" asp-route-id="@Context.Request.Query["id"]">Registration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/StudentPayment" asp-route-id="@Context.Request.Query["id"]">Payment</a>
                             </li>
                         }
                         else if (Model.Users.usertype == 'I')

@@ -26,7 +26,7 @@ namespace Lightaplusplus.Models
         /// <returns>succeeded if the charge was successful, not successful if there was an error during processing</returns>
         static public string processPayment(CreditCard card, double paymentAmount)
         {
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + secret);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", secret);
             string requestUrl = "https://api.stripe.com/v1/tokens";
             string chargeUrl = "https://api.stripe.com/v1/charges";
             string postdata = "card%5Bnumber%5D=" + card.cardNumber + "&card%5Bexp_month%5D=" + card.exp_month + "&card%5Bexp_year%5D=" + card.exp_year + "&card%5Bcvc%5D=" + card.cvc;

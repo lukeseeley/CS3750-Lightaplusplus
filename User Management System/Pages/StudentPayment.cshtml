@@ -1,0 +1,85 @@
+﻿@page
+@model Lightaplusplus.Pages.StudentPaymentModel
+@{
+}
+
+<style>
+    button {
+        margin-top: 32px;
+    }
+    div.bord {
+        border-style: groove;
+        border-color: darkgrey;
+        border-radius: 20px;
+        margin-top: 5%;
+    }
+</style>
+
+<div class="form-row">
+    <div class="col-md-6">
+        <label asp-for="RemainingBalance">Remaining Balance</label>
+        <input asp-for="RemainingBalance" type="text" class="form-control" disabled>
+    </div>
+</div>
+
+<form method="post">
+    <div class="bord">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="CardNumber">Card Number</label>
+                <input asp-for="CardNumber" type="text" class="form-control" placeholder="4242424242424242">
+                <span asp-validation-for="CardNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="SecurityCode">Security Code (CVC)</label>
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <input asp-for="SecurityCode" type="text" class="form-control" placeholder="123">
+                        <span asp-validation-for="SecurityCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="CardName">Name on Card</label>
+                <input asp-for="CardName" class="form-control" placeholder="Your Name Here">
+                <span asp-validation-for="CardName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="CardMonth">Expiration Date</label>
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <input asp-for="CardMonth" type="text" class="form-control" placeholder="8">
+                        <span asp-validation-for="CardMonth" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label>/</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input asp-for="CardYear" type="text" class="form-control" placeholder="2020">
+                        <span asp-validation-for="CardYear" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label asp-for="PaymentAmount">Amount you want to pay</label>
+                <input asp-for="PaymentAmount" type="text" class="form-control" placeholder="Your Name Here">
+                <span asp-validation-for="PaymentAmount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label></label>
+                <button type="submit" class="btn btn-primary">Submit Payment</button>
+            </div>
+        </div>
+
+        <div>
+            <div class="text-danger"> @Model.Message </div>
+        </div>
+    </div>
+</form>
