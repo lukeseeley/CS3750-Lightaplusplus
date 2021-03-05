@@ -198,6 +198,7 @@ namespace Lightaplusplus.Pages
             else
             {
                 RemainingBalance = await GetRemainingBalacne();
+                Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
                 PaymentAmount = RemainingBalance;
                 return Page();
             }
