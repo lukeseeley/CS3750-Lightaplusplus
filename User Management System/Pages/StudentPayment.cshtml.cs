@@ -78,6 +78,7 @@ namespace Lightaplusplus.Pages
         public async Task<IActionResult> OnPostAsync(int? id)
         {
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+            Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 
             RemainingBalance = await GetRemainingBalacne();
 
@@ -198,7 +199,6 @@ namespace Lightaplusplus.Pages
             else
             {
                 RemainingBalance = await GetRemainingBalacne();
-                Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
                 PaymentAmount = RemainingBalance;
                 return Page();
             }
