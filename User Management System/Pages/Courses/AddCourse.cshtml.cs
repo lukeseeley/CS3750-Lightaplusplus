@@ -82,6 +82,35 @@ namespace Lightaplusplus.Pages.Courses
             return Page();
         }
 
+        public void addCourse(string CourseCode, int CourseNumber, string CourseName, string CourseDescription, string CourseDepartment, int CourseCreditHours)
+        {
+            Models.Courses newCourse = new Models.Courses();
+
+            newCourse.CourseCode = CourseCode;
+            newCourse.CourseNumber = CourseNumber;
+            newCourse.CourseName = CourseName;
+            newCourse.CourseDescription = CourseDescription;
+            newCourse.CourseDepartment = CourseDepartment;
+            newCourse.CourseCreditHours = CourseCreditHours;
+            _context.Courses.Add(Courses);
+            _context.SaveChanges();
+            var testc = checkCourse(CourseCode, CourseNumber);
+            return;
+        }
+
+        public bool checkCourse(string CourseCode, int CourseNumber)
+        {
+            var course = _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First();
+            
+            return course != null;
+        }
+
+        public void removeCourse(string CourseCode, int CourseNumber)
+        {
+            _context.Courses.Remove(_context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First());
+            return;
+        }
+
         public async Task<IActionResult> OnPostAsync(int? id)
         {   
             //Handle security checks first
@@ -127,7 +156,7 @@ namespace Lightaplusplus.Pages.Courses
 
             if (errors) return Page();
 
-            Courses.CourseCode = CourseCode;
+            /*Courses.CourseCode = CourseCode;
             Courses.CourseNumber = CourseNumber;
 
             Courses.CourseName = CourseName;
@@ -137,8 +166,10 @@ namespace Lightaplusplus.Pages.Courses
             Courses.CourseCreditHours = CourseCreditHours;
 
 
-            _context.Courses.Add(Courses);
-            await _context.SaveChangesAsync();
+            _context.Courses.Add(Courses);*/
+
+            addCourse(CourseCode, CourseNumber, CourseName, CourseDescription, CourseDepartment, CourseCreditHours);
+            //await _context.SaveChangesAsync();
 
             return RedirectToPage("/Courses/Index", new { id = id });
         }
