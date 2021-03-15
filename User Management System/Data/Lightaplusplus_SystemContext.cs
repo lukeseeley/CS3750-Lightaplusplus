@@ -22,6 +22,7 @@ namespace Lightaplusplus.Data
         public DbSet<SectionStudents> SectionStudents { get; set; }
         public DbSet<Assignments> Assignments { get; set; }
         public DbSet<Payments> Payments { get; set; }
+        public DbSet<AssignmentSubmissions> AssignmentSubmissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
