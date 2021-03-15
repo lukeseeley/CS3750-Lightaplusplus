@@ -18,6 +18,8 @@
     <Compile Remove="Migrations\20210219211604_StudentSections.Designer.cs" />
     <Compile Remove="Migrations\20210219211824_StudentSections.cs" />
     <Compile Remove="Migrations\20210219211824_StudentSections.Designer.cs" />
+    <Compile Remove="Migrations\20210315220113_Add-Submissions.cs" />
+    <Compile Remove="Migrations\20210315220113_Add-Submissions.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
