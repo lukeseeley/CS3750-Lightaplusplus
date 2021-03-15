@@ -24,7 +24,7 @@ namespace Lightaplusplus.Pages.Courses.View
 
         public Sections Section { get; set; }
 
-        public List<Assignments> Assignments { get; set; }
+        public List<Models.Assignments> Assignments { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int sectionId, int? id)
         {

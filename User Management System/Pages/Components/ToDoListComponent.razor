@@ -1,6 +1,6 @@
 ﻿<div class="card" style="width:100%; padding:5px">
-    <a style="padding:2px,5px" href="redirect to class goes here">@ClassNumber</a>
-    <a style="padding:2px,5px" href="redirect to assignment goes here">@AssignmentName</a>
+    <a style="padding:2px,5px" href="@CourseLink">@ClassNumber</a>
+    <a style="padding:2px,5px" href="@AssignmentLink">@AssignmentName</a>
     <a style="padding:2px,5px">Due: @DueDate</a>
 </div>
 
@@ -12,5 +12,7 @@
     [Parameter]
     public string DueDate { get; set; }
     [Parameter]
-    public string Link { get; set; }
+    public string CourseLink { get; set; }
+    [Parameter]
+    public string AssignmentLink { get; set; }
 }
