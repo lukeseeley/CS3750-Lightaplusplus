@@ -140,6 +140,12 @@ namespace Lightaplusplus.Pages
             {
                 if (DateTime.Now.CompareTo(assignment.AssignmentDueDateTime) < 0) //The assignment is still in the future
                 {
+                    if(Users.usertype == 'S')
+                    {
+                        var Submission = await _context.AssignmentSubmissions.FirstOrDefaultAsync(asub => asub.AssignmentId == assignment.AssignmentId && asub.StudentId == Users.ID);
+                        if (Submission != null) continue; //As the student has already submitted this assignment
+                    }
+                    
                     TodoAssignments.Add(assignment);
                 }
             }
