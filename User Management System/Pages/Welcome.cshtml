@@ -80,6 +80,10 @@
                     param-CourseLink='$"/Courses/{Model.TodoAssignments[i].SectionId}?id={Model.Users.ID}"'
                     param-AssignmentLink='$"/Courses/{Model.TodoAssignments[i].SectionId}/Assignments/{Model.TodoAssignments[i].AssignmentId}?id={Model.Users.ID}"' />
             }
+            @if(Model.TodoAssignments.Count < 1)
+            {
+                <p>Lucky you! It looks like you have nothing on your to-do list for now.</p>
+            }
         </div>
     </div>
     <div class="row">
