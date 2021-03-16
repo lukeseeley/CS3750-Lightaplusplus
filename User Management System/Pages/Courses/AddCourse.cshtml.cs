@@ -82,35 +82,6 @@ namespace Lightaplusplus.Pages.Courses
             return Page();
         }
 
-        public void addCourse(string CourseCode, int CourseNumber, string CourseName, string CourseDescription, string CourseDepartment, int CourseCreditHours)
-        {
-            Models.Courses newCourse = new Models.Courses();
-
-            newCourse.CourseCode = CourseCode;
-            newCourse.CourseNumber = CourseNumber;
-            newCourse.CourseName = CourseName;
-            newCourse.CourseDescription = CourseDescription;
-            newCourse.CourseDepartment = CourseDepartment;
-            newCourse.CourseCreditHours = CourseCreditHours;
-            _context.Courses.Add(newCourse);
-            _context.SaveChanges();
-            var testc = checkCourse(CourseCode, CourseNumber);
-            return;
-        }
-
-        public bool checkCourse(string CourseCode, int CourseNumber)
-        {
-            var course = _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First();
-            
-            return course != null;
-        }
-
-        public void removeCourse(string CourseCode, int CourseNumber)
-        {
-            _context.Courses.Remove(_context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First());
-            return;
-        }
-
         public async Task<IActionResult> OnPostAsync(int? id)
         {   
             //Handle security checks first
@@ -133,6 +104,7 @@ namespace Lightaplusplus.Pages.Courses
             //Handle Validation checks
             var errors = false;
             var existingCourse = await _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).FirstOrDefaultAsync();
+            CourseAdder myAdder = new CourseAdder(_context);
             if(existingCourse != null)
             {
                 ExistingCourseError = "That Course already exists.";
@@ -156,20 +128,7 @@ namespace Lightaplusplus.Pages.Courses
 
             if (errors) return Page();
 
-            /*Courses.CourseCode = CourseCode;
-            Courses.CourseNumber = CourseNumber;
-
-            Courses.CourseName = CourseName;
-            Courses.CourseDescription = CourseDescription;
-            Courses.CourseDepartment = CourseDepartment;
-
-            Courses.CourseCreditHours = CourseCreditHours;
-
-
-            _context.Courses.Add(Courses);*/
-
-            addCourse(CourseCode, CourseNumber, CourseName, CourseDescription, CourseDepartment, CourseCreditHours);
-            //await _context.SaveChangesAsync();
+            myAdder.addCourse(CourseCode, CourseNumber, CourseName, CourseDescription, CourseDepartment, CourseCreditHours);
 
             return RedirectToPage("/Courses/Index", new { id = id });
         }

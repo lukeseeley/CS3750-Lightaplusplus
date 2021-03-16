@@ -34,14 +34,21 @@ namespace Lightaplusplus.Pages.Courses
 
         public bool checkCourse(string CourseCode, int CourseNumber)
         {
-            var course = _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First();
-
-            return course != null;
+            try
+            {
+                var course = _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First();
+                return course != null;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void removeCourse(string CourseCode, int CourseNumber)
         {
             _context.Courses.Remove(_context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First());
+            _context.SaveChanges();
             return;
         }
     }
