@@ -22,6 +22,10 @@ namespace Lightaplusplus.Pages
 
         public Sections[] SectionsArray { get; set; }
 
+        public List<Assignments> Assignments { get; set; }
+
+        public List<Assignments> TodoAssignments { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
 
@@ -97,6 +101,57 @@ namespace Lightaplusplus.Pages
                     }
                 }
             }
+
+            Assignments = new List<Assignments>();
+            TodoAssignments = new List<Assignments>();
+
+            //Let's get the list of assignments
+            if(Users.usertype == 'S')
+            {
+                var SectionList = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
+                foreach (var section in SectionList)
+                {
+                    var assignments = await _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToListAsync();
+
+                    if (assignments != null)
+                    {
+                        Assignments.AddRange(assignments);
+                    }
+
+                }
+            }
+            else
+            {
+                var SectionList = await _context.Sections.Where(s => s.InstructorId == Users.ID).ToListAsync();
+                foreach (var section in SectionList)
+                {
+                    var assignments = await _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToListAsync();
+
+                    if (assignments != null)
+                    {
+                        Assignments.AddRange(assignments);
+                    }
+
+                }
+            }
+
+            //Now let's created a filtered list for the todo list
+            foreach (var assignment in Assignments)
+            {
+                if (DateTime.Now.CompareTo(assignment.AssignmentDueDateTime) < 0) //The assignment is still in the future
+                {
+                    if(Users.usertype == 'S')
+                    {
+                        var Submission = await _context.AssignmentSubmissions.FirstOrDefaultAsync(asub => asub.AssignmentId == assignment.AssignmentId && asub.StudentId == Users.ID);
+                        if (Submission != null) continue; //As the student has already submitted this assignment
+                    }
+                    
+                    TodoAssignments.Add(assignment);
+                }
+            }
+
+            //Now sort to soonest
+            TodoAssignments.Sort((a1, a2) => DateTime.Compare(a1.AssignmentDueDateTime, a2.AssignmentDueDateTime));
 
             if (Users == null)
             {
