@@ -92,7 +92,7 @@ namespace Lightaplusplus.Pages.Courses
             newCourse.CourseDescription = CourseDescription;
             newCourse.CourseDepartment = CourseDepartment;
             newCourse.CourseCreditHours = CourseCreditHours;
-            _context.Courses.Add(Courses);
+            _context.Courses.Add(newCourse);
             _context.SaveChanges();
             var testc = checkCourse(CourseCode, CourseNumber);
             return;
