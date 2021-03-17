@@ -39,8 +39,9 @@ namespace Lightaplusplus.Pages.Courses
                 var course = _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First();
                 return course != null;
             }
-            catch
+            catch (Exception e)
             {
+                // log exception
                 return false;
             }
         }

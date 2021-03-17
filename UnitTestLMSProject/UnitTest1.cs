@@ -19,7 +19,7 @@ namespace UnitTestLMSProject
             CourseAdder myAdder = new CourseAdder(context);
 
             // Perform operations
-            myAdder.addCourse("CS", 1234, "Test being run", "This is just a test", "Social Sciences", 4);
+            myAdder.addCourse("CS", 123456789, "Test being run", "This is just a test", "Social Sciences", 4);
 
             // Analyze results
             Assert.IsTrue(myAdder.checkCourse("CS", 123456789));
@@ -35,7 +35,7 @@ namespace UnitTestLMSProject
             CourseAdder myAdder = new CourseAdder(context);
 
             // Perform operations
-            myAdder.removeCourse("CS", 1234);
+            myAdder.removeCourse("CS", 123456789);
 
             // Analyze results
             Assert.IsFalse(myAdder.checkCourse("CS", 123456789));
