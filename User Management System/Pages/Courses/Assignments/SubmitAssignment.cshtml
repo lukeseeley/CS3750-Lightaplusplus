@@ -4,21 +4,37 @@
     ViewData["Title"] = "Submit Assignment";
 }
 
+<style>
+    textarea {
+        margin-bottom: 3%;
+    }
+    .file {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        color: #0366D6;
+        cursor: pointer;
+    }
+    .file:hover{
+        text-decoration: underline;
+    }
+</style>
+
 <h1>Submit Assignment</h1>
 @*
-TODO: Make button for instructor to edit assignment    
-<div class="row d-flex justify-content-between" style="margin-top: 20px">
-    @if (Model.Users.usertype == 'I')
-    {
-        <div>
-            <a asp-page="/Courses/Assignments/"
-               asp-route-sectionId="@Model.SectionId"
-               asp-route-id="@Model.Users.ID"
-               asp-route-assignmentId="@Model.Ass"
-               class="btn btn-primary">Edit Assignment</a>
-        </div>
-    }
-</div>*@
+    TODO: Make button for instructor to edit assignment
+    <div class="row d-flex justify-content-between" style="margin-top: 20px">
+        @if (Model.Users.usertype == 'I')
+        {
+            <div>
+                <a asp-page="/Courses/Assignments/"
+                   asp-route-sectionId="@Model.SectionId"
+                   asp-route-id="@Model.Users.ID"
+                   asp-route-assignmentId="@Model.Ass"
+                   class="btn btn-primary">Edit Assignment</a>
+            </div>
+        }
+    </div>*@
 <div>
     <hr />
     <dl class="row">
@@ -48,10 +64,65 @@ TODO: Make button for instructor to edit assignment
         </dd>
     </dl>
 </div>
+
+
+
 <div>
     @if (@Model.Users.usertype == 'S')
     {
-        <button class="btn btn-primary">Submit</button>
+        //if the assignment is a file submission
+        if (Model.Assignments.AssignmentSubmissionType == 'F')
+        {
+            <div>
+                <form method="post" enctype="multipart/form-data">
+                    @if (Model.Display == false)
+                    {
+                        <input asp-page-handler="DownloadFile" type="submit" class="file" value="@Model.FilePath">
+                    }
+                    else
+                    {
+                        <input asp-for="FileUpload" type="file">
+                        <input asp-page-handler="Upload" class="btn btn-primary up" type="submit" value="Upload" />
+                    }
+                    <input asp-for="HiddenId" type="text" hidden>
+                    <input asp-for="HiddenSectionId" type="text" hidden>
+                    <input asp-for="HiddenAssignmentId" type="text" hidden>
+                </form>
+            </div>
+        }
+        // if the assignment is a text submission
+        else if (Model.Assignments.AssignmentSubmissionType == 'T')
+        {
+            <form method="post">
+                @if(Model.Display == false)
+                {
+                    <textarea asp-for="Assignment" rows="10" class="form-control" disabled="disabled"></textarea>
+                }
+                else
+                {
+                    <textarea asp-for="Assignment" rows="10" class="form-control" placeholder="Your Assignment Here"></textarea>
+                    <input asp-page-handler="Text" class="btn btn-primary" type="submit" value="Submit" />
+                }
+                
+                <input asp-for="HiddenId" type="text" hidden>
+                <input asp-for="HiddenSectionId" type="text" hidden>
+                <input asp-for="HiddenAssignmentId" type="text" hidden>
+            </form>
+        }
+
+        if (Model.Success == 1)
+        {
+            <div class="alert alert-success" role="alert">
+                Upload Successful
+            </div>
+        }
+        else if (Model.Success == 2)
+        {
+            <div class="alert alert-danger" role="alert">
+                Upload Failed
+            </div>
+        }
+
     }
     <a asp-page="/Courses/View/Index"
        asp-route-sectionId="@Model.SectionId"
