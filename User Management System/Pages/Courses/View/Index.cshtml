@@ -45,11 +45,22 @@
                         <td>@assignment.AssignmentMaxPoints</td>
                         <td>
                             <div>
-                                <a asp-page="/Courses/Assignments/SubmitAssignment"
-                                   asp-route-sectionId="@Model.SectionId"
-                                   asp-route-id="@Model.Users.ID"
-                                   asp-route-assignmentId="@assignment.AssignmentId"
-                                   class="btn btn-primary">Submit</a>
+                                @if (@Model.Users.usertype == 'S')
+                                {
+                                    <a asp-page="/Courses/Assignments/SubmitAssignment"
+                                       asp-route-sectionId="@Model.SectionId"
+                                       asp-route-id="@Model.Users.ID"
+                                       asp-route-assignmentId="@assignment.AssignmentId"
+                                       class="btn btn-primary">Submit</a>
+                                }
+                                else
+                                {
+                                    <a asp-page="/Courses/Assignments/SubmitAssignment"
+                                       asp-route-sectionId="@Model.SectionId"
+                                       asp-route-id="@Model.Users.ID"
+                                       asp-route-assignmentId="@assignment.AssignmentId"
+                                       class="btn btn-primary">View</a>
+                                }
                             </div>
                         </td>
                     </tr>

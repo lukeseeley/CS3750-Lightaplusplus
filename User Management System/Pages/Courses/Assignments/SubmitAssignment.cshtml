@@ -5,7 +5,20 @@
 }
 
 <h1>Submit Assignment</h1>
-
+@*
+TODO: Make button for instructor to edit assignment    
+<div class="row d-flex justify-content-between" style="margin-top: 20px">
+    @if (Model.Users.usertype == 'I')
+    {
+        <div>
+            <a asp-page="/Courses/Assignments/"
+               asp-route-sectionId="@Model.SectionId"
+               asp-route-id="@Model.Users.ID"
+               asp-route-assignmentId="@Model.Ass"
+               class="btn btn-primary">Edit Assignment</a>
+        </div>
+    }
+</div>*@
 <div>
     <hr />
     <dl class="row">
@@ -36,6 +49,11 @@
     </dl>
 </div>
 <div>
-    <button class="btn btn-primary">Submit</button>
-    <a asp-page="./Index" asp-route-id="@Model.SectionId">Back to List</a>
+    @if (@Model.Users.usertype == 'S')
+    {
+        <button class="btn btn-primary">Submit</button>
+    }
+    <a asp-page="/Courses/View/Index"
+       asp-route-sectionId="@Model.SectionId"
+       asp-route-id="@Model.Users.ID">Back to List</a>
 </div>
