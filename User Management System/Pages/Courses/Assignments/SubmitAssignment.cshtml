@@ -1,0 +1,41 @@
+﻿@page "/Courses/{sectionId:int}/Assignments/{assignmentId:int}"
+@model Lightaplusplus.Pages.Courses.Assignments.SubmitAssignmentModel
+@{
+    ViewData["Title"] = "Submit Assignment";
+}
+
+<h1>Submit Assignment</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignments.AssignmentTitle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignments.AssignmentTitle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignments.AssignmentDescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignments.AssignmentDescription)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignments.AssignmentDueDateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignments.AssignmentDueDateTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignments.AssignmentMaxPoints)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignments.AssignmentMaxPoints)
+        </dd>
+    </dl>
+</div>
+<div>
+    <button class="btn btn-primary">Submit</button>
+    <a asp-page="./Index" asp-route-id="@Model.SectionId">Back to List</a>
+</div>
