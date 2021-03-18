@@ -70,12 +70,7 @@
 <div>
     @if (@Model.Users.usertype == 'S')
     {
-        if (Model.Submitted == true)
-        {
-            <button type="button" class="btn btn-success">Submitted&#10003;</button>
-        }
-        else
-        {
+
             //if the assignment is a file submission
             if (Model.Assignments.AssignmentSubmissionType == 'F')
             {
@@ -84,6 +79,7 @@
                     @if (Model.Display == false)
                     {
                         <input asp-page-handler="DownloadFile" type="submit" class="file" value="@Model.FilePath">
+                        <button type="button" class="btn btn-success">Submitted&#10003;</button>
                     }
                     else
                     {
@@ -115,7 +111,6 @@
                 <input asp-for="HiddenAssignmentId" type="text" hidden>
             </form>
             }
-        }
 
         if (Model.Success == 1)
         {

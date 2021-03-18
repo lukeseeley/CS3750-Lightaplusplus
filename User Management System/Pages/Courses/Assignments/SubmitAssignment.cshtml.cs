@@ -198,7 +198,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
             byte[] bytes = System.IO.File.ReadAllBytes(path);
 
-            return File(bytes, "application/octet-stream", Submissions.Submission);         
+            string fileName = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.ID.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
+
+            return File(bytes, "application/octet-stream", fileName);         
         }
     }
 }
