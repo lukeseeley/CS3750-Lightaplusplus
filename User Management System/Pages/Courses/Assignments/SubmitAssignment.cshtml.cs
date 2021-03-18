@@ -90,7 +90,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                     }
                     else if(Assignments.AssignmentSubmissionType == 'F')
                     {
-                        FilePath = Submissions.Submission;
+                        FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.firstname.Length - Users.lastname.Length - Assignments.AssignmentTitle.Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length-4,4);
                     }
                 }
                 else
@@ -118,9 +118,13 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
         public async Task<IActionResult> OnPostUploadAsync()
         {
+            Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
+            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
+            SectionId = HiddenSectionId;
             try
             {
-                var file = Path.Combine(_environment.ContentRootPath, "Assignments", FileUpload.FileName);
+                string path = FileUpload.FileName.Substring(0, FileUpload.FileName.Length - 4) + Users.firstname + Users.lastname + Assignments.AssignmentTitle + FileUpload.FileName.Substring(FileUpload.FileName.Length - 4, 4);
+                var file = Path.Combine(_environment.ContentRootPath, "Assignments", path);
                 using (var fileStream = new FileStream(file, FileMode.Create))
                 {
                     await FileUpload.CopyToAsync(fileStream);
@@ -129,7 +133,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                 assignment.AssignmentId = HiddenAssignmentId;
                 assignment.StudentId = HiddenId;
                 assignment.SubmissionDateTime = DateTime.Now;
-                assignment.Submission = FileUpload.FileName;
+                assignment.Submission = path; 
 
                 _context.AssignmentSubmissions.Add(assignment);
                 await _context.SaveChangesAsync();
@@ -149,16 +153,13 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
             Success = 1;
 
-            Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
-            SectionId = HiddenSectionId;
-
             return Page();
 
         }
 
         public async Task<IActionResult> OnPostTextAsync()
         {
+
             try
             {
                 AssignmentSubmissions assignment = new AssignmentSubmissions();
@@ -189,11 +190,14 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             SectionId = HiddenSectionId;
 
             return Page();
-
         }
 
         public async Task<IActionResult> OnPostDownloadFileAsync()
         {
+            Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
+            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
+            SectionId = HiddenSectionId;
+
             Submissions = await _context.AssignmentSubmissions.FirstOrDefaultAsync(s => s.StudentId == HiddenId && s.AssignmentId == HiddenAssignmentId);
 
             string path = Path.Combine(_environment.ContentRootPath, "Assignments", Submissions.Submission);
