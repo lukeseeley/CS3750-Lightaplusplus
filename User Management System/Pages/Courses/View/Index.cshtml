@@ -47,6 +47,8 @@
                             <div>
                                 @if (@Model.Users.usertype == 'S')
                                 {
+                                    @*TODO: Change link to <class="btn btn-success">Submitted<>
+                                        if assignment has been submitted*@
                                     <a asp-page="/Courses/Assignments/SubmitAssignment"
                                        asp-route-sectionId="@Model.SectionId"
                                        asp-route-id="@Model.Users.ID"

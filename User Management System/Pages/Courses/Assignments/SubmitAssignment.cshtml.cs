@@ -53,6 +53,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
         public string FilePath { get; set; }
 
+        [BindProperty]
+        public bool Submitted { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int sectionId, int? id, int assignmentId)
         {
             SectionId = sectionId;
@@ -83,6 +86,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                 if (Submissions != null)
                 {
                     Display = false;
+                    Submitted = true;
 
                     if(Assignments.AssignmentSubmissionType == 'T')
                     {
@@ -96,6 +100,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                 else
                 {
                     Display = true;
+                    Submitted = false;
                 }
             }
             catch { }

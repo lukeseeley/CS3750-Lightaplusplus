@@ -70,9 +70,15 @@
 <div>
     @if (@Model.Users.usertype == 'S')
     {
-        //if the assignment is a file submission
-        if (Model.Assignments.AssignmentSubmissionType == 'F')
+        if (Model.Submitted == true)
         {
+            <button type="button" class="btn btn-success">Submitted&#10003;</button>
+        }
+        else
+        {
+            //if the assignment is a file submission
+            if (Model.Assignments.AssignmentSubmissionType == 'F')
+            {
             <div>
                 <form method="post" enctype="multipart/form-data">
                     @if (Model.Display == false)
@@ -89,12 +95,12 @@
                     <input asp-for="HiddenAssignmentId" type="text" hidden>
                 </form>
             </div>
-        }
-        // if the assignment is a text submission
-        else if (Model.Assignments.AssignmentSubmissionType == 'T')
-        {
+            }
+            // if the assignment is a text submission
+            else if (Model.Assignments.AssignmentSubmissionType == 'T')
+            {
             <form method="post">
-                @if(Model.Display == false)
+                @if (Model.Display == false)
                 {
                     <textarea asp-for="Assignment" rows="10" class="form-control" disabled="disabled"></textarea>
                 }
@@ -108,6 +114,7 @@
                 <input asp-for="HiddenSectionId" type="text" hidden>
                 <input asp-for="HiddenAssignmentId" type="text" hidden>
             </form>
+            }
         }
 
         if (Model.Success == 1)
