@@ -90,7 +90,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                     }
                     else if(Assignments.AssignmentSubmissionType == 'F')
                     {
-                        FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.firstname.Length - Users.lastname.Length - Assignments.AssignmentTitle.Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length-4,4);
+                        FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.ID.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length-4,4);
                     }
                 }
                 else
@@ -123,7 +123,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             SectionId = HiddenSectionId;
             try
             {
-                string path = FileUpload.FileName.Substring(0, FileUpload.FileName.Length - 4) + Users.firstname + Users.lastname + Assignments.AssignmentTitle + FileUpload.FileName.Substring(FileUpload.FileName.Length - 4, 4);
+                string path = FileUpload.FileName.Substring(0, FileUpload.FileName.Length - 4) + Users.ID.ToString() + Assignments.AssignmentId.ToString() + FileUpload.FileName.Substring(FileUpload.FileName.Length - 4, 4);
                 var file = Path.Combine(_environment.ContentRootPath, "Assignments", path);
                 using (var fileStream = new FileStream(file, FileMode.Create))
                 {
