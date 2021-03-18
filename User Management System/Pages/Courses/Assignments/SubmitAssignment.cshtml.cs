@@ -100,16 +100,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             }
             catch { }
 
-            // TODO: Make Assignment Submittable for student or make page editable for Instructor
-            //if (Users.usertype == 'I')
-            //{
-
-            //}
-            //else if (Users.usertype == 'S')
-            //{
-
-            //}
-
             this.HiddenId = (int)id;
             this.HiddenAssignmentId = assignmentId;
             this.HiddenSectionId = sectionId;
@@ -154,7 +144,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             Success = 1;
 
             return Page();
-
         }
 
         public async Task<IActionResult> OnPostTextAsync()
@@ -204,8 +193,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
             byte[] bytes = System.IO.File.ReadAllBytes(path);
 
-            return File(bytes, "application/octet-stream", Submissions.Submission);
-            
+            return File(bytes, "application/octet-stream", Submissions.Submission);         
         }
     }
 }
