@@ -104,6 +104,7 @@ namespace Lightaplusplus.Pages.Courses
             //Handle Validation checks
             var errors = false;
             var existingCourse = await _context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).FirstOrDefaultAsync();
+            CourseAdder myAdder = new CourseAdder(_context);
             if(existingCourse != null)
             {
                 ExistingCourseError = "That Course already exists.";
@@ -127,18 +128,7 @@ namespace Lightaplusplus.Pages.Courses
 
             if (errors) return Page();
 
-            Courses.CourseCode = CourseCode;
-            Courses.CourseNumber = CourseNumber;
-
-            Courses.CourseName = CourseName;
-            Courses.CourseDescription = CourseDescription;
-            Courses.CourseDepartment = CourseDepartment;
-
-            Courses.CourseCreditHours = CourseCreditHours;
-
-
-            _context.Courses.Add(Courses);
-            await _context.SaveChangesAsync();
+            myAdder.addCourse(CourseCode, CourseNumber, CourseName, CourseDescription, CourseDepartment, CourseCreditHours);
 
             return RedirectToPage("/Courses/Index", new { id = id });
         }
