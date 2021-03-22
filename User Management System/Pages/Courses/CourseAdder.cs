@@ -47,9 +47,13 @@ namespace Lightaplusplus.Pages.Courses
         }
 
         public void removeCourse(string CourseCode, int CourseNumber)
-        {
-            _context.Courses.Remove(_context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First());
-            _context.SaveChanges();
+        { 
+            while (checkCourse(CourseCode, CourseNumber))
+            {
+                _context.Courses.Remove(_context.Courses.Where(c => c.CourseCode == CourseCode).Where(c => c.CourseNumber == CourseNumber).First());
+                _context.SaveChanges();
+            }
+            
             return;
         }
     }

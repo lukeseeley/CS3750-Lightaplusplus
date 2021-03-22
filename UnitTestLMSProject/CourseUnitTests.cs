@@ -7,14 +7,14 @@ using System.ComponentModel.DataAnnotations;
 namespace UnitTestLMSProject
 {
     [TestClass]
-    public class UnitTest1
+    public class CourseUnitTests
     {
         [TestMethod]
         public void AddCourseTest()
         {
             // Preparation or setup
             var options = new DbContextOptionsBuilder<Lightaplusplus.Data.Lightaplusplus_SystemContext>();
-            options.UseSqlServer("Data Source=titan.cs.weber.edu,10433;Initial Catalog=LMS_ELON;User ID=LMS_ELON;Password=1KHI6i!erIYbF7l$sPBw");
+            options.UseSqlServer("Data Source=titan.cs.weber.edu,10433;Initial Catalog=LMS_ELON;User ID=LMS_ELON;Password=$Y02X9iwsdAQ3HcDPUig");
             var context = new Lightaplusplus.Data.Lightaplusplus_SystemContext(options.Options);
             CourseAdder myAdder = new CourseAdder(context);
 
@@ -30,7 +30,7 @@ namespace UnitTestLMSProject
         {
             // Preparation or setup
             var options = new DbContextOptionsBuilder<Lightaplusplus.Data.Lightaplusplus_SystemContext>();
-            options.UseSqlServer("Data Source=titan.cs.weber.edu,10433;Initial Catalog=LMS_ELON;User ID=LMS_ELON;Password=1KHI6i!erIYbF7l$sPBw");
+            options.UseSqlServer("Data Source=titan.cs.weber.edu,10433;Initial Catalog=LMS_ELON;User ID=LMS_ELON;Password=$Y02X9iwsdAQ3HcDPUig");
             var context = new Lightaplusplus.Data.Lightaplusplus_SystemContext(options.Options);
             CourseAdder myAdder = new CourseAdder(context);
 

@@ -62,6 +62,10 @@ namespace Lightaplusplus.Models
                 content = responseMessage.Content;
                 message = content.ReadAsStringAsync().GetAwaiter().GetResult();
                 json = JsonConvert.DeserializeObject<dynamic>(message);
+                if (message.Contains("error"))
+                {
+                    return "Error";
+                }
                 string status = json.status.ToString();
 
                 // return whether is was successful or not. "succeeded" returns if it was successful

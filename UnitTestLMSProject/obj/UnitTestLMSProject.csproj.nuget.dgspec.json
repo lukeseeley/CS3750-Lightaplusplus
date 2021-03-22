@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj": {}
+    "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj": {
+    "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
+        "projectUniqueName": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
         "projectName": "UnitTestLMSProject",
-        "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
-        "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\obj\\",
+        "projectPath": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
+        "packagesPath": "C:\\Users\\Ben\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Ben\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,8 +28,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj": {
-                "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj"
+              "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj": {
+                "projectPath": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj"
               }
             }
           }
@@ -79,21 +79,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj": {
+    "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj",
+        "projectUniqueName": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj",
         "projectName": "Lighta++",
-        "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj",
-        "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\obj\\",
+        "projectPath": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj",
+        "packagesPath": "C:\\Users\\Ben\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ben\\Documents\\GitHub\\CS3750\\User Management System\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Ben\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -160,7 +160,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     }
