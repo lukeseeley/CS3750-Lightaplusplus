@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lighta++", "User Management System\Lighta++.csproj", "{7B8D169B-FE4D-4CAB-92C5-B2E2B3A17063}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestLMSProject", "UnitTestLMSProject\UnitTestLMSProject.csproj", "{E8998423-B261-4C00-9C3C-AA4B21483C5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestLMSProject", "UnitTestLMSProject\UnitTestLMSProject.csproj", "{E8998423-B261-4C00-9C3C-AA4B21483C5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
