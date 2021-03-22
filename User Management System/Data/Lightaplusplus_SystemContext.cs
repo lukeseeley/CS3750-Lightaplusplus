@@ -23,6 +23,7 @@ namespace Lightaplusplus.Data
         public DbSet<Assignments> Assignments { get; set; }
         public DbSet<Payments> Payments { get; set; }
         public DbSet<AssignmentSubmissions> AssignmentSubmissions { get; set; }
+        public DbSet<Grades> Grades { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,8 @@ namespace Lightaplusplus.Data
                 .HasAlternateKey(u => u.email);
             modelBuilder.Entity<SectionStudents>()
                 .HasKey(ss => new { ss.SectionId, ss.StudentId });
+            modelBuilder.Entity<Grades>()
+                .HasKey(g => new { g.AssignmentId, g.StudentId });
         }
     }
 }
