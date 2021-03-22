@@ -3,3 +3,116 @@
 @{
     ViewData["Title"] = "Grade Assignment";
 }
+
+<style>
+    textarea {
+        margin-bottom: 3%;
+    }
+
+    .file {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        color: #0366D6;
+        cursor: pointer;
+    }
+
+    .file:hover {
+        text-decoration: underline;
+    }
+
+    .field {
+        padding: 5px 15px;
+        padding-left: 0;
+    }
+
+    .field-row {
+        margin: 16px -15px;
+    }
+
+</style>
+
+<h1>Grade Assignment</h1>
+<div class="container col-12">
+    <div class="field-row">
+        <h3>@Model.Submissions.Assignment.AssignmentTitle</h3>
+    </div>
+
+    @if(Model.Success)
+    {
+        <div class="alert alert-success field-row">
+            Grade Successfully Submitted
+        </div>
+    }
+
+    <div class="row" style="margin-bottom: 16px">
+        <div class="field">
+            <strong>Due</strong> @Model.Submissions.Assignment.AssignmentDueDateTime.ToString("MM/dd/yyyy") by @Model.Submissions.Assignment.AssignmentDueDateTime.ToString("h:mm tt")
+        </div>
+        @if (Model.Submissions.Assignment.AssignmentDueDateTime < Model.Submissions.SubmissionDateTime)
+        {
+            <div class="field">
+                <span class="badge badge-danger badge-pill">Submitted Late</span>
+                @Model.Submissions.SubmissionDateTime.ToString("MM/dd/yyyy") at @Model.Submissions.SubmissionDateTime.ToString("h:mm tt")
+            </div>
+        }
+        else
+        {
+            <div class="field">
+                <strong>Submitted</strong>
+                @Model.Submissions.SubmissionDateTime.ToString("MM/dd/yyyy") at @Model.Submissions.SubmissionDateTime.ToString("h:mm tt")
+            </div>
+        }
+        <div class="field">
+            <strong>Max Points</strong> @Model.Submissions.Assignment.AssignmentMaxPoints
+        </div>
+    </div>
+    <div class="row">
+        <p>@Model.Submissions.Assignment.AssignmentDescription</p>
+    </div>
+    <div class="field-row">
+        <h4>Student Submission</h4>
+        @if (Model.Submissions.Assignment.AssignmentSubmissionType == 'T')
+        {
+            <textarea asp-for="Submissions.Submission" rows="10" class="form-control" disabled="disabled"></textarea>
+        }
+        else if (Model.Submissions.Assignment.AssignmentSubmissionType == 'F')
+        {
+            <div>
+                <form method="post" enctype="multipart/form-data">
+                    <input asp-page-handler="DownloadFile" type="submit" class="file" value="@Model.FilePath">
+
+                    <input asp-for="HiddenId" type="text" hidden>
+                    <input asp-for="HiddenSubmissionId" type="text" hidden>
+                </form>
+            </div>
+        }
+    </div>
+    <div class="field-row">
+        <h4 class="heading">Student Grade</h4>
+        <form method="post">
+            @if (Model.Success || Model.Graded)
+            {
+                <div class=" form-group">
+                    <label asp-for="GradeValue" class="control-label">Points Earned <em>(Out of @Model.Submissions.Assignment.AssignmentMaxPoints)</em></label>
+                    <input asp-for="GradeValue" class="form-control" type="number" style="max-width: 150px" disabled />
+                </div>
+                
+                <button class="btn btn-success" disabled>Submitted Grade &#10003;</button>
+                <a class="btn btn-primary" asp-page="/Courses/Grades/Submissions" asp-route-id="@Model.Users.ID" asp-route-sectionId="@Model.SectionId" asp-route-assignmentId="@Model.AssignmentId">Return to List</a>
+            }
+            else
+            {
+                <div class=" form-group">
+                    <label asp-for="GradeValue" class="control-label">Points Earned <em>(Out of @Model.Submissions.Assignment.AssignmentMaxPoints)</em></label>
+                    <input asp-for="GradeValue" class="form-control" type="number" style="max-width: 150px" required />
+                    <span asp-validation-for="GradeValue" class="text-danger">@Model.GradeValueError</span>
+                </div>
+                
+                <button class="btn btn-primary">Submit Grade</button>
+                <a class="btn btn-danger" asp-page="/Courses/Grades/Submissions" asp-route-id="@Model.Users.ID" asp-route-sectionId="@Model.SectionId" asp-route-assignmentId="@Model.AssignmentId">Cancel</a>
+            }
+        </form>
+    </div>
+
+</div>
