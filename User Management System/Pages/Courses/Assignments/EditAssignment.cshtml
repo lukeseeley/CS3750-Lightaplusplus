@@ -1,0 +1,70 @@
+﻿@page
+@model Lightaplusplus.Pages.Courses.Assignments.EditAssignmentModel
+
+@{
+    ViewData["Title"] = "EditAssignment";
+}
+
+<h1>Edit Assignment</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Assignments.AssignmentId" />
+            <input type="hidden" asp-for="Assignments.SectionId" />
+            <div class="form-group">
+                <label asp-for="Assignments.AssignmentTitle" class="control-label">Assignment Title</label>
+                <input asp-for="Assignments.AssignmentTitle" class="form-control" />
+                <span asp-validation-for="Assignments.AssignmentTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Assignments.AssignmentDescription" class="control-label">Description</label>
+                <input asp-for="Assignments.AssignmentDescription" class="form-control" />
+                <span asp-validation-for="Assignments.AssignmentDescription" class="text-danger"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="DueDate" class="control-label">Due Date</label>
+                    <input asp-for="DueDate" class="form-control" type="date" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="DueTime" class="control-label">Due Time</label>
+                    <input asp-for="DueTime" class="form-control" type="time" asp-format="{0:HH:mm}" required />
+                </div>
+                <span asp-validation-for="DueTime" class="text-danger">@Model.DueDateError</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssignmentMaxPoints" class="control-label">Maximum Points</label>
+                <input asp-for="AssignmentMaxPoints" type="number" class="form-control" required />
+                <span asp-validation-for="AssignmentMaxPoints" class="text-danger">@Model.PointsError</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssignmentSubmissionType" class="control-label">Submission Type:</label>
+                <div class="form-check">
+                    <input asp-for="AssignmentSubmissionType" id="File" type="radio" value="F" />
+                    <label class="form-check-label" for="File">File Submission</label><br/>
+                    <input asp-for="AssignmentSubmissionType" id="Text" type="radio" value="T" />
+                    <label class="form-check-label" for="Text">Text Submission</label>
+                </div>
+                <span asp-validation-for="AssignmentSubmissionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Update Assignment</button>
+                <a class="btn btn-danger" asp-page="/Courses/Assignments/SubmitAssignment"
+                                          asp-route-sectionId="@Model.SectionId"
+                                          asp-route-id="@Model.id"
+                                          asp-route-assignmentId="@Model.AssignmentId">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
