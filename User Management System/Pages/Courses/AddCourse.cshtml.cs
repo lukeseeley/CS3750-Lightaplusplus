@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages.Courses
 {

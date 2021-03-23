@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Lightaplusplus.Pages.Courses
+namespace Lightaplusplus.BisLogic
 {
     public class CourseAdder
     {
