@@ -43,11 +43,11 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         [BindProperty, Required, DataType(DataType.DateTime)]
         public DateTime AssignmentDueDateTime { get; set; }
 
-        //[BindProperty, Required, DataType(DataType.Date)]
-        //public DateTime DueDate { get; set; }
+        [BindProperty, Required, DataType(DataType.Date)]
+        public DateTime DueDate { get; set; }
 
-        //[BindProperty, Required, DataType(DataType.Time)]
-        //public DateTime DueTime { get; set; }
+        [BindProperty, Required, DataType(DataType.Time)]
+        public DateTime DueTime { get; set; }
 
         [BindProperty, Required]
         public int? AssignmentMaxPoints { get; set; }
@@ -96,6 +96,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             AssignmentDueDateTime = Assignments.AssignmentDueDateTime;
             AssignmentMaxPoints = Assignments.AssignmentMaxPoints;
             AssignmentSubmissionType = Assignments.AssignmentSubmissionType;
+            DueDate = Assignments.AssignmentDueDateTime.Date;
+            DueTime = DateTime.Parse(Assignments.AssignmentDueDateTime.ToString());
+            DueTime.ToString("HH:mm tt");
 
             this.id = (int)id;
             AssignmentId = assignmentId;
@@ -109,7 +112,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
             Assignments.AssignmentTitle = AssignmentTitle;
             Assignments.AssignmentDescription = AssignmentDescription;
-            Assignments.AssignmentDueDateTime = AssignmentDueDateTime;
+            Assignments.AssignmentDueDateTime = DueDate.Date.Add(DueTime.TimeOfDay);
             Assignments.AssignmentMaxPoints = AssignmentMaxPoints;
             Assignments.AssignmentSubmissionType = AssignmentSubmissionType;
 

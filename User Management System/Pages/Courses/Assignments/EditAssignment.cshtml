@@ -17,14 +17,20 @@
                 <span asp-validation-for="AssignmentTitle" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AssignmentDescription" class="control-label">Description</label>
-                <input asp-for="AssignmentDescription" class="form-control" />
+                <label asp-for="AssignmentDescription" class="control-label">Assignment Description</label>
+                <textarea asp-for="AssignmentDescription" class="form-control"></textarea>
                 <span asp-validation-for="AssignmentDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AssignmentDueDateTime" class="control-label"></label>
-                <input asp-for="AssignmentDueDateTime" class="form-control" />
-                <span asp-validation-for="AssignmentDueDateTime" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="DueDate" class="control-label">Due Date</label>
+                    <input asp-for="DueDate" class="form-control" type="date" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="DueTime" class="control-label">Due Time</label>
+                    <input asp-for="DueTime" class="form-control" type="time" asp-format="{0:HH:mm}" required />
+                </div>
+                <span asp-validation-for="DueTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AssignmentMaxPoints" class="control-label">Max Points</label>
