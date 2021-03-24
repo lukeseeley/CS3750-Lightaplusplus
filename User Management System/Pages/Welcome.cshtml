@@ -20,25 +20,59 @@
         //https://fullcalendar.io/docs/recurring-events
         //https://fullcalendar.io/docs/event-object
         //https://fullcalendar.io/docs/Calendar-addEvent
+
+        function createEvent(eventtitle, days, start, end) {
+            var event = {
+                title: eventtitle,
+                daysOfWeek: days,
+                startTime: start,
+                endTime: end,
+            }
+
+            return event
+        }
+
+        var calendarevents = [];
+
+        function createAssignments() {
+            var evs = @Html.Raw(Json.Serialize(Model.assignmentEvents));
+            //console.log(evs);
+            return evs;
+        }
+
+        function createCourses() {
+            var evs = @Html.Raw(Json.Serialize(Model.sectionEvents));
+
+            for (var i = 0; i < evs.length; ++i) {
+                calendarevents.push(createEvent(evs[i].title, evs[i].daysOfWeek, evs[i].startTime, evs[i].endTime));
+            }
+            
+            return evs;
+        }
+
+        calendarevents = createAssignments();
+        createCourses();
+        
+        console.log(calendarevents)
+
+        //createAssignments();
+        //calendarevents.push(createEvent("CS1234", [2, 4], "10:00:00", "11:00:00"))
+        calendarevents.push(createEvent("CS000", [3, 5], "10:00:00", "11:00:00"))
+        //calendarevents.push({title: "test", start: "2021-03-12 10:00:00"})
+
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
+            console.log("Building calendar")
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: [
-                    {
-                        title: "CS1234",
-                        daysOfWeek: [2, 4],
-                        startTime: "10:00:00",
-                        endTime: "11:00:00",
-                        description: "Lecture"
-                    }
-                ],
+                events: calendarevents,
                 headerToolbar: {
                     left: 'prev, next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
             });
+            console.log(calendar)
             calendar.render();
         });
 
