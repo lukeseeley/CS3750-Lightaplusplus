@@ -16,11 +16,23 @@
     <script src='~/lib/fullcalendar/lib/main.js'></script>
 
     <script>
-
+        //https://fullcalendar.io/docs/eventClick
+        //https://fullcalendar.io/docs/recurring-events
+        //https://fullcalendar.io/docs/event-object
+        //https://fullcalendar.io/docs/Calendar-addEvent
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialVeiw: 'dayGridMonth',
+                initialView: 'dayGridMonth',
+                events: [
+                    {
+                        title: "CS1234",
+                        daysOfWeek: [2, 4],
+                        startTime: "10:00:00",
+                        endTime: "11:00:00",
+                        description: "Lecture"
+                    }
+                ],
                 headerToolbar: {
                     left: 'prev, next today',
                     center: 'title',
