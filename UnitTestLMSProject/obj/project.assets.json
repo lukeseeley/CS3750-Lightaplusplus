@@ -9665,19 +9665,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\luke\\.nuget\\packages\\": {}
+    "C:\\Users\\Cade\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
+      "projectUniqueName": "C:\\Users\\Cade\\source\\repos\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
       "projectName": "UnitTestLMSProject",
-      "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
-      "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\obj\\",
+      "projectPath": "C:\\Users\\Cade\\source\\repos\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
+      "packagesPath": "C:\\Users\\Cade\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Cade\\source\\repos\\CS3750\\UnitTestLMSProject\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Cade\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -9691,8 +9695,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj": {
-              "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj"
+            "C:\\Users\\Cade\\source\\repos\\CS3750\\User Management System\\Lighta++.csproj": {
+              "projectPath": "C:\\Users\\Cade\\source\\repos\\CS3750\\User Management System\\Lighta++.csproj"
             }
           }
         }
@@ -9735,14 +9739,11 @@
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {
-          "Microsoft.AspNetCore.App": {
-            "privateAssets": "none"
-          },
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

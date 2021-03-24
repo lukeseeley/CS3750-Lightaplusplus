@@ -8,6 +8,7 @@
     textarea {
         margin-bottom: 3%;
     }
+
     .file {
         background: none !important;
         border: none;
@@ -15,26 +16,30 @@
         color: #0366D6;
         cursor: pointer;
     }
-    .file:hover{
-        text-decoration: underline;
-    }
+
+        .file:hover {
+            text-decoration: underline;
+        }
 </style>
 
-<h1>Submit Assignment</h1>
-@*
-    TODO: Make button for instructor to edit assignment
+@if (Model.Users.usertype == 'I')
+{
     <div class="row d-flex justify-content-between" style="margin-top: 20px">
-        @if (Model.Users.usertype == 'I')
-        {
-            <div>
-                <a asp-page="/Courses/Assignments/"
-                   asp-route-sectionId="@Model.SectionId"
-                   asp-route-id="@Model.Users.ID"
-                   asp-route-assignmentId="@Model.Ass"
-                   class="btn btn-primary">Edit Assignment</a>
-            </div>
-        }
-    </div>*@
+        <h1>View Assignments</h1>
+        <div>
+            <a asp-page="/Courses/Assignments/EditAssignment"
+               asp-route-sectionId="@Model.SectionId"
+               asp-route-assignmentId="@Model.AssignmentId"
+               asp-route-id="@Model.Users.ID"
+               class="btn btn-primary">Edit Assignment</a>
+        </div>
+    </div>
+}
+else
+{
+    <h1>Submit Assignment</h1>
+}
+
 <div>
     <hr />
     <dl class="row">
@@ -71,15 +76,15 @@
     @if (@Model.Users.usertype == 'S')
     {
 
-            //if the assignment is a file submission
-            if (Model.Assignments.AssignmentSubmissionType == 'F')
-            {
+        //if the assignment is a file submission
+        if (Model.Assignments.AssignmentSubmissionType == 'F')
+        {
             <div>
                 <form method="post" enctype="multipart/form-data">
                     @if (Model.Display == false)
                     {
                         <input asp-page-handler="DownloadFile" type="submit" class="file" value="@Model.FilePath">
-                        <button type="button" class="btn btn-success">Submitted&#10003;</button>
+                        <button type="button" class="btn btn-success">Submitted &#10003;</button>
                     }
                     else
                     {
@@ -91,10 +96,10 @@
                     <input asp-for="HiddenAssignmentId" type="text" hidden>
                 </form>
             </div>
-            }
-            // if the assignment is a text submission
-            else if (Model.Assignments.AssignmentSubmissionType == 'T')
-            {
+        }
+        // if the assignment is a text submission
+        else if (Model.Assignments.AssignmentSubmissionType == 'T')
+        {
             <form method="post">
                 @if (Model.Display == false)
                 {
@@ -105,12 +110,12 @@
                     <textarea asp-for="Assignment" rows="10" class="form-control" placeholder="Your Assignment Here"></textarea>
                     <input asp-page-handler="Text" class="btn btn-primary" type="submit" value="Submit" />
                 }
-                
+
                 <input asp-for="HiddenId" type="text" hidden>
                 <input asp-for="HiddenSectionId" type="text" hidden>
                 <input asp-for="HiddenAssignmentId" type="text" hidden>
             </form>
-            }
+        }
 
         if (Model.Success == 1)
         {
