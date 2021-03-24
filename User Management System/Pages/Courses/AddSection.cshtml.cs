@@ -212,7 +212,7 @@ namespace Lightaplusplus.Pages.Courses
             _context.Sections.Add(Sections);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Courses", new { id = id });
+            return RedirectToPage("/Courses/", new { id = id });
         }
     }
 }

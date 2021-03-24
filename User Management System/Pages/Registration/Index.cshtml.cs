@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Data;
 using Lightaplusplus.Models;
-using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages.Registration
 {
@@ -35,7 +34,7 @@ namespace Lightaplusplus.Pages.Registration
         public List<Sections> SectionsList { get; set; }
 
         [BindProperty]
-        public List<SectionRegistrationData> SectionRegistrations { get; set; }
+        public List<SectionRegistration> SectionRegistrations { get; set; }
 
         [BindProperty]
         public bool isError { get; set; }
@@ -72,7 +71,7 @@ namespace Lightaplusplus.Pages.Registration
                 .AsNoTracking()
                 .ToListAsync();
 
-            SectionRegistrations = new List<SectionRegistrationData>();
+            SectionRegistrations = new List<SectionRegistration>();
             foreach (var section in SectionsList)
             {
                 var sectionRegistry = await _context.SectionStudents.Where(sr => sr.SectionId == section.SectionId).ToListAsync();
@@ -90,7 +89,7 @@ namespace Lightaplusplus.Pages.Registration
                 {
                     registrationStatus = 'N';
                 }
-                SectionRegistrations.Add(new SectionRegistrationData(section, sectionRegistry, registrationStatus));
+                SectionRegistrations.Add(new SectionRegistration(section, sectionRegistry, registrationStatus));
             }
 
             isError = false;
@@ -99,73 +98,132 @@ namespace Lightaplusplus.Pages.Registration
 
         public async Task<IActionResult> OnPostRegisterAsync(int studentId, int sectionId)
         {
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
-            var register = new StudentRegister(_context);
-            var result = register.RegisterStudent(studentId, sectionId);
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            var doesExist = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
+            var sectionList = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).ToListAsync();
 
-            if (result == 0)
+            if (user == null)
+            {
+                RegisterError = "Invalid Student Account.";
+                isError = true;
+                return Page();
+            }
+            else if (section == null)
+            {
+                RegisterError = "Invalid Class.";
+                isError = true;
+                return Page();
+            }
+            else if (doesExist != null)
+            {
+                RegisterError = "You are already registered in the class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
+                isError = true;
+                return Page();
+            }
+            else if (section.SectionCapacity < sectionList.Count())
+            {
+                RegisterError = "The class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + " is full.";
+                isError = true;
+                return Page();
+            }
+            else
             {
                 isError = false;
                 RegisterError = string.Empty;
-                return RedirectToPage("./Index", new { id = studentId });
             }
-            else isError = true;
 
-            switch (result)
+            SectionStudents sectionStudents = new SectionStudents
             {
-                case (1):
-                    RegisterError = "Invalid Student Account.";
-                    break;
-                case (2):
-                    RegisterError = "Invalid Class.";
-                    break;
-                case (3):
-                    RegisterError = "You are already registered in the class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
-                    break;
-                case (4):
-                    RegisterError = "The class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + " is full.";
-                    break;
-                default:
-                    RegisterError = "Unknown Registration Error";
-                    break;
+                StudentId = studentId,
+                SectionId = sectionId
+            };
+
+            _context.SectionStudents.Add(sectionStudents);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
             }
 
-            return Page();
+            return RedirectToPage("./Index", new { id = studentId });
         }
 
         public async Task<IActionResult> OnPostDropAsync(int studentId, int sectionId)
         {
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
-            var register = new StudentRegister(_context);
-            var result = register.DropStudent(studentId, sectionId);
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
+            var sectionStudents = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
 
-            if (result == 0)
+            if (user == null)
+            {
+                RegisterError = "Invalid Student Account.";
+                isError = true;
+                return Page();
+            }
+            else if (section == null)
+            {
+                RegisterError = "Invalid Class.";
+                isError = true;
+                return Page();
+            }
+            else if (sectionStudents == null)
+            {
+                RegisterError = "You are not registered for the course: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
+                isError = true;
+                return Page();
+            }
+            else
             {
                 isError = false;
                 RegisterError = string.Empty;
-                return RedirectToPage("./Index", new { id = studentId });
             }
-            else isError = true;
 
-            switch (result)
+            _context.SectionStudents.Remove(sectionStudents);
+
+            try
             {
-                case (1):
-                    RegisterError = "Invalid Student Account.";
-                    break;
-                case (2):
-                    RegisterError = "Invalid Class.";
-                    break;
-                case (3):
-                    RegisterError = "You are not registered for the course: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
-                    break;
-                default:
-                    RegisterError = "Unknown Drop Error";
-                    break;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
             }
 
-            return Page();
+            return RedirectToPage("./Index", new { id = studentId });
         }
 
     }
+    /// <summary>
+    /// This is a data class for organizing the information related to a section
+    /// </summary>
+    public class SectionRegistration
+    {
+        /// <summary>
+        /// This is the Section associated with this section
+        /// </summary>
+        public Sections Section { get; set; }
 
+        /// <summary>
+        /// This is the registry of students related to this section
+        /// </summary>
+        public List<SectionStudents> StudentRegistry { get; set; }
+
+        /// <summary>
+        /// This is the current registration status for this particular section
+        /// R -> Registered; F -> Full capacity;  N -> Not registered
+        /// </summary>
+        public char RegistrationStatus { get; set; }
+
+        public SectionRegistration(Sections section, List<SectionStudents> sectionStudents, char registrationStatus)
+        {
+            Section = section;
+            StudentRegistry = sectionStudents;
+            RegistrationStatus = registrationStatus;
+        }
+    }
 }
