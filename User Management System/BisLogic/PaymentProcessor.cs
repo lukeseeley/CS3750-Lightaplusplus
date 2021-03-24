@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Lightaplusplus.Models;
 
-namespace Lightaplusplus.Models
+namespace Lightaplusplus.BisLogic
 {
     static public class PaymentProcessor
     {

@@ -141,6 +141,7 @@
 
   <ItemGroup>
     <Folder Include="Assignments\" />
+    <Folder Include="BisLogic\" />
   </ItemGroup>
 
 </Project>

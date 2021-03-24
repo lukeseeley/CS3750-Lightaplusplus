@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Lightaplusplus.Models;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages
 {
