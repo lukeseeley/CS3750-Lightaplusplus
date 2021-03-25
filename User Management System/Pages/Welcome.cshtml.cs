@@ -132,19 +132,6 @@ namespace Lightaplusplus.Pages
                 }
             }
 
-            assignmentEvents = new Event[Assignments.Count()];
-            for (int i = 0; i < Assignments.Count(); ++i)
-            {
-                var myEvent = new Event();
-                myEvent.title = Assignments[i].AssignmentTitle;
-                myEvent.start = Assignments[i].AssignmentDueDateTime.ToString("yyyy-MM-dd HH:mm:ss");
-                myEvent.end = Assignments[i].AssignmentDueDateTime.AddSeconds(1).ToString("yyyy-MM-dd HH:mm:ss");
-                assignmentEvents[i] = myEvent;
-            }
-
-            //string jsonAssignments = JsonConvert.SerializeObject(assignmentEvents);
-
-
             //Now let's created a filtered list for the todo list
             foreach (var assignment in Assignments)
             {
@@ -164,6 +151,16 @@ namespace Lightaplusplus.Pages
 
             if (Users.usertype == 'S')
             {
+                assignmentEvents = new Event[Assignments.Count()];
+                for (int b = 0; b < Assignments.Count(); ++b)
+                {
+                    var myEvent = new Event();
+                    myEvent.title = Assignments[b].AssignmentTitle;
+                    myEvent.start = Assignments[b].AssignmentDueDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    myEvent.end = Assignments[b].AssignmentDueDateTime.AddSeconds(1).ToString("yyyy-MM-dd HH:mm:ss");
+                    assignmentEvents[b] = myEvent;
+                }
+
                 // get all the sections the student is in
                 var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
 
@@ -191,6 +188,73 @@ namespace Lightaplusplus.Pages
                     foreach (var course in courses)
                     {
                         studSection.Course = course;
+                    }
+                }
+
+                // create classes
+                sectionEvents = new RecurringEvent[SectionsArray.Length];
+                for (int j = 0; j < SectionsArray.Length; j++)
+                {
+                    RecurringEvent myEvent = new RecurringEvent();
+                    myEvent.title = SectionsArray[j].Course.CourseCode + " " + SectionsArray[j].Course.CourseNumber.ToString();
+                    myEvent.startTime = SectionsArray[j].SectionTimeStart.ToString("HH:mm:ss");
+                    myEvent.endTime = SectionsArray[j].SectionTimeEnd.ToString("HH:mm:ss");
+                    myEvent.description = SectionsArray[j].Course.CourseDescription;
+                    List<int> numericalDays = new List<int>();
+                    foreach (var letter in SectionsArray[j].DaysTaught)
+                    {
+                        switch (letter)
+                        {
+                            case 'M':
+                                numericalDays.Add(1);
+                                break;
+                            case 'T':
+                                numericalDays.Add(2);
+                                break;
+                            case 'W':
+                                numericalDays.Add(3);
+                                break;
+                            case 'H':
+                                numericalDays.Add(4);
+                                break;
+                            case 'F':
+                                numericalDays.Add(5);
+                                break;
+                            case 'S':
+                                numericalDays.Add(6);
+                                break;
+                            case 'U':
+                                numericalDays.Add(7);
+                                break;
+                        }
+                    }
+
+                    myEvent.daysOfWeek = new int[numericalDays.Count()];
+                    for (int k = 0; k < numericalDays.Count(); ++k)
+                    {
+                        myEvent.daysOfWeek[k] = numericalDays[k];
+                    }
+                    sectionEvents[j] = myEvent;
+                }
+            }
+            else if (Users.usertype == 'I')
+            {
+                var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
+
+                SectionsArray = new Sections[sections.Count()];
+                int iter = 0;
+                foreach (var section in sections)
+                {
+                    SectionsArray[iter] = section;
+                    iter++;
+                }
+
+                foreach (var section in SectionsArray)
+                {
+                    var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
+                    foreach (var course in courses)
+                    {
+                        section.Course = course;
                     }
                 }
 
