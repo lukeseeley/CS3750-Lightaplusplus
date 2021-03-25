@@ -28,6 +28,8 @@ namespace Lightaplusplus.Pages.Courses.Grades
         [BindProperty]
         public int id { get; set; }
 
+        public Sections Section { get; set; }
+
         public string ChartJson { get; internal set; }
 
         [BindProperty]
@@ -39,7 +41,7 @@ namespace Lightaplusplus.Pages.Courses.Grades
         [BindProperty]
         public Models.Assignments Assignment { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id, int assignmentId)
+        public async Task<IActionResult> OnGetAsync(int? id, int assignmentId, int sectionId)
         {
             if (id == null)
             {
@@ -47,12 +49,17 @@ namespace Lightaplusplus.Pages.Courses.Grades
             }
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+            Section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
             if (Users == null)
             {
                 return RedirectToPage("/Index");
             }
             if (Users.usertype != 'I') 
+            {
+                return RedirectToPage("/Welcome", new { id = id });
+            }
+            else if (Users.ID != Section.InstructorId)
             {
                 return RedirectToPage("/Welcome", new { id = id });
             }
