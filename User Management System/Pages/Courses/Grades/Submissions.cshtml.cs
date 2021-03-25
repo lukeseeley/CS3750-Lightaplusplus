@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +29,15 @@ namespace Lightaplusplus.Pages.Courses.Grades
         public int id { get; set; }
 
         public string ChartJson { get; internal set; }
+
+        [BindProperty]
+        public List<AssignmentSubmissions> SubmissionsList { get; set; }
+
+        [BindProperty]
+        public List<StudentSubmission> StudentSubmissions { get; set; }
+
+        [BindProperty]
+        public Models.Assignments Assignment { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id, int assignmentId)
         {
@@ -149,8 +159,51 @@ namespace Lightaplusplus.Pages.Courses.Grades
             // set chart rendering json
             ChartJson = column.Render();
 
+            SubmissionsList = await _context.AssignmentSubmissions
+                .Include(t => t.Student)
+                .Include(a => a.Assignment)
+                .Where(e => e.AssignmentId == assignmentId)
+                .ToListAsync();
+
+            StudentSubmissions = new List<StudentSubmission>();
+
+            foreach(var studentAssignment in SubmissionsList)
+            {
+                var submission = await _context.AssignmentSubmissions
+                    .Where(s => s.StudentId == studentAssignment.StudentId)
+                    .Where(a => a.AssignmentId == assignmentId)
+                    .FirstOrDefaultAsync();
+
+                var grade = await _context.Grades
+                    .Where(s => s.StudentId == studentAssignment.StudentId)
+                    .Where(a => a.AssignmentId == assignmentId)
+                    .FirstOrDefaultAsync();
+
+                if(submission == null)
+                {
+                    break;
+                }
+
+                StudentSubmissions.Add(new StudentSubmission(submission, grade));
+            }
+
+            Assignment = assignment;
+
             return Page();
         }
+    }
+}
+
+public class StudentSubmission
+{
+    public AssignmentSubmissions AssignmentSubmission { get; set; }
+
+    public Grades Grade { get; set; }
+
+    public StudentSubmission(AssignmentSubmissions submission, Grades grade)
+    {
+        AssignmentSubmission = submission;
+        Grade = grade;
     }
 }
 // submission page
