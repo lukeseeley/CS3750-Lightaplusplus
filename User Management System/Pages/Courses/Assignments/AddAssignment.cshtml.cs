@@ -10,6 +10,7 @@ using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages.Courses
 {
@@ -137,7 +138,7 @@ namespace Lightaplusplus.Pages.Courses
                 return Page();
             }
 
-
+            AssignmentAdder myAdder = new AssignmentAdder(_context);
             // Data assignment
             Assignments.SectionId = SectionId;
             Assignments.AssignmentTitle = AssignmentTitle;
@@ -146,10 +147,7 @@ namespace Lightaplusplus.Pages.Courses
             Assignments.AssignmentMaxPoints = AssignmentMaxPoints;
             Assignments.AssignmentSubmissionType = AssignmentSubmissionType;
 
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+            myAdder.AddAssignment(SectionId, AssignmentTitle, AssignmentDescription, DueDate.Date.Add(DueTime.TimeOfDay), (int)AssignmentMaxPoints, AssignmentSubmissionType);
 
             _context.Assignments.Add(Assignments);
             await _context.SaveChangesAsync();
