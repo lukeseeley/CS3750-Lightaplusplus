@@ -1,0 +1,111 @@
+﻿@page
+@model Lightaplusplus.Pages.CalendarModel
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href='~/lib/fullcalendar/lib/main.css' rel='stylesheet' />
+    <script src='~/lib/fullcalendar/lib/main.js'></script>
+
+    <script>
+        //https://fullcalendar.io/docs/eventClick
+        //https://fullcalendar.io/docs/recurring-events
+        //https://fullcalendar.io/docs/event-object
+        //https://fullcalendar.io/docs/Calendar-addEvent
+
+        function createEvent(eventtitle, days, start, end) {
+            var event = {
+                title: eventtitle,
+                daysOfWeek: days,
+                startTime: start,
+                endTime: end,
+            }
+            return event
+        }
+
+        function createAssignmentEvent(eventtitle, start, end, link) {
+            var event = {
+                title: eventtitle,
+                start: start,
+                end: end,
+                type: "assignment",
+                redirect: link,//"/Courses/1011/Assignments/2015", // "/Courses/" + sectionid + "/Assignments/" + assignmentid
+            }
+            return event
+        }
+
+
+        var calendarevents = [];
+
+        function createAssignments() {
+            var evs = @Html.Raw(Json.Serialize(Model.assignmentEvents));
+            //console.log(evs);
+            for (var i = 0; i < evs.length; ++i) {
+                calendarevents.push(createAssignmentEvent(evs[i].title, evs[i].start, evs[i].end, evs[i].link));
+            }
+            return evs;
+        }
+
+        function createCourses() {
+            var evs = @Html.Raw(Json.Serialize(Model.sectionEvents));
+
+            for (var i = 0; i < evs.length; ++i) {
+                calendarevents.push(createEvent(evs[i].title, evs[i].daysOfWeek, evs[i].startTime, evs[i].endTime));
+            }
+
+            return evs;
+        }
+
+        createAssignments();
+
+        createCourses();
+
+        console.log(calendarevents)
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            console.log("Building calendar")
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: calendarevents,
+                headerToolbar: {
+                    left: 'prev, next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                eventClick: function (info) {
+                    info.jsEvent.preventDefault(); // don't let the browser navigate
+                    console.log(info.event);
+                    if (info.event.extendedProps.type == "assignment") {
+                        console.log("Redirecting to " + info.event.extendedProps.redirect + "?id=" + @Model.Users.ID);
+                        //window.location.href = "/asdf"
+                        //https://localhost:44300/Courses/1011/Assignments/2015?id=7
+                        window.location.href = info.event.extendedProps.redirect + "?id=" + @Model.Users.ID
+                    }
+                },
+            });
+            calendar.render();
+        });
+
+    </script>
+
+</head>
+<body>
+    <div class="row">
+        <a href="/Welcome?id=@Model.Users.ID" style="font-size:25px ">&#8592; Back to main page</a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div id='calendar'></div>
+        </div>
+    </div>
+</body>
+</html>

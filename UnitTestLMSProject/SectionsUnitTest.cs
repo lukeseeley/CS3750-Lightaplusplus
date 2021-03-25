@@ -1,45 +1,47 @@
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Lightaplusplus.Pages.Courses;
-using Microsoft.EntityFrameworkCore;
-using Lightaplusplus.Models;
-using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using Lightaplusplus.BisLogic;
 
 namespace UnitTestLMSProject
 {
     [TestClass]
-    public class CourseUnitTests
+    public class SectionsUnitTest
     {
         [TestMethod]
-        public void AddCourseTest()
+        public void AddSectionTest()
         {
             // Preparation or setup
             var options = new DbContextOptionsBuilder<Lightaplusplus.Data.Lightaplusplus_SystemContext>();
             options.UseSqlServer(UnitTestConfig.ConnectionString);
             var context = new Lightaplusplus.Data.Lightaplusplus_SystemContext(options.Options);
-            CourseAdder myAdder = new CourseAdder(context);
+            SectionAdder myAdder = new SectionAdder(context);
+            DateTime time = new DateTime(2012, 12, 25, 10, 30, 50);
 
             // Perform operations
-            myAdder.addCourse("CS", 123456789, "Test being run", "This is just a test", "Social Sciences", 4);
+            myAdder.addSection(1054, 13, "Room 103", time, time.AddHours(1), "MWF", 30);
 
             // Analyze results
-            Assert.IsTrue(myAdder.checkCourse("CS", 123456789));
-            Assert.IsFalse(myAdder.checkCourse("CS", 123456788)); // Make sure it's not just telling us everything is true
+            Assert.IsTrue(myAdder.checkSection(1054, 13, time));
+            Assert.IsFalse(myAdder.checkSection(1055, 14, time)); // Make sure it's not just telling us everything is true
         }
         [TestMethod]
-        public void RemoveCourseTest()
+        public void RemoveSectionTest()
         {
             // Preparation or setup
             var options = new DbContextOptionsBuilder<Lightaplusplus.Data.Lightaplusplus_SystemContext>();
             options.UseSqlServer(UnitTestConfig.ConnectionString);
             var context = new Lightaplusplus.Data.Lightaplusplus_SystemContext(options.Options);
-            CourseAdder myAdder = new CourseAdder(context);
+            SectionAdder myAdder = new SectionAdder(context);
+            DateTime time = new DateTime(2012, 12, 25, 10, 30, 50);
 
             // Perform operations
-            myAdder.removeCourse("CS", 123456789);
+            myAdder.removeSection(1054, 13, time);
 
             // Analyze results
-            Assert.IsFalse(myAdder.checkCourse("CS", 123456789));
+            Assert.IsFalse(myAdder.checkSection(1054, 13, time));
         }
     }
 }

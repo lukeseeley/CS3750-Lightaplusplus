@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Data;
 using Lightaplusplus.Models;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages.Registration
 {
@@ -34,7 +35,7 @@ namespace Lightaplusplus.Pages.Registration
         public List<Sections> SectionsList { get; set; }
 
         [BindProperty]
-        public List<SectionRegistration> SectionRegistrations { get; set; }
+        public List<SectionRegistrationData> SectionRegistrations { get; set; }
 
         [BindProperty]
         public bool isError { get; set; }
@@ -71,7 +72,7 @@ namespace Lightaplusplus.Pages.Registration
                 .AsNoTracking()
                 .ToListAsync();
 
-            SectionRegistrations = new List<SectionRegistration>();
+            SectionRegistrations = new List<SectionRegistrationData>();
             foreach (var section in SectionsList)
             {
                 var sectionRegistry = await _context.SectionStudents.Where(sr => sr.SectionId == section.SectionId).ToListAsync();
@@ -89,7 +90,7 @@ namespace Lightaplusplus.Pages.Registration
                 {
                     registrationStatus = 'N';
                 }
-                SectionRegistrations.Add(new SectionRegistration(section, sectionRegistry, registrationStatus));
+                SectionRegistrations.Add(new SectionRegistrationData(section, sectionRegistry, registrationStatus));
             }
 
             isError = false;
@@ -197,33 +198,5 @@ namespace Lightaplusplus.Pages.Registration
             return RedirectToPage("./Index", new { id = studentId });
         }
 
-    }
-    /// <summary>
-    /// This is a data class for organizing the information related to a section
-    /// </summary>
-    public class SectionRegistration
-    {
-        /// <summary>
-        /// This is the Section associated with this section
-        /// </summary>
-        public Sections Section { get; set; }
-
-        /// <summary>
-        /// This is the registry of students related to this section
-        /// </summary>
-        public List<SectionStudents> StudentRegistry { get; set; }
-
-        /// <summary>
-        /// This is the current registration status for this particular section
-        /// R -> Registered; F -> Full capacity;  N -> Not registered
-        /// </summary>
-        public char RegistrationStatus { get; set; }
-
-        public SectionRegistration(Sections section, List<SectionStudents> sectionStudents, char registrationStatus)
-        {
-            Section = section;
-            StudentRegistry = sectionStudents;
-            RegistrationStatus = registrationStatus;
-        }
     }
 }

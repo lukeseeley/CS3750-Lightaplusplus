@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using Lightaplusplus.BisLogic;
+using Newtonsoft.Json;
 
 namespace Lightaplusplus.Pages
 {
@@ -25,18 +26,14 @@ namespace Lightaplusplus.Pages
 
         public List<Assignments> Assignments { get; set; }
 
+        public Event[] assignmentEvents { get; set; }
+
+        public RecurringEvent[] sectionEvents { get; set; }
+
         public List<Assignments> TodoAssignments { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-
-            CreditCard mycard = new CreditCard();
-
-            mycard.cardNumber = "4242424242424242";
-            mycard.cvc = "314";
-            mycard.exp_month = "2";
-            mycard.exp_year = "2022";
-            PaymentProcessor.processPayment(mycard, 12.00);
             if (id == null)
             {
                 return NotFound();
@@ -148,6 +145,166 @@ namespace Lightaplusplus.Pages
                     }
                     
                     TodoAssignments.Add(assignment);
+                }
+            }
+
+
+
+            if (Users.usertype == 'S')
+            {
+                assignmentEvents = new Event[Assignments.Count()];
+                for (int b = 0; b < Assignments.Count(); ++b)
+                {
+                    var myEvent = new Event();
+                    myEvent.title = Assignments[b].AssignmentTitle;
+                    myEvent.start = Assignments[b].AssignmentDueDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    myEvent.end = Assignments[b].AssignmentDueDateTime.AddSeconds(1).ToString("yyyy-MM-dd HH:mm:ss");
+                    myEvent.link = "/Courses/" + Assignments[b].SectionId + "/Assignments/" + Assignments[b].AssignmentId;
+                    // "/Courses/" + sectionid + "/Assignments/" + assignmentid
+                    assignmentEvents[b] = myEvent;
+                }
+
+                // get all the sections the student is in
+                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
+
+                SectionsArray = new Sections[StudentSections.Count()];
+
+                // put the sections in a list
+                List<Sections> sectionsList = new List<Sections>();
+                foreach (var section in StudentSections)
+                {
+                    var sections = await _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefaultAsync();
+                    sectionsList.Add(sections);
+                }
+
+                // put the list into SectionsArray
+                int i = 0;
+                foreach (var section in sectionsList)
+                {
+                    SectionsArray[i] = section;
+                    i++;
+                }
+                // get the course information
+                foreach (var studSection in SectionsArray)
+                {
+                    var courses = _context.Courses.Where(c => c.CourseId == studSection.CourseId);
+                    foreach (var course in courses)
+                    {
+                        studSection.Course = course;
+                    }
+                }
+
+                // create classes
+                sectionEvents = new RecurringEvent[SectionsArray.Length];
+                for (int j = 0; j < SectionsArray.Length; j++)
+                {
+                    RecurringEvent myEvent = new RecurringEvent();
+                    myEvent.title = SectionsArray[j].Course.CourseCode + " " + SectionsArray[j].Course.CourseNumber.ToString();
+                    myEvent.startTime = SectionsArray[j].SectionTimeStart.ToString("HH:mm:ss");
+                    myEvent.endTime = SectionsArray[j].SectionTimeEnd.ToString("HH:mm:ss");
+                    myEvent.description = SectionsArray[j].Course.CourseDescription;
+                    List<int> numericalDays = new List<int>();
+                    foreach (var letter in SectionsArray[j].DaysTaught)
+                    {
+                        switch (letter)
+                        {
+                            case 'M':
+                                numericalDays.Add(1);
+                                break;
+                            case 'T':
+                                numericalDays.Add(2);
+                                break;
+                            case 'W':
+                                numericalDays.Add(3);
+                                break;
+                            case 'H':
+                                numericalDays.Add(4);
+                                break;
+                            case 'F':
+                                numericalDays.Add(5);
+                                break;
+                            case 'S':
+                                numericalDays.Add(6);
+                                break;
+                            case 'U':
+                                numericalDays.Add(7);
+                                break;
+                        }
+                    }
+
+                    myEvent.daysOfWeek = new int[numericalDays.Count()];
+                    for (int k = 0; k < numericalDays.Count(); ++k)
+                    {
+                        myEvent.daysOfWeek[k] = numericalDays[k];
+                    }
+                    sectionEvents[j] = myEvent;
+                }
+            }
+            else if (Users.usertype == 'I')
+            {
+                assignmentEvents = new Event[0]; // Teachers don't have assignments listed on their calendar
+                var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
+
+                SectionsArray = new Sections[sections.Count()];
+                int iter = 0;
+                foreach (var section in sections)
+                {
+                    SectionsArray[iter] = section;
+                    iter++;
+                }
+
+                foreach (var section in SectionsArray)
+                {
+                    var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
+                    foreach (var course in courses)
+                    {
+                        section.Course = course;
+                    }
+                }
+
+                sectionEvents = new RecurringEvent[SectionsArray.Length];
+                for (int j = 0; j < SectionsArray.Length; j++)
+                {
+                    RecurringEvent myEvent = new RecurringEvent();
+                    myEvent.title = SectionsArray[j].Course.CourseCode + " " + SectionsArray[j].Course.CourseNumber.ToString();
+                    myEvent.startTime = SectionsArray[j].SectionTimeStart.ToString("HH:mm:ss");
+                    myEvent.endTime = SectionsArray[j].SectionTimeEnd.ToString("HH:mm:ss");
+                    myEvent.description = SectionsArray[j].Course.CourseDescription;
+                    List<int> numericalDays = new List<int>();
+                    foreach (var letter in SectionsArray[j].DaysTaught)
+                    {
+                        switch (letter)
+                        {
+                            case 'M':
+                                numericalDays.Add(1);
+                                break;
+                            case 'T':
+                                numericalDays.Add(2);
+                                break;
+                            case 'W':
+                                numericalDays.Add(3);
+                                break;
+                            case 'H':
+                                numericalDays.Add(4);
+                                break;
+                            case 'F':
+                                numericalDays.Add(5);
+                                break;
+                            case 'S':
+                                numericalDays.Add(6);
+                                break;
+                            case 'U':
+                                numericalDays.Add(7);
+                                break;
+                        }
+                    }
+
+                    myEvent.daysOfWeek = new int[numericalDays.Count()];
+                    for (int k = 0; k < numericalDays.Count(); ++k)
+                    {
+                        myEvent.daysOfWeek[k] = numericalDays[k];
+                    }
+                    sectionEvents[j] = myEvent;
                 }
             }
 
