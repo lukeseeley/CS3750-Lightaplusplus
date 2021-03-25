@@ -1,27 +1,27 @@
-﻿@page "/Courses/{sectionId:int}/Assignments/New"
-@model Lightaplusplus.Pages.Courses.AddAssignmentModel
+﻿@page
+@model Lightaplusplus.Pages.Courses.Assignments.EditAssignmentModel
 
 @{
-    ViewData["Title"] = "Create New Assignment";
+    ViewData["Title"] = "EditAssignment";
 }
 
-<h1>Add Assignment</h1>
+<h1>Edit Assignment</h1>
 
+<hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="AssignmentTitle" class="control-label">Assignment Title</label>
-                <input asp-for="AssignmentTitle" class="form-control" type="text" placeholder="Title" required/>
+                <input asp-for="AssignmentTitle" class="form-control" />
                 <span asp-validation-for="AssignmentTitle" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AssignmentDescription" class="control-label">Assignment Description</label>
-                <textarea asp-for="AssignmentDescription" class="form-control" placeholder="Assignment Description" required></textarea>
+                <textarea asp-for="AssignmentDescription" class="form-control"></textarea>
                 <span asp-validation-for="AssignmentDescription" class="text-danger"></span>
             </div>
-            <div class="form-row">
+            <div class="form-group">
                 <div class="form-group">
                     <label asp-for="DueDate" class="control-label">Due Date</label>
                     <input asp-for="DueDate" class="form-control" type="date" required />
@@ -30,30 +30,35 @@
                     <label asp-for="DueTime" class="control-label">Due Time</label>
                     <input asp-for="DueTime" class="form-control" type="time" asp-format="{0:HH:mm}" required />
                 </div>
-                <span asp-validation-for="DueTime" class="text-danger">@Model.DueDateError</span>
+                <span asp-validation-for="DueTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AssignmentMaxPoints" class="control-label">Maximum Points</label>
-                <input asp-for="AssignmentMaxPoints" type="number" class="form-control" required/>
-                <span asp-validation-for="AssignmentMaxPoints" class="text-danger">@Model.PointsError</span>
+                <label asp-for="AssignmentMaxPoints" class="control-label">Max Points</label>
+                <input asp-for="AssignmentMaxPoints" class="form-control" />
+                <span asp-validation-for="AssignmentMaxPoints" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AssignmentSubmissionType" class="control-label">Submission Type:</label>
                 <div class="form-check">
                     <input asp-for="AssignmentSubmissionType" id="File" type="radio" value="F" />
-                    <label class="form-check-label" for="File">File Submission</label><br/>
+                    <label class="form-check-label" for="File">File Submission</label><br />
                     <input asp-for="AssignmentSubmissionType" id="Text" type="radio" value="T" />
                     <label class="form-check-label" for="Text">Text Submission</label>
                 </div>
                 <span asp-validation-for="AssignmentSubmissionType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Add Assignment</button>
-                <a class="btn btn-danger" 
-                   asp-page="/Courses/View/Index" 
-                   asp-route-sectionId="@Model.SectionId" 
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a class="btn btn-danger"
+                   asp-page="/Courses/Assignments/SubmitAssignment"
+                   asp-route-assignmentId="@Model.AssignmentId"
+                   asp-route-sectionId="@Model.SectionId"
                    asp-route-id="@Model.Users.ID">Cancel</a>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
