@@ -158,6 +158,7 @@ namespace Lightaplusplus.Pages
                     myEvent.title = Assignments[b].AssignmentTitle;
                     myEvent.start = Assignments[b].AssignmentDueDateTime.ToString("yyyy-MM-dd HH:mm:ss");
                     myEvent.end = Assignments[b].AssignmentDueDateTime.AddSeconds(1).ToString("yyyy-MM-dd HH:mm:ss");
+                    myEvent.link = "http://google.com";
                     assignmentEvents[b] = myEvent;
                 }
 
@@ -239,6 +240,7 @@ namespace Lightaplusplus.Pages
             }
             else if (Users.usertype == 'I')
             {
+                assignmentEvents = new Event[0]; // Teachers don't have assignments listed on their calendar
                 var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
 
                 SectionsArray = new Sections[sections.Count()];

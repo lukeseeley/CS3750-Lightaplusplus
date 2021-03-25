@@ -28,7 +28,17 @@
                 startTime: start,
                 endTime: end,
             }
+            return event
+        }
 
+        function createAssignmentEvent(eventtitle, start, end, link) {
+            var event = {
+                title: eventtitle,
+                start: start,
+                end: end,
+                type: "assignment"
+                //url: link,
+            }
             return event
         }
 
@@ -37,6 +47,9 @@
         function createAssignments() {
             var evs = @Html.Raw(Json.Serialize(Model.assignmentEvents));
             //console.log(evs);
+            for (var i = 0; i < evs.length; ++i) {
+                calendarevents.push(createAssignmentEvent(evs[i].title, evs[i].start, evs[i].end, evs[i].link));
+            }
             return evs;
         }
 
@@ -50,15 +63,11 @@
             return evs;
         }
 
-        calendarevents = createAssignments();
+        createAssignments();
+
         createCourses();
         
         console.log(calendarevents)
-
-        //createAssignments();
-        //calendarevents.push(createEvent("CS1234", [2, 4], "10:00:00", "11:00:00"))
-        //calendarevents.push(createEvent("CS000", [3, 5], "10:00:00", "11:00:00"))
-        //calendarevents.push({title: "test", start: "2021-03-12 10:00:00"})
 
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
@@ -70,6 +79,13 @@
                     left: 'prev, next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                eventClick: function (info) {
+                    info.jsEvent.preventDefault(); // don't let the browser navigate
+                    console.log(info.event.extendedProps.type);
+                    if (info.event.extendedProps.type == "assignment") {
+                        console.log("Redirecting");
+                    }
                 },
             });
             console.log(calendar)
