@@ -31,6 +31,7 @@
     ".NETCoreApp,Version=v3.1": {
       "Lighta++/1.0.0": {
         "dependencies": {
+          "FusionCharts.Visualization": "1.0.7",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.13",
           "Microsoft.EntityFrameworkCore.Sqlite": "3.1.13",
           "Microsoft.EntityFrameworkCore.Tools": "3.1.13",
@@ -170,6 +171,7 @@
           "System.Console.Reference": "4.1.2.0",
           "System.Core": "4.0.0.0",
           "System.Data.Common": "4.2.2.0",
+          "System.Data.DataSetExtensions.Reference": "4.0.1.0",
           "System.Data.DataSetExtensions": "4.0.1.0",
           "System.Data": "4.0.0.0",
           "System.Diagnostics.Contracts": "4.0.4.0",
@@ -310,6 +312,27 @@
         },
         "compile": {
           "Lighta++.dll": {}
+        }
+      },
+      "FusionCharts.Visualization/1.0.7": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3",
+          "System.Data.DataSetExtensions": "4.5.0",
+          "System.Data.SqlClient": "4.6.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FusionCharts.DataEngine.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          },
+          "lib/netstandard2.0/FusionCharts.Visualization.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/FusionCharts.DataEngine.dll": {},
+          "lib/netstandard2.0/FusionCharts.Visualization.dll": {}
         }
       },
       "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
@@ -618,7 +641,7 @@
           "System.Runtime.Caching": "4.5.0",
           "System.Security.Principal.Windows": "4.5.0",
           "System.Text.Encoding.CodePages": "4.5.1",
-          "runtime.native.System.Data.SqlClient.sni": "4.4.0"
+          "runtime.native.System.Data.SqlClient.sni": "4.5.0"
         },
         "runtime": {
           "lib/netcoreapp2.1/Microsoft.Data.SqlClient.dll": {
@@ -1249,7 +1272,7 @@
           "Microsoft.NETCore.Targets": "1.1.0"
         }
       },
-      "runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "runtime.native.System.Data.SqlClient.sni/4.5.0": {
         "dependencies": {
           "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
           "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
@@ -1680,6 +1703,38 @@
           "System.IO": "4.3.0",
           "System.Runtime": "4.3.0",
           "System.Text.Encoding": "4.3.0"
+        }
+      },
+      "System.Data.DataSetExtensions/4.5.0": {},
+      "System.Data.SqlClient/4.6.1": {
+        "dependencies": {
+          "Microsoft.Win32.Registry": "4.5.0",
+          "System.Security.Principal.Windows": "4.5.0",
+          "System.Text.Encoding.CodePages": "4.5.1",
+          "runtime.native.System.Data.SqlClient.sni": "4.5.0"
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/System.Data.SqlClient.dll": {
+            "assemblyVersion": "4.5.0.1",
+            "fileVersion": "4.6.27618.1"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll": {
+            "rid": "unix",
+            "assetType": "runtime",
+            "assemblyVersion": "4.5.0.1",
+            "fileVersion": "4.6.27618.1"
+          },
+          "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "4.5.0.1",
+            "fileVersion": "4.6.27618.1"
+          }
+        },
+        "compile": {
+          "ref/netcoreapp2.1/System.Data.SqlClient.dll": {}
         }
       },
       "System.Diagnostics.Debug/4.3.0": {
@@ -3196,6 +3251,7 @@
         },
         "compileOnly": true
       },
+      "System.Data.DataSetExtensions.Reference/4.0.1.0": {
       "System.Data.DataSetExtensions/4.0.1.0": {
         "compile": {
           "System.Data.DataSetExtensions.dll": {}
@@ -4008,6 +4064,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "FusionCharts.Visualization/1.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-w7A81Bn++7Xk1nSPRAsSYwU9SOMy2S8oX/vJQ3gBYZ2l/wcMyusNcq7RCOAq2LbkhDVlb5wH972ui4BCEOm/DQ==",
+      "path": "fusioncharts.visualization/1.0.7",
+      "hashPath": "fusioncharts.visualization.1.0.7.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
       "type": "package",
       "serviceable": true,
@@ -4442,12 +4505,12 @@
       "path": "runtime.native.system/4.3.0",
       "hashPath": "runtime.native.system.4.3.0.nupkg.sha512"
     },
-    "runtime.native.System.Data.SqlClient.sni/4.4.0": {
+    "runtime.native.System.Data.SqlClient.sni/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-A8v6PGmk+UGbfWo5Ixup0lPM4swuSwOiayJExZwKIOjTlFFQIsu3QnDXECosBEyrWSPryxBVrdqtJyhK3BaupQ==",
-      "path": "runtime.native.system.data.sqlclient.sni/4.4.0",
-      "hashPath": "runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
+      "sha512": "sha512-AJfX7owAAkMjWQYhoml5IBfXh8UyYPjktn8pK0BFGAdKgBS7HqMz1fw5vdzfZUWfhtTPDGCjgNttt46ZyEmSjg==",
+      "path": "runtime.native.system.data.sqlclient.sni/4.5.0",
+      "hashPath": "runtime.native.system.data.sqlclient.sni.4.5.0.nupkg.sha512"
     },
     "runtime.native.System.IO.Compression/4.3.0": {
       "type": "package",
@@ -4714,6 +4777,20 @@
       "sha512": "sha512-DHDrIxiqk1h03m6khKWV2X8p/uvN79rgSqpilL6uzpmSfxfU5ng8VcPtW4qsDsQDHiTv6IPV9TmD5M/vElPNLg==",
       "path": "system.console/4.3.0",
       "hashPath": "system.console.4.3.0.nupkg.sha512"
+    },
+    "System.Data.DataSetExtensions/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-221clPs1445HkTBZPL+K9sDBdJRB8UN8rgjO3ztB0CQ26z//fmJXtlsr6whGatscsKGBrhJl5bwJuKSA8mwFOw==",
+      "path": "system.data.datasetextensions/4.5.0",
+      "hashPath": "system.data.datasetextensions.4.5.0.nupkg.sha512"
+    },
+    "System.Data.SqlClient/4.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7MTJhBFt4/tSJ2VRpG+TQNPcDdbCnWuoYzbe0kD5O3mQ7aZ2Q+Q3D9Y5Y3/aper5Gp3Lrs+8edk9clvxyPYXPw==",
+      "path": "system.data.sqlclient/4.6.1",
+      "hashPath": "system.data.sqlclient.4.6.1.nupkg.sha512"
     },
     "System.Diagnostics.Debug/4.3.0": {
       "type": "package",
@@ -5861,6 +5938,7 @@
       "serviceable": false,
       "sha512": ""
     },
+    "System.Data.DataSetExtensions.Reference/4.0.1.0": {
     "System.Data.DataSetExtensions/4.0.1.0": {
       "type": "referenceassembly",
       "serviceable": false,

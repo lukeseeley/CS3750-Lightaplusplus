@@ -462,6 +462,8 @@ C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1
 C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.dll
 C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.pdb
 C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.genruntimeconfig.cache
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.pdb
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\appsettings.Development.json
@@ -482,6 +484,8 @@ C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Uni
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\UnitTestLMSProject.runtimeconfig.dev.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\UnitTestLMSProject.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\UnitTestLMSProject.pdb
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.DataEngine.dll
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.Visualization.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
@@ -547,6 +551,7 @@ C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Sys
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Composition.Runtime.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Composition.TypedParts.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
@@ -686,6 +691,8 @@ C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\run
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
@@ -696,4 +703,6 @@ C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\Uni
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.AssemblyInfo.cs
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.csproj.CoreCompileInputs.cache
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.csproj.CopyComplete
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.dll
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.pdb
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.genruntimeconfig.cache

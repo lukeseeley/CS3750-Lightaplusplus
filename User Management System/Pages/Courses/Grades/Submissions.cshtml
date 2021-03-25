@@ -1,0 +1,77 @@
+﻿@page "/Courses/{sectionId:int}/Grades/{assignmentId:int}"
+@model Lightaplusplus.Pages.Courses.Grades.SubmissionsModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Assignment Submissions";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <title>ColumnChart</title>
+</head>
+
+<body>
+    <h1>Submissions</h1> <br /><br />
+
+    <h3>@Model.Assignment.AssignmentTitle</h3>
+
+    <div class="row">
+        <table class="table table-hover" style="margin-top: 20px">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Submission Date</th>
+                    <th>Grade</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody id="section-table-body">
+                @foreach (var student in Model.StudentSubmissions)
+                {
+                    <tr>
+                        <td>@student.AssignmentSubmission.Student.firstname @student.AssignmentSubmission.Student.lastname</td>
+                        <td>@student.AssignmentSubmission.SubmissionDateTime</td>
+                        @if (student.Grade == null)
+                        {
+                            <td>Not Graded</td>
+                            <td>
+                                <a asp-page="/Courses/Grades/GradeAssignment"
+                                   asp-route-sectionId="@Model.Assignment.SectionId"
+                                   asp-route-id="@Model.Users.ID"
+                                   asp-route-assignmentId="@Model.Assignment.AssignmentId"
+                                   asp-route-submissionId="@student.AssignmentSubmission.SubmissionId"
+                                   class="btn btn-primary">Grade</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>@student.Grade.GradeValue / @Model.Assignment.AssignmentMaxPoints</td>
+                            <td>
+                                <a asp-page="/Courses/Grades/GradeAssignment"
+                                   asp-route-sectionId="@Model.Assignment.SectionId"
+                                   asp-route-id="@Model.Users.ID"
+                                   asp-route-assignmentId="@Model.Assignment.AssignmentId"
+                                   asp-route-submissionId="@student.AssignmentSubmission.SubmissionId"
+                                   class="btn btn-success">Graded &#10003;</a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    <form method="post">
+        <div>@Html.Raw(Model.ChartJson)</div>
+        <br />
+    </form>
+</body>
+</html>

@@ -26,6 +26,7 @@
                         <th>Due Date</th>
                         <th>Points</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
 
@@ -61,7 +62,19 @@
                                        asp-route-sectionId="@Model.SectionId"
                                        asp-route-id="@Model.Users.ID"
                                        asp-route-assignmentId="@assignment.AssignmentId"
-                                       class="btn btn-primary">View</a>
+                                       class="btn btn-primary">View Assignment</a>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                @if (Model.Users.usertype == 'I')
+                                {
+                                    <a asp-page="/Courses/Grades/Submissions"
+                                       asp-route-sectionId="@Model.SectionId"
+                                       asp-route-id="@Model.Users.ID"
+                                       asp-route-assignmentId="@assignment.AssignmentId"
+                                       class="btn btn-primary">View Submissions</a>
                                 }
                             </div>
                         </td>
