@@ -36,11 +36,12 @@
                 title: eventtitle,
                 start: start,
                 end: end,
-                type: "assignment"
-                //url: link,
+                type: "assignment",
+                redirect: link,//"/Courses/1011/Assignments/2015", // "/Courses/" + sectionid + "/Assignments/" + assignmentid
             }
             return event
         }
+        
 
         var calendarevents = [];
 
@@ -82,9 +83,12 @@
                 },
                 eventClick: function (info) {
                     info.jsEvent.preventDefault(); // don't let the browser navigate
-                    console.log(info.event.extendedProps.type);
+                    console.log(info.event);
                     if (info.event.extendedProps.type == "assignment") {
-                        console.log("Redirecting");
+                        console.log("Redirecting to " + info.event.extendedProps.redirect + "?id=" + @Model.Users.ID);
+                        //window.location.href = "/asdf"
+                        //https://localhost:44300/Courses/1011/Assignments/2015?id=7
+                        window.location.href = info.event.extendedProps.redirect + "?id=" + @Model.Users.ID
                     }
                 },
             });

@@ -158,7 +158,8 @@ namespace Lightaplusplus.Pages
                     myEvent.title = Assignments[b].AssignmentTitle;
                     myEvent.start = Assignments[b].AssignmentDueDateTime.ToString("yyyy-MM-dd HH:mm:ss");
                     myEvent.end = Assignments[b].AssignmentDueDateTime.AddSeconds(1).ToString("yyyy-MM-dd HH:mm:ss");
-                    myEvent.link = "http://google.com";
+                    myEvent.link = "/Courses/" + Assignments[b].SectionId + "/Assignments/" + Assignments[b].AssignmentId;
+                    // "/Courses/" + sectionid + "/Assignments/" + assignmentid
                     assignmentEvents[b] = myEvent;
                 }
 
