@@ -464,6 +464,9 @@ C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1
 C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.genruntimeconfig.cache
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.dll
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.pdb
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
@@ -474,6 +477,7 @@ C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Lig
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Lighta++.deps.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Lighta++.runtimeconfig.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Lighta++.runtimeconfig.dev.json
+C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Lighta++.exe
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\UnitTestLMSProject.deps.json
 C:\Users\Cade\source\repos\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\UnitTestLMSProject.runtimeconfig.json
