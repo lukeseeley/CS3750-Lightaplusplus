@@ -19,7 +19,16 @@
 <body>
     <h1>Submissions</h1> <br /><br />
 
-    <h3>@Model.Assignment.AssignmentTitle</h3>
+    <div class="row d-flex justify-content-between" style="margin-top: 20px">
+        <h3>@Model.Assignment.AssignmentTitle</h3>
+        <div>
+            <a asp-page="/Courses/View/Index"
+               asp-route-sectionId="@Model.Assignment.SectionId"
+               asp-route-id="@Model.Users.ID"
+               asp-route-assignmentId="@Model.Assignment.AssignmentId"
+               class="btn btn-primary">Back to Assignments</a>
+        </div>
+    </div>
 
     <div class="row">
         <table class="table table-hover" style="margin-top: 20px">
