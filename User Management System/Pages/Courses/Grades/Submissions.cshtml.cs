@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FusionCharts.DataEngine;
 using FusionCharts.Visualization;
+using Lightaplusplus.BisLogic;
 using Lightaplusplus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,9 +24,6 @@ namespace Lightaplusplus.Pages.Courses.Grades
         }
 
         [BindProperty]
-        public Users Users { get; set; }
-
-        [BindProperty]
         public int id { get; set; }
 
         public Sections Section { get; set; }
@@ -41,28 +39,19 @@ namespace Lightaplusplus.Pages.Courses.Grades
         [BindProperty]
         public Models.Assignments Assignment { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id, int assignmentId, int sectionId)
+        public async Task<IActionResult> OnGetAsync(int assignmentId, int sectionId)
         {
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+            path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
 
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             Section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
-            if (Users == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (Users.usertype != 'I') 
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-            else if (Users.ID != Section.InstructorId)
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
             //get the assignment
             var assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
             // get all the grades for this assignment
@@ -200,21 +189,4 @@ namespace Lightaplusplus.Pages.Courses.Grades
         }
     }
 }
-
-public class StudentSubmission
-{
-    public AssignmentSubmissions AssignmentSubmission { get; set; }
-
-    public Grades Grade { get; set; }
-
-    public StudentSubmission(AssignmentSubmissions submission, Grades grade)
-    {
-        AssignmentSubmission = submission;
-        Grade = grade;
-    }
-}
-// submission page
-//https://localhost:44300/Courses/1011/Grades/2015?id=13
-// grade page
-//https://localhost:44300/Courses/1011/Grades/2015/34?id=13
 

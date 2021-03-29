@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages
 {
@@ -27,23 +28,16 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public Sections[] sectionsTaught { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Users == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (Users.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
             var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
 
             sectionsTaught = new Sections[sections.Count()];

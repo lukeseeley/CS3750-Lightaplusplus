@@ -85,10 +85,10 @@
                     info.jsEvent.preventDefault(); // don't let the browser navigate
                     console.log(info.event);
                     if (info.event.extendedProps.type == "assignment") {
-                        console.log("Redirecting to " + info.event.extendedProps.redirect + "?id=" + @Model.Users.ID);
+                        console.log("Redirecting to " + info.event.extendedProps.redirect);
                         //window.location.href = "/asdf"
                         //https://localhost:44300/Courses/1011/Assignments/2015?id=7
-                        window.location.href = info.event.extendedProps.redirect + "?id=" + @Model.Users.ID
+                        window.location.href = info.event.extendedProps.redirect
                     }
                 },
             });
@@ -100,7 +100,7 @@
 </head>
 <body>
     <div class="row">
-        <a href="/Welcome?id=@Model.Users.ID" style="font-size:25px ">&#8592; Back to main page</a>
+        <a href="/Welcome" style="font-size:25px ">&#8592; Back to main page</a>
     </div>
     <div class="row">
         <div class="col-12">

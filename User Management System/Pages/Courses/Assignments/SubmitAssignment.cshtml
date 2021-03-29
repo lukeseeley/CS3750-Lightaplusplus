@@ -30,7 +30,6 @@
             <a asp-page="/Courses/Assignments/EditAssignment"
                asp-route-sectionId="@Model.SectionId"
                asp-route-assignmentId="@Model.AssignmentId"
-               asp-route-id="@Model.Users.ID"
                class="btn btn-primary">Edit Assignment</a>
         </div>
     </div>
@@ -91,7 +90,6 @@ else
                         <input asp-for="FileUpload" type="file">
                         <input asp-page-handler="Upload" class="btn btn-primary up" type="submit" value="Upload" />
                     }
-                    <input asp-for="HiddenId" type="text" hidden>
                     <input asp-for="HiddenSectionId" type="text" hidden>
                     <input asp-for="HiddenAssignmentId" type="text" hidden>
                 </form>
@@ -111,7 +109,6 @@ else
                     <input asp-page-handler="Text" class="btn btn-primary" type="submit" value="Submit" />
                 }
 
-                <input asp-for="HiddenId" type="text" hidden>
                 <input asp-for="HiddenSectionId" type="text" hidden>
                 <input asp-for="HiddenAssignmentId" type="text" hidden>
             </form>
@@ -133,5 +130,5 @@ else
     }
     <a asp-page="/Courses/View/Index"
        asp-route-sectionId="@Model.SectionId"
-       asp-route-id="@Model.Users.ID">Back to List</a>
+       >Back to List</a>
 </div>

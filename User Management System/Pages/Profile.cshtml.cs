@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lightaplusplus.BisLogic;
 using Lightaplusplus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -27,19 +28,16 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public List<UserLinks> Links { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session);
+            if (path != "") return RedirectToPage(path);
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Users == null)
-            {
-                return NotFound();
-            }
 
             var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
             Image = image != null ? image.profilepic : null;

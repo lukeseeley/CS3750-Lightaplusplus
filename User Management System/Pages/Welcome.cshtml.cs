@@ -32,21 +32,19 @@ namespace Lightaplusplus.Pages
 
         public List<Assignments> TodoAssignments { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session);
+            if (path != "") return RedirectToPage(path);
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (Users == null)
-            {
-                return RedirectToPage("/Index");
-            }
 
-            if (Users.usertype == 'S')
+            if (userType == "S")
             {
                 // get all the sections the student is in
                 var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
@@ -78,7 +76,7 @@ namespace Lightaplusplus.Pages
                     }
                 }
             }
-            else if (Users.usertype == 'I')
+            else if (userType == "I")
             {
                 var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
 
@@ -104,7 +102,7 @@ namespace Lightaplusplus.Pages
             TodoAssignments = new List<Assignments>();
 
             //Let's get the list of assignments
-            if(Users.usertype == 'S')
+            if(userType == "S")
             {
                 var SectionList = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
                 foreach (var section in SectionList)
@@ -148,9 +146,7 @@ namespace Lightaplusplus.Pages
                 }
             }
 
-
-
-            if (Users.usertype == 'S')
+            if (userType == "S")
             {
                 assignmentEvents = new Event[Assignments.Count()];
                 for (int b = 0; b < Assignments.Count(); ++b)
@@ -240,7 +236,7 @@ namespace Lightaplusplus.Pages
                     sectionEvents[j] = myEvent;
                 }
             }
-            else if (Users.usertype == 'I')
+            else if (userType == "I")
             {
                 assignmentEvents = new Event[0]; // Teachers don't have assignments listed on their calendar
                 var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
@@ -311,10 +307,6 @@ namespace Lightaplusplus.Pages
             //Now sort to soonest
             TodoAssignments.Sort((a1, a2) => DateTime.Compare(a1.AssignmentDueDateTime, a2.AssignmentDueDateTime));
 
-            if (Users == null)
-            {
-                return NotFound();
-            }
             return Page();
         }
     }

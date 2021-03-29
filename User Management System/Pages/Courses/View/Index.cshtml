@@ -11,7 +11,6 @@
             <div>
                 <a asp-page="/Courses/Assignments/AddAssignment" 
                    asp-route-sectionId="@Model.SectionId" 
-                   asp-route-id="@Model.Users.ID"
                    class="btn btn-primary">Create Assignment</a>
             </div>
         }
@@ -52,7 +51,6 @@
                                         if assignment has been submitted*@
                                     <a asp-page="/Courses/Assignments/SubmitAssignment"
                                        asp-route-sectionId="@Model.SectionId"
-                                       asp-route-id="@Model.Users.ID"
                                        asp-route-assignmentId="@assignment.AssignmentId"
                                        class="btn btn-primary">Submit</a>
                                 }
@@ -60,7 +58,6 @@
                                 {
                                     <a asp-page="/Courses/Assignments/SubmitAssignment"
                                        asp-route-sectionId="@Model.SectionId"
-                                       asp-route-id="@Model.Users.ID"
                                        asp-route-assignmentId="@assignment.AssignmentId"
                                        class="btn btn-primary">View Assignment</a>
                                 }
@@ -71,8 +68,7 @@
                                 @if (Model.Users.usertype == 'I')
                                 {
                                     <a asp-page="/Courses/Grades/Submissions"
-                                       asp-route-sectionId="@Model.SectionId"
-                                       asp-route-id="@Model.Users.ID"
+                                       asp-route-sectionId="@Model.SectionId"                        
                                        asp-route-assignmentId="@assignment.AssignmentId"
                                        class="btn btn-primary">View Submissions</a>
                                 }

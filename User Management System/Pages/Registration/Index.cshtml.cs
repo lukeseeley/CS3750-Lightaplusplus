@@ -45,8 +45,15 @@ namespace Lightaplusplus.Pages.Registration
 
         public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
             if (id == null)
             {
                 return RedirectToPage("/Index");
@@ -97,105 +104,72 @@ namespace Lightaplusplus.Pages.Registration
             return Page();
         }
 
-        public async Task<IActionResult> OnPostRegisterAsync(int studentId, int sectionId)
+        public async Task<IActionResult> OnPostRegisterAsync(int sectionId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            int studentId = (int)Session.getUserId(HttpContext.Session);
+            var register = new StudentRegister(_context);
+            var result = register.RegisterStudent(studentId, sectionId);
+
+            if (result == 0)
+            {
+                return RedirectToPage("./Index");
+            }
+            else isError = true;
+
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
-            var doesExist = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
-            var sectionList = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).ToListAsync();
 
-            if (user == null)
+            switch (result)
             {
-                RegisterError = "Invalid Student Account.";
-                isError = true;
-                return Page();
-            }
-            else if (section == null)
-            {
-                RegisterError = "Invalid Class.";
-                isError = true;
-                return Page();
-            }
-            else if (doesExist != null)
-            {
-                RegisterError = "You are already registered in the class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
-                isError = true;
-                return Page();
-            }
-            else if (section.SectionCapacity < sectionList.Count())
-            {
-                RegisterError = "The class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + " is full.";
-                isError = true;
-                return Page();
-            }
-            else
-            {
-                isError = false;
-                RegisterError = string.Empty;
+                case (1):
+                    RegisterError = "Invalid Student Account.";
+                    break;
+                case (2):
+                    RegisterError = "Invalid Class.";
+                    break;
+                case (3):
+                    RegisterError = "You are already registered in the class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
+                    break;
+                case (4):
+                    RegisterError = "The class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + " is full.";
+                    break;
+                default:
+                    break;
             }
 
-            SectionStudents sectionStudents = new SectionStudents
-            {
-                StudentId = studentId,
-                SectionId = sectionId
-            };
-
-            _context.SectionStudents.Add(sectionStudents);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return RedirectToPage("./Index", new { id = studentId });
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostDropAsync(int studentId, int sectionId)
+        public async Task<IActionResult> OnPostDropAsync(int sectionId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            int studentId = (int)Session.getUserId(HttpContext.Session);
+            var register = new StudentRegister(_context);
+
+            var result = register.DropStudent(studentId, sectionId);
+
+            if (result == 0)
+            {
+                return RedirectToPage("./Index");
+            }
+            else isError = true;
+
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
-            var sectionStudents = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
 
-            if (user == null)
+            switch (result)
             {
-                RegisterError = "Invalid Student Account.";
-                isError = true;
-                return Page();
-            }
-            else if (section == null)
-            {
-                RegisterError = "Invalid Class.";
-                isError = true;
-                return Page();
-            }
-            else if (sectionStudents == null)
-            {
-                RegisterError = "You are not registered for the course: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
-                isError = true;
-                return Page();
-            }
-            else
-            {
-                isError = false;
-                RegisterError = string.Empty;
+                case (1):
+                    RegisterError = "Invalid Student Account.";
+                    break;
+                case (2):
+                    RegisterError = "Invalid Class.";
+                    break;
+                case (3):
+                    RegisterError = "You are not registered for the course: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
+                    break;
+                default:
+                    break;
             }
 
-            _context.SectionStudents.Remove(sectionStudents);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return RedirectToPage("./Index", new { id = studentId });
+            return Page();
         }
 
     }

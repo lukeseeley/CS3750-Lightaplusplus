@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 using Lightaplusplus.Models;
 using Lightaplusplus.BisLogic;
 
@@ -60,7 +61,9 @@ namespace Lightaplusplus.Pages
             } 
             else
             {
-                return RedirectToPage("./Welcome", new { id = User.ID });
+                Session.setUser(HttpContext.Session, User);
+                
+                return RedirectToPage("./Welcome");
             }
 
         }

@@ -12,6 +12,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.RegularExpressions;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages
 {
@@ -78,19 +79,16 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public List<UserLinks> Links { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session);
+            if (path != "") return RedirectToPage(path);
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Users == null)
-            {
-                return NotFound();
-            }
 
             Firstname = Users.firstname ;
             Lastname = Users.lastname;
@@ -120,6 +118,9 @@ namespace Lightaplusplus.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var path = UserValidator.validateUser(_context, HttpContext.Session);
+            if (path != "") return RedirectToPage(path);
+
             bool notValid = false;
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             Users.firstname = Firstname;
@@ -199,27 +200,16 @@ namespace Lightaplusplus.Pages
 
             _context.Attach(Users).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsersExists(Users.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Profile", new { id = id });
+            return RedirectToPage("./Profile");
         }
 
         public async Task<IActionResult> OnPostUploadAsync()
         {
+            var path = UserValidator.validateUser(_context, HttpContext.Session);
+            if (path != "") return RedirectToPage(path);
+
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
             var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
@@ -258,21 +248,7 @@ namespace Lightaplusplus.Pages
 
                             _context.Attach(Users).State = EntityState.Modified;
 
-                            try
-                            {
-                                await _context.SaveChangesAsync();
-                            }
-                            catch (DbUpdateConcurrencyException)
-                            {
-                                if (!UsersExists(Users.ID))
-                                {
-                                    return NotFound();
-                                }
-                                else
-                                {
-                                    throw;
-                                }
-                            }
+                            await _context.SaveChangesAsync();
                         }
                         else
                         {
@@ -282,7 +258,7 @@ namespace Lightaplusplus.Pages
                         }
                     }
 
-                    return RedirectToPage("./EditProfile", new { id = id });
+                    return RedirectToPage("./EditProfile");
                 }
                 else
                 {
@@ -297,16 +273,6 @@ namespace Lightaplusplus.Pages
                 Image = Users.Picture.profilepic;
                 return Page();
             }
-        }
-        
-        //public async Task OnPostAddLink()
-        //{
-
-        //}
-
-        private bool UsersExists(int id)
-        {
-            return _context.Users.Any(e => e.ID == id);
         }
     }
 }

@@ -24,7 +24,6 @@
         <div>
             <a asp-page="/Courses/View/Index"
                asp-route-sectionId="@Model.Assignment.SectionId"
-               asp-route-id="@Model.Users.ID"
                asp-route-assignmentId="@Model.Assignment.AssignmentId"
                class="btn btn-primary">Back to Assignments</a>
         </div>
@@ -53,7 +52,6 @@
                             <td>
                                 <a asp-page="/Courses/Grades/GradeAssignment"
                                    asp-route-sectionId="@Model.Assignment.SectionId"
-                                   asp-route-id="@Model.Users.ID"
                                    asp-route-assignmentId="@Model.Assignment.AssignmentId"
                                    asp-route-submissionId="@student.AssignmentSubmission.SubmissionId"
                                    class="btn btn-primary">Grade</a>
@@ -65,7 +63,6 @@
                             <td>
                                 <a asp-page="/Courses/Grades/GradeAssignment"
                                    asp-route-sectionId="@Model.Assignment.SectionId"
-                                   asp-route-id="@Model.Users.ID"
                                    asp-route-assignmentId="@Model.Assignment.AssignmentId"
                                    asp-route-submissionId="@student.AssignmentSubmission.SubmissionId"
                                    class="btn btn-success">Graded &#10003;</a>

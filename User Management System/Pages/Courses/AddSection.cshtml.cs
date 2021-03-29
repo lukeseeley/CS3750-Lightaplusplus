@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Lightaplusplus.BisLogic;
 using Lightaplusplus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -68,26 +69,17 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public string CapacityError { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
 
             InstructorId = (int)id;
-            Users = user;
+            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
             CourseList = await _context.Courses.ToListAsync();
 
@@ -96,6 +88,9 @@ namespace Lightaplusplus.Pages.Courses
 
         public async Task<IActionResult> OnGetSearch(string courseSearch)
         {
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+
             List<string> courseList = new List<string>();
             CourseList = await _context.Courses.ToListAsync();
 
@@ -107,28 +102,14 @@ namespace Lightaplusplus.Pages.Courses
             return new JsonResult(courseList);
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            ///////Handle security level checks first
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
 
             Sections.InstructorId = (int)id;
 
-            ///////Handle validation checks now
             //Course Check
             int CourseId = 0;
             var course = Course.Split(" ");
@@ -212,7 +193,7 @@ namespace Lightaplusplus.Pages.Courses
             _context.Sections.Add(Sections);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Courses/", new { id = id });
+            return RedirectToPage("/Courses");
         }
     }
 }

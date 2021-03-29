@@ -55,12 +55,14 @@ namespace Lightaplusplus.Pages
         public string ErrorPaymentAmount { get; set; }
 
         public string Message { get; set; }
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
 
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
@@ -69,15 +71,15 @@ namespace Lightaplusplus.Pages
 
             Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 
-            if (Users == null)
-            {
-                return NotFound();
-            }
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 

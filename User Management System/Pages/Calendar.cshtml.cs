@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using Newtonsoft.Json;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages
 {
@@ -31,8 +32,15 @@ namespace Lightaplusplus.Pages
 
         public List<Assignments> TodoAssignments { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session);
+            if (path != "") return RedirectToPage(path);
+
             if (id == null)
             {
                 return NotFound();
