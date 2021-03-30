@@ -72,16 +72,16 @@ namespace Lightaplusplus.Pages.Courses.Grades
 
             var assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
 
-            if(assignment == null)
+            if (assignment == null || assignment.SectionId != sectionId)
             {
-                return RedirectToPage("/Courses/Index");
+                return RedirectToPage("/Courses/View/Index", new { sectionId });
             }
 
             Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).ThenInclude(a => a.Section).FirstOrDefaultAsync(@as => @as.SubmissionId == submissionId);
 
             if (Submissions == null)
             {
-                return RedirectToPage("/Courses/Grades/Submissions", new { sectionId = sectionId, assignmentId = assignmentId });
+                return RedirectToPage("/Courses/Grades/Submissions", new {sectionId, assignmentId });
             }
 
             if(Submissions.Assignment.AssignmentSubmissionType == 'F')
@@ -121,7 +121,7 @@ namespace Lightaplusplus.Pages.Courses.Grades
                 return RedirectToPage("/Courses/Index");
             }
 
-            Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).ThenInclude(a => a.Section).FirstOrDefaultAsync(@as => @as.SubmissionId == submissionId);
+            Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).FirstOrDefaultAsync(@as => @as.SubmissionId == submissionId);
 
 
             if (Submissions == null)

@@ -69,7 +69,7 @@ namespace Lightaplusplus.BisLogic
                     var section = context.Sections.FirstOrDefault(s => s.SectionId == reqPermissions.Id && s.InstructorId == id);
                     if (section == null)
                     {
-                        return "/Courses";
+                        return "/Courses/Index";
                     }
                 }
             }

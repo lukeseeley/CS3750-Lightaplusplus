@@ -22,8 +22,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             _context = context;
         }
 
-        public Sections Section { get; set; }
-
         public int SectionId { get; set; }
 
         [BindProperty]
@@ -69,11 +67,10 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
             Assignments = await _context.Assignments
                 .Include(a => a.Section).FirstOrDefaultAsync(m => m.AssignmentId == assignmentId);
-            Section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
-            if (Assignments == null)
+            if (Assignments == null || Assignments.SectionId != sectionId)
             {
-                return NotFound();
+                return RedirectToPage("/Courses/View/Index", new { sectionId });
             }
 
             AssignmentTitle = Assignments.AssignmentTitle;

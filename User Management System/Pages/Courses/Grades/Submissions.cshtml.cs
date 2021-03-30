@@ -26,8 +26,6 @@ namespace Lightaplusplus.Pages.Courses.Grades
         [BindProperty]
         public int id { get; set; }
 
-        public Sections Section { get; set; }
-
         public string ChartJson { get; internal set; }
 
         [BindProperty]
@@ -50,10 +48,14 @@ namespace Lightaplusplus.Pages.Courses.Grades
             path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
             if (path != "") return RedirectToPage(path);
 
-            Section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
-
             //get the assignment
             var assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
+
+            if (assignment == null || assignment.SectionId != sectionId)
+            {
+                return RedirectToPage("/Courses/View/Index", new { sectionId });
+            }
+
             // get all the grades for this assignment
             var grades = await _context.Grades.Where(g => g.AssignmentId == assignmentId).ToListAsync();
             //create a list of each letter grade

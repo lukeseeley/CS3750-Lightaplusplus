@@ -69,9 +69,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
             Submissions = await _context.AssignmentSubmissions.FirstOrDefaultAsync(s => s.StudentId == id && s.AssignmentId == assignmentId);
 
-            if(Assignments == null)
+            if(Assignments == null || Assignments.SectionId != sectionId)
             {
-                return RedirectToPage("/Courses/Index");
+                return RedirectToPage("/Courses/View/Index", new { sectionId });
             }
 
             try
