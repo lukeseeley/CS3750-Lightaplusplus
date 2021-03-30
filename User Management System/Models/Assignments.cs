@@ -45,6 +45,12 @@ namespace Lightaplusplus.Models
         [Required]
         public char AssignmentSubmissionType { get; set; }
 
+        /// <summary>
+        /// The time in which the assignment was created
+        /// </summary>
+        [DataType(DataType.DateTime)]
+        public DateTime AssignmentCreationDate { get; set; }
+
         public virtual Sections Section { get; set; }
 
     }

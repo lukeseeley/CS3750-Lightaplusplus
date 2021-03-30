@@ -125,5 +125,16 @@ namespace Lightaplusplus.Models
         /// </summary>
         public virtual UserPictures Picture { get; set; }
 
+        /// <summary>
+        /// The last login time, which should be set after logging in or after signing up
+        /// </summary>
+        [DataType(DataType.DateTime)]
+        public DateTime CurrentLoginTime { get; set; }
+
+        /// <summary>
+        /// The previous login time, which should be set to the Current login if it was previously
+        /// </summary>
+        [DataType(DataType.DateTime)]
+        public DateTime LastLoginTime { get; set; }
     }
 }
