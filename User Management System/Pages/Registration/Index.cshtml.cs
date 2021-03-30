@@ -21,17 +21,6 @@ namespace Lightaplusplus.Pages.Registration
             _context = context;
         }
 
-        public SectionStudents SectionStudents { get; set; }
-
-        [BindProperty]
-        public int StudentId { get; set; }
-
-        [BindProperty]
-        public int SectionId { get; set; }
-
-        [BindProperty]
-        public List<Sections> SectionsList { get; set; }
-
         [BindProperty]
         public List<SectionRegistrationData> SectionRegistrations { get; set; }
 
@@ -52,32 +41,8 @@ namespace Lightaplusplus.Pages.Registration
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
             if (path != "") return RedirectToPage(path);
 
-            SectionsList = await _context.Sections
-                .Include(s => s.Instructor)
-                .Include(s => s.Course)
-                .AsNoTracking()
-                .ToListAsync();
-
-            SectionRegistrations = new List<SectionRegistrationData>();
-            foreach (var section in SectionsList)
-            {
-                var sectionRegistry = await _context.SectionStudents.Where(sr => sr.SectionId == section.SectionId).ToListAsync();
-                var isEnrolled = await _context.SectionStudents.Where(ss => ss.SectionId == section.SectionId).Where(ss => ss.StudentId == StudentId).FirstOrDefaultAsync();
-                char registrationStatus;
-                if (isEnrolled != null) //Meaning this student is already registered in this section
-                {
-                    registrationStatus = 'R';
-                }
-                else if (sectionRegistry.Count() >= section.SectionCapacity) //Meaning the class is at full capacity
-                {
-                    registrationStatus = 'F';
-                }
-                else //Meaning the student is not enrolled in this class, and the class is not full
-                {
-                    registrationStatus = 'N';
-                }
-                SectionRegistrations.Add(new SectionRegistrationData(section, sectionRegistry, registrationStatus));
-            }
+            var register = new StudentRegister(_context);
+            SectionRegistrations = register.GetSectionRegistration((int)id);
 
             isError = false;
             return Page();
@@ -85,6 +50,11 @@ namespace Lightaplusplus.Pages.Registration
 
         public async Task<IActionResult> OnPostRegisterAsync(int sectionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
             if (path != "") return RedirectToPage(path);
 
@@ -98,6 +68,7 @@ namespace Lightaplusplus.Pages.Registration
             }
             else isError = true;
 
+            SectionRegistrations = register.GetSectionRegistration((int)id);
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
             switch (result)
@@ -123,6 +94,11 @@ namespace Lightaplusplus.Pages.Registration
 
         public async Task<IActionResult> OnPostDropAsync(int sectionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
             if (path != "") return RedirectToPage(path);
 
@@ -137,6 +113,7 @@ namespace Lightaplusplus.Pages.Registration
             }
             else isError = true;
 
+            SectionRegistrations = register.GetSectionRegistration((int)id);
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
             switch (result)

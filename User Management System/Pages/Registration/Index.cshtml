@@ -34,7 +34,6 @@
         <div class="alert alert-danger" role="alert">
             <strong>Error:</strong>
             @Model.RegisterError
-            Return to registration <a class="alert-link" asp-page="/Registration/Index">here</a>.
         </div>
     }
 
@@ -88,7 +87,7 @@
                         @Html.DisplayFor(modelItem => item.Section.SectionLocation)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.StudentRegistry.Count) / @Html.DisplayFor(modelItem => item.Section.SectionCapacity)
+                        @Html.DisplayFor(modelItem => item.StudentRegistry) / @Html.DisplayFor(modelItem => item.Section.SectionCapacity)
                     </td>
                     <td>
                         @{

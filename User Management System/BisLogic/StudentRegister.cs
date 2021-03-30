@@ -1,4 +1,5 @@
 ﻿using Lightaplusplus.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,39 @@ namespace Lightaplusplus.BisLogic
         public StudentRegister(Lightaplusplus.Data.Lightaplusplus_SystemContext context)
         {
             _context = context;
+        }
+
+        public List<SectionRegistrationData> GetSectionRegistration(int studentId)
+        {
+            List<SectionRegistrationData> registration = new List<SectionRegistrationData>();
+
+            var SectionsList = _context.Sections
+                .Include(s => s.Instructor)
+                .Include(s => s.Course)
+                .AsNoTracking()
+                .ToList();
+
+            foreach (var section in SectionsList)
+            {
+                var sectionRegistry = _context.SectionStudents.Where(sr => sr.SectionId == section.SectionId).Count();
+                var isEnrolled = _context.SectionStudents.FirstOrDefault(ss => ss.SectionId == section.SectionId && ss.StudentId == studentId);
+                char registrationStatus;
+                if (isEnrolled != null) //Meaning this student is already registered in this section
+                {
+                    registrationStatus = 'R';
+                }
+                else if (sectionRegistry >= section.SectionCapacity) //Meaning the class is at full capacity
+                {
+                    registrationStatus = 'F';
+                }
+                else //Meaning the student is not enrolled in this class, and the class is not full
+                {
+                    registrationStatus = 'N';
+                }
+                registration.Add(new SectionRegistrationData(section, sectionRegistry, registrationStatus));
+            }
+
+            return registration;
         }
 
         /// <summary>
