@@ -20,8 +20,6 @@ namespace Lightaplusplus.Pages
             _context = context;
         }
 
-        public Users Users { get; set; }
-
         [BindProperty]
         public int id { get; set; }
 
@@ -37,8 +35,7 @@ namespace Lightaplusplus.Pages
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
             if (path != "") return RedirectToPage(path);
 
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-            var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
+            var sections = _context.Sections.Where(i => i.InstructorId == id);
 
             sectionsTaught = new Sections[sections.Count()];
             int iter = 0;

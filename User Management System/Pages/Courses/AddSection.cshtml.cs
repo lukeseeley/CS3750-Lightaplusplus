@@ -19,9 +19,6 @@ namespace Lightaplusplus.Pages.Courses
         {
             _context = context;
         }
-
-        [BindProperty]
-        public Users Users { get; set; }
         
         [BindProperty]
         public int InstructorId { get; set; }
@@ -79,7 +76,6 @@ namespace Lightaplusplus.Pages.Courses
             if (path != "") return RedirectToPage(path);
 
             InstructorId = (int)id;
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
             CourseList = await _context.Courses.ToListAsync();
 

@@ -21,8 +21,6 @@ namespace Lightaplusplus.Pages.Registration
             _context = context;
         }
 
-        public Users Users { get; set; }
-
         public SectionStudents SectionStudents { get; set; }
 
         [BindProperty]
@@ -53,25 +51,6 @@ namespace Lightaplusplus.Pages.Registration
             ViewData["UserType"] = userType;
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
             if (path != "") return RedirectToPage(path);
-
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'S') // Make sure only the student is viewing registration
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-
-            StudentId = (int)id;
-            Users = user;
 
             SectionsList = await _context.Sections
                 .Include(s => s.Instructor)
@@ -106,6 +85,9 @@ namespace Lightaplusplus.Pages.Registration
 
         public async Task<IActionResult> OnPostRegisterAsync(int sectionId)
         {
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
             int studentId = (int)Session.getUserId(HttpContext.Session);
             var register = new StudentRegister(_context);
             var result = register.RegisterStudent(studentId, sectionId);
@@ -141,6 +123,9 @@ namespace Lightaplusplus.Pages.Registration
 
         public async Task<IActionResult> OnPostDropAsync(int sectionId)
         {
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
             int studentId = (int)Session.getUserId(HttpContext.Session);
             var register = new StudentRegister(_context);
 

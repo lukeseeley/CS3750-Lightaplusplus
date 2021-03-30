@@ -6,7 +6,7 @@
 
     <div class="row d-flex justify-content-between" style="margin-top: 20px">
         <h4>Assignments</h4>
-        @if(Model.Users.usertype == 'I')
+        @if((string)ViewData["UserType"] == "I")
         {
             <div>
                 <a asp-page="/Courses/Assignments/AddAssignment" 
@@ -45,7 +45,7 @@
                         <td>@assignment.AssignmentMaxPoints</td>
                         <td>
                             <div>
-                                @if (@Model.Users.usertype == 'S')
+                                @if ((string)ViewData["UserType"] == "S")
                                 {
                                     @*TODO: Change link to <class="btn btn-success">Submitted<>
                                         if assignment has been submitted*@
@@ -65,7 +65,7 @@
                         </td>
                         <td>
                             <div>
-                                @if (Model.Users.usertype == 'I')
+                                @if ((string)ViewData["UserType"] == "I")
                                 {
                                     <a asp-page="/Courses/Grades/Submissions"
                                        asp-route-sectionId="@Model.SectionId"                        

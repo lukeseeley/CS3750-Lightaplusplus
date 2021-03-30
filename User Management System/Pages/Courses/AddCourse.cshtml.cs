@@ -21,9 +21,6 @@ namespace Lightaplusplus.Pages.Courses
         }
 
         [BindProperty]
-        public Users Users { get; set; }
-
-        [BindProperty]
         public int id { get; set; }
 
         [BindProperty]
@@ -69,7 +66,6 @@ namespace Lightaplusplus.Pages.Courses
 
             this.id = (int)id;
             CourseCreditHours = 3;
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
             return Page();
         }

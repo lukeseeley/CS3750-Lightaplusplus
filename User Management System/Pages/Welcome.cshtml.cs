@@ -20,8 +20,6 @@ namespace Lightaplusplus.Pages
             _context = context;
         }
 
-        public Users Users { get; set; }
-
         public Sections[] SectionsArray { get; set; }
 
         public List<Assignments> Assignments { get; set; }
@@ -41,13 +39,13 @@ namespace Lightaplusplus.Pages
             var path = UserValidator.validateUser(_context, HttpContext.Session);
             if (path != "") return RedirectToPage(path);
 
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+            ViewData["UserName"] = $"{user.firstname} {user.lastname}";
 
             if (userType == "S")
             {
                 // get all the sections the student is in
-                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
+                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == id).ToListAsync();
 
                 SectionsArray = new Sections[StudentSections.Count()];
 
@@ -78,7 +76,7 @@ namespace Lightaplusplus.Pages
             }
             else if (userType == "I")
             {
-                var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
+                var sections = _context.Sections.Where(i => i.InstructorId == id);
 
                 SectionsArray = new Sections[sections.Count()];
                 int iter = 0;
@@ -104,7 +102,7 @@ namespace Lightaplusplus.Pages
             //Let's get the list of assignments
             if(userType == "S")
             {
-                var SectionList = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
+                var SectionList = await _context.SectionStudents.Where(ss => ss.StudentId == id).ToListAsync();
                 foreach (var section in SectionList)
                 {
                     var assignments = await _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToListAsync();
@@ -118,7 +116,7 @@ namespace Lightaplusplus.Pages
             }
             else
             {
-                var SectionList = await _context.Sections.Where(s => s.InstructorId == Users.ID).ToListAsync();
+                var SectionList = await _context.Sections.Where(s => s.InstructorId == id).ToListAsync();
                 foreach (var section in SectionList)
                 {
                     var assignments = await _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToListAsync();
@@ -136,9 +134,9 @@ namespace Lightaplusplus.Pages
             {
                 if (DateTime.Now.CompareTo(assignment.AssignmentDueDateTime) < 0) //The assignment is still in the future
                 {
-                    if(Users.usertype == 'S')
+                    if(userType == "S")
                     {
-                        var Submission = await _context.AssignmentSubmissions.FirstOrDefaultAsync(asub => asub.AssignmentId == assignment.AssignmentId && asub.StudentId == Users.ID);
+                        var Submission = await _context.AssignmentSubmissions.FirstOrDefaultAsync(asub => asub.AssignmentId == assignment.AssignmentId && asub.StudentId == id);
                         if (Submission != null) continue; //As the student has already submitted this assignment
                     }
                     
@@ -161,7 +159,7 @@ namespace Lightaplusplus.Pages
                 }
 
                 // get all the sections the student is in
-                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
+                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == id).ToListAsync();
 
                 SectionsArray = new Sections[StudentSections.Count()];
 
@@ -239,7 +237,7 @@ namespace Lightaplusplus.Pages
             else if (userType == "I")
             {
                 assignmentEvents = new Event[0]; // Teachers don't have assignments listed on their calendar
-                var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
+                var sections = _context.Sections.Where(i => i.InstructorId == id);
 
                 SectionsArray = new Sections[sections.Count()];
                 int iter = 0;

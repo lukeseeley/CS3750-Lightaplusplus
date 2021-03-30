@@ -21,7 +21,6 @@ namespace Lightaplusplus.Pages.Courses.View
 
         public int SectionId { get; set; }
 
-        public Users Users { get; set; }
 
         public Sections Section { get; set; }
 
@@ -38,7 +37,6 @@ namespace Lightaplusplus.Pages.Courses.View
 
             SectionId = sectionId;
 
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             Section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == SectionId);
 
             Assignments = await _context.Assignments.Where(a => a.SectionId == SectionId).ToListAsync();

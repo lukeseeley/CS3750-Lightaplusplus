@@ -22,7 +22,7 @@
         }
 </style>
 
-@if (Model.Users.usertype == 'I')
+@if ((string)ViewData["UserType"] == "I")
 {
     <div class="row d-flex justify-content-between" style="margin-top: 20px">
         <h1>View Assignments</h1>
@@ -72,7 +72,7 @@ else
 
 
 <div>
-    @if (@Model.Users.usertype == 'S')
+    @if ((string)ViewData["UserType"] == "S")
     {
 
         //if the assignment is a file submission
