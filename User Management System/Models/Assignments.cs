@@ -49,7 +49,7 @@ namespace Lightaplusplus.Models
         /// The time in which the assignment was created
         /// </summary>
         [DataType(DataType.DateTime)]
-        public DateTime AssignmentCreationDate { get; set; }
+        public DateTime? AssignmentCreationDate { get; set; }
 
         public virtual Sections Section { get; set; }
 

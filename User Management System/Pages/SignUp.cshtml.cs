@@ -104,6 +104,7 @@ namespace Lightaplusplus.Pages
             //}
 
             Users.password = encryptor.encrypt(Users.password);
+            Users.CurrentLoginTime = DateTime.Now;
             _context.Users.Add(Users);
             await _context.SaveChangesAsync();
 

@@ -62,7 +62,19 @@ namespace Lightaplusplus.Pages
             else
             {
                 Session.setUser(HttpContext.Session, User);
-                
+                if(User.CurrentLoginTime == null)
+                {
+                    User.CurrentLoginTime = DateTime.Now;
+                }
+                else
+                {
+                    User.LastLoginTime = User.CurrentLoginTime;
+                    User.CurrentLoginTime = DateTime.Now;
+                }
+
+                _context.Users.Update(User);
+                await _context.SaveChangesAsync();
+
                 return RedirectToPage("./Welcome");
             }
 
