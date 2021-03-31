@@ -42,92 +42,9 @@ namespace Lightaplusplus.Pages
             var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             ViewData["UserName"] = $"{user.firstname} {user.lastname}";
 
-            if (userType == "S")
-            {
-                // get all the sections the student is in
-                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == id).ToListAsync();
-
-                SectionsArray = new Sections[StudentSections.Count()];
-
-                // put the sections in a list
-                List<Sections> sectionsList = new List<Sections>();
-                foreach (var section in StudentSections)
-                {
-                    var sections = await _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefaultAsync();
-                    sectionsList.Add(sections);
-                }
-
-                // put the list into SectionsArray
-                int i = 0;
-                foreach(var section in sectionsList)
-                {
-                    SectionsArray[i] = section;
-                    i++;
-                }
-                // get the course information
-                foreach (var studSection in SectionsArray)
-                {
-                    var courses = _context.Courses.Where(c => c.CourseId == studSection.CourseId);
-                    foreach (var course in courses)
-                    {
-                        studSection.Course = course;
-                    }
-                }
-            }
-            else if (userType == "I")
-            {
-                var sections = _context.Sections.Where(i => i.InstructorId == id);
-
-                SectionsArray = new Sections[sections.Count()];
-                int iter = 0;
-                foreach (var section in sections)
-                {
-                    SectionsArray[iter] = section;
-                    iter++;
-                }
-
-                foreach (var section in SectionsArray)
-                {
-                    var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
-                    foreach (var course in courses)
-                    {
-                        section.Course = course;
-                    }
-                }
-            }
-
-            Assignments = new List<Assignments>();
+            SectionsArray = Session.getSections(HttpContext.Session).ToArray();
+            Assignments = Session.getAssignments(HttpContext.Session);
             TodoAssignments = new List<Assignments>();
-
-            //Let's get the list of assignments
-            if(userType == "S")
-            {
-                var SectionList = await _context.SectionStudents.Where(ss => ss.StudentId == id).ToListAsync();
-                foreach (var section in SectionList)
-                {
-                    var assignments = await _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToListAsync();
-
-                    if (assignments != null)
-                    {
-                        Assignments.AddRange(assignments);
-                    }
-
-                }
-            }
-            else
-            {
-                var SectionList = await _context.Sections.Where(s => s.InstructorId == id).ToListAsync();
-                foreach (var section in SectionList)
-                {
-                    var assignments = await _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToListAsync();
-
-                    if (assignments != null)
-                    {
-                        Assignments.AddRange(assignments);
-                    }
-
-                }
-            }
 
             //Now let's created a filtered list for the todo list
             foreach (var assignment in Assignments)
@@ -136,7 +53,7 @@ namespace Lightaplusplus.Pages
                 {
                     if(userType == "S")
                     {
-                        var Submission = await _context.AssignmentSubmissions.FirstOrDefaultAsync(asub => asub.AssignmentId == assignment.AssignmentId && asub.StudentId == id);
+                        var Submission = await _context.AssignmentSubmissions.FirstOrDefaultAsync(asub => asub.AssignmentId == assignment.AssignmentId && asub.StudentId == id); // *****REMOVE REQUEST******
                         if (Submission != null) continue; //As the student has already submitted this assignment
                     }
                     
@@ -156,36 +73,6 @@ namespace Lightaplusplus.Pages
                     myEvent.link = "/Courses/" + Assignments[b].SectionId + "/Assignments/" + Assignments[b].AssignmentId;
                     // "/Courses/" + sectionid + "/Assignments/" + assignmentid
                     assignmentEvents[b] = myEvent;
-                }
-
-                // get all the sections the student is in
-                var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == id).ToListAsync();
-
-                SectionsArray = new Sections[StudentSections.Count()];
-
-                // put the sections in a list
-                List<Sections> sectionsList = new List<Sections>();
-                foreach (var section in StudentSections)
-                {
-                    var sections = await _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefaultAsync();
-                    sectionsList.Add(sections);
-                }
-
-                // put the list into SectionsArray
-                int i = 0;
-                foreach (var section in sectionsList)
-                {
-                    SectionsArray[i] = section;
-                    i++;
-                }
-                // get the course information
-                foreach (var studSection in SectionsArray)
-                {
-                    var courses = _context.Courses.Where(c => c.CourseId == studSection.CourseId);
-                    foreach (var course in courses)
-                    {
-                        studSection.Course = course;
-                    }
                 }
 
                 // create classes
@@ -237,25 +124,6 @@ namespace Lightaplusplus.Pages
             else if (userType == "I")
             {
                 assignmentEvents = new Event[0]; // Teachers don't have assignments listed on their calendar
-                var sections = _context.Sections.Where(i => i.InstructorId == id);
-
-                SectionsArray = new Sections[sections.Count()];
-                int iter = 0;
-                foreach (var section in sections)
-                {
-                    SectionsArray[iter] = section;
-                    iter++;
-                }
-
-                foreach (var section in SectionsArray)
-                {
-                    var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
-                    foreach (var course in courses)
-                    {
-                        section.Course = course;
-                    }
-                }
-
                 sectionEvents = new RecurringEvent[SectionsArray.Length];
                 for (int j = 0; j < SectionsArray.Length; j++)
                 {

@@ -699,3 +699,8 @@ C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1
 C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
 C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.DataEngine.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.Visualization.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

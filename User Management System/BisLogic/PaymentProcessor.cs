@@ -49,6 +49,10 @@ namespace Lightaplusplus.BisLogic
                 var test = JsonConvert.SerializeObject(message);
                 // Get Card Token
                 var json = JsonConvert.DeserializeObject<dynamic>(message);
+                if (message.Contains("invalid"))
+                {
+                    return "error";
+                }
                 var cardToken = json.id;
                 // charge the card
                 data = new Dictionary<string, string>();

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Data;
 using Lightaplusplus.Models;
 using Lightaplusplus.BisLogic;
+using Newtonsoft.Json;
 
 namespace Lightaplusplus.Pages.Registration
 {
@@ -32,6 +33,69 @@ namespace Lightaplusplus.Pages.Registration
 
         public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
 
+
+        public void setSectionInfo(int id)
+        {
+            // get all the sections the student is in
+            var StudentSections = _context.SectionStudents.Where(ss => ss.StudentId == id).ToList();
+
+            var SectionsArray = new Sections[StudentSections.Count()];
+
+            // put the sections in a list
+            List<Sections> sectionsList = new List<Sections>();
+            foreach (var section in StudentSections)
+            {
+                var sections = _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefault();
+                sectionsList.Add(sections);
+            }
+
+            // put the list into SectionsArray
+            int i = 0;
+            foreach (var section in sectionsList)
+            {
+                SectionsArray[i] = section;
+                i++;
+            }
+            // get the course information
+            foreach (var studSection in SectionsArray)
+            {
+                var courses = _context.Courses.Where(c => c.CourseId == studSection.CourseId);
+                foreach (var course in courses)
+                {
+                    studSection.Course = course;
+                }
+            }
+
+            foreach (var section in sectionsList)
+            {
+                var assignments = _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToList();
+
+                if (assignments != null)
+                {
+                    section.Assignments = assignments;
+                }
+
+            }
+            // Create Cookie in session of sections the user has
+            string separatedSections = "";
+            foreach (var section in SectionsArray)
+            {
+                foreach (var assignment in section.Assignments)
+                {
+                    int courseNo = assignment.Section.Course.CourseNumber;
+                    string code = assignment.Section.Course.CourseCode;
+                    assignment.Section = new Sections();
+                    assignment.Section.Course = new Models.Courses();
+                    assignment.Section.Course.CourseNumber = courseNo;
+                    assignment.Section.Course.CourseCode = code;
+                }
+                section.SectionStudents = null;
+                section.Course.Sections = null;
+                section.Instructor.InstructorSections = null;
+                separatedSections = separatedSections + ":::" + JsonConvert.SerializeObject(section);
+            }
+            Session.setSections(HttpContext.Session, separatedSections);
+        }
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -45,6 +109,8 @@ namespace Lightaplusplus.Pages.Registration
             SectionRegistrations = register.GetSectionRegistration((int)id);
 
             isError = false;
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
             return Page();
         }
 
@@ -88,7 +154,8 @@ namespace Lightaplusplus.Pages.Registration
                 default:
                     break;
             }
-
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
             return Page();
         }
 
@@ -130,9 +197,9 @@ namespace Lightaplusplus.Pages.Registration
                 default:
                     break;
             }
-
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
             return Page();
         }
-
     }
 }

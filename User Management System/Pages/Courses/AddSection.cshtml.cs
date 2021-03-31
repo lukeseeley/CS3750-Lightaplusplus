@@ -8,6 +8,7 @@ using Lightaplusplus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Lightaplusplus.Pages.Courses
 {
@@ -66,6 +67,38 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public string CapacityError { get; set; }
 
+        public void setSectionInfo(int id)
+        {
+            var sections = _context.Sections.Where(i => i.InstructorId == id);
+
+            var SectionsArray = new Sections[sections.Count()];
+            int iter = 0;
+            foreach (var section in sections)
+            {
+                SectionsArray[iter] = section;
+                iter++;
+            }
+
+            foreach (var section in SectionsArray)
+            {
+                var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
+                foreach (var course in courses)
+                {
+                    section.Course = course;
+                }
+            }
+            // Create Cookie in session of sections the user has
+            string separatedSections = "";
+            foreach (var section in SectionsArray)
+            {
+                section.SectionStudents = null; // This has an infinite loop
+                section.Course.Sections = null; // This has an infinite loop
+                //section.Instructor.InstructorSections = null; // This has an infinite loop
+                separatedSections = separatedSections + ":::" + JsonConvert.SerializeObject(section);
+            }
+            Session.setSections(HttpContext.Session, separatedSections);
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -78,7 +111,8 @@ namespace Lightaplusplus.Pages.Courses
             InstructorId = (int)id;
 
             CourseList = await _context.Courses.ToListAsync();
-
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
             return Page();
         }
 
@@ -188,8 +222,9 @@ namespace Lightaplusplus.Pages.Courses
 
             _context.Sections.Add(Sections);
             await _context.SaveChangesAsync();
-
-            return RedirectToPage("/Courses");
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
+            return RedirectToPage("/Welcome");
         }
     }
 }
