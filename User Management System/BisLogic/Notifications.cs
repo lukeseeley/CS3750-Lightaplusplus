@@ -10,17 +10,6 @@ namespace Lightaplusplus.BisLogic
 {
     public static class Notifications
     {
-        public static void SetUserObject(this ISession session, string key, Users user)
-        {
-            session.SetString(key, JsonConvert.SerializeObject(user));
-        }
-
-        public static Users GetUserObject<Users>(this ISession session, string key)
-        {
-            var value = session.GetString(key);
-            return value == null ? default : JsonConvert.DeserializeObject<Users>(value);
-        }
-
         public static void SetGrades(this ISession session, string grades)
         {
             session.SetString("Grades", grades);
