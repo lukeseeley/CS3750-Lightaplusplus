@@ -37,6 +37,9 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public string ErrorMessage { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public void OnGet(int? result)
         {
         }

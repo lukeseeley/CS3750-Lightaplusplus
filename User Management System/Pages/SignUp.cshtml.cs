@@ -48,6 +48,9 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public string EmailErrorMessage { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public IActionResult OnGet()
         {
             return Page();
