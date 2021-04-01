@@ -45,6 +45,8 @@ namespace Lightaplusplus.BisLogic
                     }
                 }
 
+                NotificationList.Sort((n1, n2) => DateTime.Compare(n1.NotificationDate, n2.NotificationDate));
+
             }
 
 
