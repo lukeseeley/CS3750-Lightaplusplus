@@ -33,6 +33,8 @@ namespace Lightaplusplus.Pages.Registration
 
         public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
 
         public void setSectionInfo(int id)
         {
@@ -111,6 +113,9 @@ namespace Lightaplusplus.Pages.Registration
             isError = false;
             // Update session cookie
             setSectionInfo(int.Parse(id.ToString()));
+
+            Notifications = new Notifications(HttpContext.Session, _context);
+
             return Page();
         }
 
@@ -156,6 +161,9 @@ namespace Lightaplusplus.Pages.Registration
             }
             // Update session cookie
             setSectionInfo(int.Parse(id.ToString()));
+
+            Notifications = new Notifications(HttpContext.Session, _context);
+
             return Page();
         }
 
@@ -199,6 +207,9 @@ namespace Lightaplusplus.Pages.Registration
             }
             // Update session cookie
             setSectionInfo(int.Parse(id.ToString()));
+
+            Notifications = new Notifications(HttpContext.Session, _context);
+
             return Page();
         }
     }

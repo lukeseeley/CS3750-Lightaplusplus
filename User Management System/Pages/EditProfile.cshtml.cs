@@ -79,6 +79,9 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public List<UserLinks> Links { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -110,6 +113,11 @@ namespace Lightaplusplus.Pages
                 var link = new UserLinks();
                 link.UserId = (int)id;
                 Links.Add(link);
+            }
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
             }
 
             this.id = (int)id;

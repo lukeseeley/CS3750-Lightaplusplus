@@ -13,6 +13,10 @@ namespace Lightaplusplus.BisLogic
     {
         public List<Notification> NotificationList { get; set; }
 
+        public Notifications()
+        {
+        }
+
         public Notifications(ISession session, Lightaplusplus.Data.Lightaplusplus_SystemContext context)
         {
             var id = Session.getUserId(session);

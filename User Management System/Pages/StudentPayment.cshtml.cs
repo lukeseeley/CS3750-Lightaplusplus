@@ -53,6 +53,9 @@ namespace Lightaplusplus.Pages
         public string ErrorPaymentAmount { get; set; }
 
         public string Message { get; set; }
+
+        [BindProperty]
+        public Notifications Notifications { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -66,6 +69,9 @@ namespace Lightaplusplus.Pages
             PaymentAmount = RemainingBalance;
 
             Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
+
+            Notifications = new Notifications(HttpContext.Session, _context);
+
 
             return Page();
         }

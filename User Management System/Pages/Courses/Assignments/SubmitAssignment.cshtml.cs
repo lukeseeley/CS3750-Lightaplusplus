@@ -53,6 +53,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         [BindProperty]
         public bool Submitted { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int sectionId, int assignmentId)
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -97,6 +100,11 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                 }
             }
             catch { }
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             this.HiddenAssignmentId = assignmentId;
             this.HiddenSectionId = sectionId;

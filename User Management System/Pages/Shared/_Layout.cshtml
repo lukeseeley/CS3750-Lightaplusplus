@@ -67,39 +67,38 @@
                                 {
                                     if ((string)ViewData["UserType"] == "S")
                                     {
-                                        var user = Lightaplusplus.BisLogic.Notifications.GetUserObject<Models.Users>(Context.Session, "user");
-                                        var assignments = Lightaplusplus.BisLogic.Session.getAssignments(Context.Session);
-                                        var grades = Lightaplusplus.BisLogic.Notifications.GetGrades(Context.Session);
                                     <li>
                                         <div class="dropdown">
-                                            <button id="notifications-button" class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                                                <i class="fas fa-bell fa-fw"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                @if(assignments.Any()){
-                                                    @foreach (var assignment in assignments)
+                                            @if (Model.Notifications.NotificationList.Count > 0)
+                                            {
+                                                <button id="notifications-button" class="btn" type="button" data-toggle="dropdown">
+                                                    <i class="fas fa-bell fa-fw" style="color:red"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    @foreach (var item in Model.Notifications.NotificationList)
                                                     {
-                                                        if (assignment.AssignmentCreationDate > user.LastLoginTime && assignment.AssignmentCreationDate < user.CurrentLoginTime)
+                                                        if (item.Type == 'A')
                                                         {
                                                             <a class="dropdown-item"
-                                                               asp-page="/Courses/Assignments/SubmitAssignment"
-                                                               asp-route-sectionId="@assignment.SectionId"
-                                                               asp-route-assignmentId="@assignment.AssignmentId">@assignment.AssignmentTitle was created.</a>
+                                                               asp-page="@item.Link">@item.NotificationTitle was created.</a>
                                                         }
-                                                    }
-                                                }
-                                                @if(grades.Any())
-                                                {
-                                                    @foreach (var grade in grades)
-                                                    {
-                                                        if (grade.GradeDateTime > user.LastLoginTime && grade.GradeDateTime < user.CurrentLoginTime)
+                                                        else
                                                         {
                                                             <a class="dropdown-item"
-                                                               href="#">@grade.Assignment.AssignmentTitle was graded.</a>
+                                                               href="#">@item.NotificationTitle was graded.</a>
                                                         }
                                                     }
-                                                }
-                                            </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <button id="notifications-button" class="btn" type="button" data-toggle="dropdown">
+                                                    <i class="fas fa-bell fa-fw"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item">No Notifications</a>
+                                                </div>
+                                            }
                                         </div>
                                     </li>
                                     }

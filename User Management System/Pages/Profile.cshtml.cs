@@ -28,6 +28,9 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public List<UserLinks> Links { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -43,6 +46,11 @@ namespace Lightaplusplus.Pages
             Image = image != null ? image.profilepic : null;
 
             Links = _context.UserLinks.Where(u => u.UserId == (int)id).ToList();
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             return Page();
         }
