@@ -37,9 +37,6 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public string ErrorMessage { get; set; }
 
-        [BindProperty]
-        public Notifications Notifications { get; set; }
-
         public void OnGet(int? result)
         {
         }
@@ -192,11 +189,6 @@ namespace Lightaplusplus.Pages
                 await _context.SaveChangesAsync();
 
                 setSectionInfo(User.ID, User.usertype);
-
-                if ((string)ViewData["UserType"] == "S")
-                {
-                    Notifications = new Notifications(HttpContext.Session, _context);
-                }
 
                 return RedirectToPage("./Welcome");
             }

@@ -48,9 +48,6 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public string EmailErrorMessage { get; set; }
 
-        [BindProperty]
-        public Notifications Notifications { get; set; }
-
         public IActionResult OnGet()
         {
             return Page();
@@ -115,10 +112,6 @@ namespace Lightaplusplus.Pages
 
             Session.setUser(HttpContext.Session, user);
 
-            if ((string)ViewData["UserType"] == "S")
-            {
-                Notifications = new Notifications(HttpContext.Session, _context);
-            }
 
             return RedirectToPage("./Welcome");
         }
