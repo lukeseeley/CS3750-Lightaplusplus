@@ -53,6 +53,7 @@ namespace Lightaplusplus.Pages
 
                 // put the sections in a list
                 List<Sections> sectionsList = new List<Sections>();
+                List<Sections> allSections = new List<Sections>();
                 foreach (var section in StudentSections)
                 {
                     var sections = _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefault();
@@ -105,6 +106,19 @@ namespace Lightaplusplus.Pages
                     separatedSections = separatedSections + ":::" + JsonConvert.SerializeObject(section);
                 }
                 Session.setSections(HttpContext.Session, separatedSections);
+
+                //Create All Sections Cookie
+                allSections = _context.Sections.Include(s => s.Instructor).Include(s => s.Course).AsNoTracking().ToList();
+                string sepAll = "";
+                foreach (var section in allSections)
+                {
+                    section.Assignments = null;
+                    section.SectionStudents = null;
+                    section.Course.Sections = null;
+                    section.Instructor.InstructorSections = null;
+                    sepAll = sepAll + ":::" + JsonConvert.SerializeObject(section);
+                }
+                Session.setAllSections(HttpContext.Session, sepAll);
             }
             else if (type == 'I')
             {

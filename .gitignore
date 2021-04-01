@@ -43,3 +43,11 @@ User Management System/obj/*
 .Trashes
 ehthumbs.db
 Thumbs.db
+UnitTestLMSProject/bin/Debug/netcoreapp3.1/UnitTestLMSProject.runtimeconfig.dev.json
+UnitTestLMSProject/obj/project.assets.json
+UnitTestLMSProject/obj/UnitTestLMSProject.csproj.nuget.dgspec.json
+UnitTestLMSProject/obj/UnitTestLMSProject.csproj.nuget.g.props
+UnitTestLMSProject/bin/Debug/netcoreapp3.1/UnitTestLMSProject.runtimeconfig.dev.json
+UnitTestLMSProject/obj/project.assets.json
+UnitTestLMSProject/obj/UnitTestLMSProject.csproj.nuget.dgspec.json
+UnitTestLMSProject/obj/UnitTestLMSProject.csproj.nuget.g.props

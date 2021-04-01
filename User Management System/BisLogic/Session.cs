@@ -54,6 +54,34 @@ namespace Lightaplusplus.BisLogic
             return sectionsList;
         }
 
+        public static void setAllSections(this ISession session, string sections)
+        {
+            session.SetString("AllSections", sections);
+        }
+
+        public static List<Sections> getAllSections(this ISession session)
+        {
+            string mySections = session.GetString("AllSections");
+            List<Sections> sectionsList = new List<Sections>();
+            foreach (var section in mySections.Split(":::"))
+            {
+                try
+                {
+                    if (section.Length > 0)
+                    {
+                        Sections mySection = JsonConvert.DeserializeObject<Sections>(section);
+                        sectionsList.Add(mySection);
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            return sectionsList;
+        }
+
         public static List<Assignments> getAssignments(this ISession session)
         {
             List<Sections> sections = Session.getSections(session);
