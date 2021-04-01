@@ -41,6 +41,8 @@ namespace Lightaplusplus.Pages.Courses.Grades
         [BindProperty]
         public bool Graded { get; set; }
 
+        public int MaxGrade { get; set; }
+
         public int SectionId { get; set; }
 
         public int AssignmentId { get; set; }
@@ -76,6 +78,8 @@ namespace Lightaplusplus.Pages.Courses.Grades
             {
                 return RedirectToPage("/Courses/View/Index", new { sectionId });
             }
+
+            MaxGrade = (int)assignment.AssignmentMaxPoints;
 
             Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).ThenInclude(a => a.Section).FirstOrDefaultAsync(@as => @as.SubmissionId == submissionId);
 
@@ -145,7 +149,7 @@ namespace Lightaplusplus.Pages.Courses.Grades
                 GradeValueError = "Please enter a non negative value.";
                 errors = true;
             }
-            else if (GradeValue > Submissions.Assignment.AssignmentMaxPoints)
+            else if (GradeValue.ToString().Length > assignment.AssignmentMaxPoints.ToString().Length || GradeValue > Submissions.Assignment.AssignmentMaxPoints)
             {
                 GradeValueError = $"Please enter a number no more than {Submissions.Assignment.AssignmentMaxPoints}.";
                 errors = true;
@@ -154,6 +158,7 @@ namespace Lightaplusplus.Pages.Courses.Grades
 
             if(errors)
             {
+                MaxGrade = (int)assignment.AssignmentMaxPoints;
                 return Page();
             }
 
