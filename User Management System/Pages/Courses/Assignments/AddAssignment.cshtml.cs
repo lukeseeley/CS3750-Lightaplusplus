@@ -23,8 +23,6 @@ namespace Lightaplusplus.Pages.Courses
             _context = context;
         }
 
-        public Users Users { get; set; }
-
         public int SectionId { get; set; }
 
         [BindProperty, Required, MaxLength(50)]
@@ -64,32 +62,18 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public string PointsError { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int sectionId, int? id)
+        public async Task<IActionResult> OnGetAsync(int sectionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+            path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
+
             SectionId = sectionId;
-
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Users == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            else if(Users.usertype != 'I')
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == SectionId);
-
-            if (section.InstructorId != Users.ID)
-            {
-                return RedirectToPage("/Courses/Index", new { id = id });
-            }
 
             DueDate = DateTime.Today.AddDays(1);
             DueTime = new DateTime().AddHours(12).AddHours(11).AddMinutes(59);
@@ -97,32 +81,18 @@ namespace Lightaplusplus.Pages.Courses
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int sectionId, int? id)
+        public async Task<IActionResult> OnPostAsync(int sectionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+            path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
+
             SectionId = sectionId;
-
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Users == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            else if (Users.usertype != 'I')
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-
-            var section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == SectionId);
-
-            if (section.InstructorId != Users.ID)
-            {
-                return RedirectToPage("/Courses/Index", new { id = id });
-            }
 
             // Data validation
             var errors = false;
@@ -149,10 +119,7 @@ namespace Lightaplusplus.Pages.Courses
 
             myAdder.AddAssignment(SectionId, AssignmentTitle, AssignmentDescription, DueDate.Date.Add(DueTime.TimeOfDay), (int)AssignmentMaxPoints, AssignmentSubmissionType);
 
-            _context.Assignments.Add(Assignments);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("/Courses/View/Index", new { sectionId = SectionId, id = Users.ID });
+            return RedirectToPage("/Courses/View/Index", new { sectionId = SectionId });
         }
     }
 }

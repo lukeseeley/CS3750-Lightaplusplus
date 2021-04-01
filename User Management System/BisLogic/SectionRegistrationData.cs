@@ -19,7 +19,7 @@ namespace Lightaplusplus.BisLogic
         /// <summary>
         /// This is the registry of students related to this section
         /// </summary>
-        public List<SectionStudents> StudentRegistry { get; set; }
+        public int StudentRegistry { get; set; }
 
         /// <summary>
         /// This is the current registration status for this particular section
@@ -27,7 +27,7 @@ namespace Lightaplusplus.BisLogic
         /// </summary>
         public char RegistrationStatus { get; set; }
 
-        public SectionRegistrationData(Sections section, List<SectionStudents> sectionStudents, char registrationStatus)
+        public SectionRegistrationData(Sections section, int sectionStudents, char registrationStatus)
         {
             Section = section;
             StudentRegistry = sectionStudents;

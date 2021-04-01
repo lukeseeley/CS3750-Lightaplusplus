@@ -85,10 +85,10 @@
                     info.jsEvent.preventDefault(); // don't let the browser navigate
                     console.log(info.event);
                     if (info.event.extendedProps.type == "assignment") {
-                        console.log("Redirecting to " + info.event.extendedProps.redirect + "?id=" + @Model.Users.ID);
+                        console.log("Redirecting to " + info.event.extendedProps.redirect);
                         //window.location.href = "/asdf"
                         //https://localhost:44300/Courses/1011/Assignments/2015?id=7
-                        window.location.href = info.event.extendedProps.redirect + "?id=" + @Model.Users.ID
+                        window.location.href = info.event.extendedProps.redirect
                     }
                 },
             });
@@ -103,10 +103,10 @@
     <div class="row">
         <div class="col-9">
             <h1>Welcome</h1>
-            <h4>@Html.DisplayFor(model => model.Users.firstname) @Html.DisplayFor(model => model.Users.lastname)</h4>
+            <h4>@ViewData["UserName"]</h4>
             <div class="row">
                 @{ 
-                    if (Model.Users.usertype == 'I')
+                    if ((string)ViewData["UserType"] == "I")
                     {
                         foreach (var card in Model.SectionsArray)
                         {
@@ -115,11 +115,11 @@
                                     param-ClassName='card.Course.CourseName'
                                     param-StartTime='Convert.ToDateTime(card.SectionTimeStart)' param-EndTime='Convert.ToDateTime(card.SectionTimeEnd)'
                                     param-DaysTaught='card.DaysTaught' param-ClassCode='card.Course.CourseCode'
-                                    param-Link='$"/Courses/{card.SectionId}?id={Model.Users.ID}"' />
+                                    param-Link='$"/Courses/{card.SectionId}"' />
                             </div>
                         }
                     }
-                    else if (Model.Users.usertype == 'S')
+                    else if ((string)ViewData["UserType"] == "S")
                     {
                         foreach (var card in Model.SectionsArray)
                         {
@@ -127,7 +127,7 @@
                                 <component type="typeof(Components.ClassComponent)" render-mode="Static" param-ClassNumber='card.Course.CourseNumber'
                                 param-ClassName='card.Course.CourseName' param-Instructor='card.Instructor.firstname + " " + card.Instructor.lastname'
                                 param-DaysTaught='card.DaysTaught' param-StartTime='Convert.ToDateTime(card.SectionTimeStart)' param-EndTime='Convert.ToDateTime(card.SectionTimeEnd)'
-                                param-Link='$"/Courses/{card.SectionId}?id={Model.Users.ID}"' />
+                                param-Link='$"/Courses/{card.SectionId}"' />
                             </div>
                         }
 
@@ -143,8 +143,8 @@
                     <component type="typeof(Components.ToDoListComponent)" render-mode="Static" param-ClassNumber='$"{Model.TodoAssignments[i].Section.Course.CourseCode} {Model.TodoAssignments[i].Section.Course.CourseNumber}"'
                     param-AssignmentName='$"{Model.TodoAssignments[i].AssignmentTitle}"'
                     param-DueDate='$"{Model.TodoAssignments[i].AssignmentDueDateTime.ToString("MM/dd/yyyy")} at {Model.TodoAssignments[i].AssignmentDueDateTime.ToString("h:mm tt")}"'
-                    param-CourseLink='$"/Courses/{Model.TodoAssignments[i].SectionId}?id={Model.Users.ID}"'
-                    param-AssignmentLink='$"/Courses/{Model.TodoAssignments[i].SectionId}/Assignments/{Model.TodoAssignments[i].AssignmentId}?id={Model.Users.ID}"' />
+                    param-CourseLink='$"/Courses/{Model.TodoAssignments[i].SectionId}"'
+                    param-AssignmentLink='$"/Courses/{Model.TodoAssignments[i].SectionId}/Assignments/{Model.TodoAssignments[i].AssignmentId}"' />
             }
             @if(Model.TodoAssignments.Count < 1)
             {

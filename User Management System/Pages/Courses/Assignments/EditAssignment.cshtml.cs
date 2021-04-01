@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Data;
 using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
+using Lightaplusplus.BisLogic;
 
 namespace Lightaplusplus.Pages.Courses.Assignments
 {
@@ -20,12 +21,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         {
             _context = context;
         }
-
-        public Users Users { get; set; }
-
-        public int id { get; set; }
-
-        public Sections Section { get; set; }
 
         public int SectionId { get; set; }
 
@@ -59,36 +54,23 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         [BindProperty, Required]
         public char AssignmentSubmissionType { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id, int sectionId, int assignmentId)
+        public async Task<IActionResult> OnGetAsync(int sectionId, int assignmentId)
         {
-
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+            path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
 
             Assignments = await _context.Assignments
                 .Include(a => a.Section).FirstOrDefaultAsync(m => m.AssignmentId == assignmentId);
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-            Section = await _context.Sections.FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
-            if (Users == null)
+            if (Assignments == null || Assignments.SectionId != sectionId)
             {
-                return RedirectToPage("/Index");
-            }
-            else if (Users.usertype != 'I')
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-
-            if (Assignments == null)
-            {
-                return NotFound();
-            }
-
-            if (Section.InstructorId != Users.ID)
-            {
-                return RedirectToPage("/Courses/Index", new { id = id });
+                return RedirectToPage("/Courses/View/Index", new { sectionId });
             }
 
             AssignmentTitle = Assignments.AssignmentTitle;
@@ -100,22 +82,26 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             DueTime = DateTime.Parse(Assignments.AssignmentDueDateTime.ToString());
             DueTime.ToString("HH:mm tt");
 
-            this.id = (int)id;
             AssignmentId = assignmentId;
             SectionId = sectionId;
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id, int sectionId, int assignmentId)
+        public async Task<IActionResult> OnPostAsync(int sectionId, int assignmentId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+            path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
+
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
             Assignments.AssignmentTitle = AssignmentTitle;
             Assignments.AssignmentDescription = AssignmentDescription;
             Assignments.AssignmentDueDateTime = DueDate.Date.Add(DueTime.TimeOfDay);
             Assignments.AssignmentMaxPoints = AssignmentMaxPoints;
             Assignments.AssignmentSubmissionType = AssignmentSubmissionType;
-
 
             _context.Attach(Assignments).State = EntityState.Modified;
 
@@ -135,7 +121,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                 }
             }
 
-            return RedirectToPage("/Courses/Assignments/SubmitAssignment", new { id, sectionId, assignmentId});
+            return RedirectToPage("/Courses/Assignments/SubmitAssignment", new {sectionId, assignmentId});
         }
 
         private bool AssignmentsExists(int assignmentId)

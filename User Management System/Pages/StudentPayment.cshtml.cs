@@ -44,8 +44,6 @@ namespace Lightaplusplus.Pages
 
         public Sections[] SectionsArray { get; set; }
 
-        public Users Users { get; set; }
-
         public List<Payments> Payments { get; set; }
 
         public string ErrorCardNumber { get; set; }
@@ -55,30 +53,29 @@ namespace Lightaplusplus.Pages
         public string ErrorPaymentAmount { get; set; }
 
         public string Message { get; set; }
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
 
             RemainingBalance = await GetRemainingBalacne();
             PaymentAmount = RemainingBalance;
 
             Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 
-            if (Users == null)
-            {
-                return NotFound();
-            }
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+            var id = Session.getUserId(HttpContext.Session);
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
             Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 
             RemainingBalance = await GetRemainingBalacne();
@@ -179,7 +176,7 @@ namespace Lightaplusplus.Pages
                     // set payment to correct type
                     payment.PaymentAmount = (int)PaymentAmount;
                     payment.PaymentDateTime = DateTime.Now;
-                    payment.UserId = Users.ID;
+                    payment.UserId = (int)id;
 
                     _context.Payments.Add(payment);
                     await _context.SaveChangesAsync();
@@ -207,8 +204,10 @@ namespace Lightaplusplus.Pages
 
         public async Task<int> GetRemainingBalacne()
         {
+            var id = Session.getUserId(HttpContext.Session);
+
             // get all the sections the student is in
-            var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == Users.ID).ToListAsync();
+            var StudentSections = await _context.SectionStudents.Where(ss => ss.StudentId == id).ToListAsync();
 
             SectionsArray = new Sections[StudentSections.Count()];
 
@@ -242,7 +241,7 @@ namespace Lightaplusplus.Pages
             }
 
             // get all the payments the student has made
-            var paymentList = await _context.Payments.Where(p => p.UserId == Users.ID).ToListAsync();
+            var paymentList = await _context.Payments.Where(p => p.UserId == id).ToListAsync();
 
             int? paymentTotal = 0;
 

@@ -27,6 +27,11 @@ namespace Lightaplusplus
         {
             services.AddRazorPages();
 
+            //Add Session Services
+            services.AddSession();
+            services.AddMemoryCache();
+            services.AddMvc();
+
             services.AddDbContext<Lightaplusplus_SystemContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("Lightaplusplus_SystemContext")));
         }
@@ -47,6 +52,9 @@ namespace Lightaplusplus
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            //Session Config
+            app.UseSession();
 
             app.UseRouting();
 

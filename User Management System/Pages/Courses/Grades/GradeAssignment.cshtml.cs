@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Lightaplusplus.BisLogic;
 using Lightaplusplus.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +24,6 @@ namespace Lightaplusplus.Pages.Courses.Grades
         }
 
         [BindProperty]
-        public Users Users { get; set; }
-
-        [BindProperty]
         public AssignmentSubmissions Submissions { get; set; }
 
         [BindProperty]
@@ -43,6 +41,8 @@ namespace Lightaplusplus.Pages.Courses.Grades
         [BindProperty]
         public bool Graded { get; set; }
 
+        public int MaxGrade { get; set; }
+
         public int SectionId { get; set; }
 
         public int AssignmentId { get; set; }
@@ -52,12 +52,19 @@ namespace Lightaplusplus.Pages.Courses.Grades
         public string FilePath { get; set; }
 
         [BindProperty]
-        public int HiddenId { get; set; }
-        [BindProperty]
         public int HiddenSubmissionId { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int sectionId, int? id, int assignmentId, int submissionId)
+        public async Task<IActionResult> OnGetAsync(int sectionId, int assignmentId, int submissionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+            path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
+
             SectionId = sectionId;
             AssignmentId = assignmentId;
             SubmissionId = submissionId;
@@ -65,40 +72,25 @@ namespace Lightaplusplus.Pages.Courses.Grades
             Success = false;
             Graded = false;
 
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if(Users.usertype != 'I')
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-
             var assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
 
-            if(assignment == null)
+            if (assignment == null || assignment.SectionId != sectionId)
             {
-                return RedirectToPage("/Courses/Index", new { id = id});
+                return RedirectToPage("/Courses/View/Index", new { sectionId });
             }
+
+            MaxGrade = (int)assignment.AssignmentMaxPoints;
 
             Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).ThenInclude(a => a.Section).FirstOrDefaultAsync(@as => @as.SubmissionId == submissionId);
 
             if (Submissions == null)
             {
-                return RedirectToPage("/Courses/Grades/Submissions", new { id = id, sectionId = sectionId, assignmentId = assignmentId });
-            }
-
-            if(Submissions.Assignment.Section.InstructorId != Users.ID)
-            {
-                return RedirectToPage("/Courses/Index", new { id = id });
+                return RedirectToPage("/Courses/Grades/Submissions", new {sectionId, assignmentId });
             }
 
             if(Submissions.Assignment.AssignmentSubmissionType == 'F')
             {
-                FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.ID.ToString().Length - Submissions.Assignment.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
+                FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Submissions.StudentId.ToString().Length - Submissions.Assignment.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
             }
 
             Grade = await _context.Grades.Where(g => g.AssignmentId == AssignmentId).FirstOrDefaultAsync(g =>g.StudentId == Submissions.StudentId);
@@ -109,53 +101,44 @@ namespace Lightaplusplus.Pages.Courses.Grades
                 GradeValue = Grade.GradeValue;
             }
 
-            HiddenId = Submissions.StudentId;
             HiddenSubmissionId = Submissions.SubmissionId;
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int sectionId, int? id, int assignmentId, int submissionId)
+        public async Task<IActionResult> OnPostAsync(int sectionId, int assignmentId, int submissionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+            path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
+
             SectionId = sectionId;
             AssignmentId = assignmentId;
             SubmissionId = submissionId;
-
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Users.usertype != 'I')
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
 
             var assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
 
             if (assignment == null)
             {
-                return RedirectToPage("/Courses/Index", new { id = id });
+                return RedirectToPage("/Courses/Index");
             }
 
-            Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).ThenInclude(a => a.Section).FirstOrDefaultAsync(@as => @as.SubmissionId == submissionId);
+            Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).FirstOrDefaultAsync(@as => @as.SubmissionId == submissionId);
 
 
             if (Submissions == null)
             {
-                return RedirectToPage("/Courses/Grades/Submissions", new { id = id, sectionId = sectionId, assignmentId = assignmentId });
-            }
-
-            if (Submissions.Assignment.Section.InstructorId != Users.ID)
-            {
-                return RedirectToPage("/Courses/Index", new { id = id });
+                return RedirectToPage("/Courses/Grades/Submissions");
             }
 
             if (Submissions.Assignment.AssignmentSubmissionType == 'F')
             {
-                FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.ID.ToString().Length - Submissions.Assignment.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
+                FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Submissions.StudentId.ToString().Length - Submissions.Assignment.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
             }
 
             //Check for Errors
@@ -166,7 +149,7 @@ namespace Lightaplusplus.Pages.Courses.Grades
                 GradeValueError = "Please enter a non negative value.";
                 errors = true;
             }
-            else if (GradeValue > Submissions.Assignment.AssignmentMaxPoints)
+            else if (GradeValue.ToString().Length > assignment.AssignmentMaxPoints.ToString().Length || GradeValue > Submissions.Assignment.AssignmentMaxPoints)
             {
                 GradeValueError = $"Please enter a number no more than {Submissions.Assignment.AssignmentMaxPoints}.";
                 errors = true;
@@ -175,6 +158,7 @@ namespace Lightaplusplus.Pages.Courses.Grades
 
             if(errors)
             {
+                MaxGrade = (int)assignment.AssignmentMaxPoints;
                 return Page();
             }
 
@@ -191,9 +175,17 @@ namespace Lightaplusplus.Pages.Courses.Grades
             return Page();
         }
 
-        public async Task<IActionResult> OnPostDownloadFileAsync()
+        public async Task<IActionResult> OnPostDownloadFileAsync(int sectionId)
         {
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var redirectpath = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (redirectpath != "") return RedirectToPage(redirectpath);
+            redirectpath = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (redirectpath != "") return RedirectToPage(redirectpath);
+
             SubmissionId = HiddenSubmissionId;
 
             Submissions = await _context.AssignmentSubmissions.Include(@as => @as.Assignment).FirstOrDefaultAsync(s => s.SubmissionId == SubmissionId);
@@ -202,7 +194,7 @@ namespace Lightaplusplus.Pages.Courses.Grades
 
             byte[] bytes = System.IO.File.ReadAllBytes(path);
 
-            string fileName = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.ID.ToString().Length - Submissions.Assignment.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
+            string fileName = Submissions.Submission.Substring(0, Submissions.Submission.Length - Submissions.StudentId.ToString().Length - Submissions.Assignment.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
 
             return File(bytes, "application/octet-stream", fileName);
         }

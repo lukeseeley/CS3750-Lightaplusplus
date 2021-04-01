@@ -694,3 +694,13 @@ C:\Users\Thell\OneDrive\Documents\CS 3750\LMS\CS3750\UnitTestLMSProject\bin\Debu
 C:\Users\Thell\OneDrive\Documents\CS 3750\LMS\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\Lighta++.pdb
 C:\Users\Thell\OneDrive\Documents\CS 3750\LMS\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.csproj.CopyComplete
 C:\Users\Thell\OneDrive\Documents\CS 3750\LMS\CS3750\UnitTestLMSProject\obj\Debug\netcoreapp3.1\UnitTestLMSProject.genruntimeconfig.cache
+C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.DataEngine.dll
+C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.Visualization.dll
+C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\luke\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.DataEngine.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\FusionCharts.Visualization.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Ben\Documents\GitHub\CS3750\UnitTestLMSProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

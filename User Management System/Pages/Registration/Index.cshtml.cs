@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Data;
 using Lightaplusplus.Models;
 using Lightaplusplus.BisLogic;
+using Newtonsoft.Json;
 
 namespace Lightaplusplus.Pages.Registration
 {
@@ -21,19 +22,6 @@ namespace Lightaplusplus.Pages.Registration
             _context = context;
         }
 
-        public Users Users { get; set; }
-
-        public SectionStudents SectionStudents { get; set; }
-
-        [BindProperty]
-        public int StudentId { get; set; }
-
-        [BindProperty]
-        public int SectionId { get; set; }
-
-        [BindProperty]
-        public List<Sections> SectionsList { get; set; }
-
         [BindProperty]
         public List<SectionRegistrationData> SectionRegistrations { get; set; }
 
@@ -45,158 +33,173 @@ namespace Lightaplusplus.Pages.Registration
 
         public string[] Departments = new string[] { "Accounting", "Art", "Biology", "Chemistry", "Computer Science", "Engineering", "English", "Health Science", "History", "Mathematics", "Music", "Social Science", "Physics" };
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+
+        public void setSectionInfo(int id)
         {
-            if (id == null)
+            // get all the sections the student is in
+            var StudentSections = _context.SectionStudents.Where(ss => ss.StudentId == id).ToList();
+
+            var SectionsArray = new Sections[StudentSections.Count()];
+
+            // put the sections in a list
+            List<Sections> sectionsList = new List<Sections>();
+            foreach (var section in StudentSections)
             {
-                return RedirectToPage("/Index");
+                var sections = _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefault();
+                sectionsList.Add(sections);
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (user == null)
+            // put the list into SectionsArray
+            int i = 0;
+            foreach (var section in sectionsList)
             {
-                return RedirectToPage("/Index");
+                SectionsArray[i] = section;
+                i++;
             }
-            if (user.usertype != 'S') // Make sure only the student is viewing registration
+            // get the course information
+            foreach (var studSection in SectionsArray)
             {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-
-            StudentId = (int)id;
-            Users = user;
-
-            SectionsList = await _context.Sections
-                .Include(s => s.Instructor)
-                .Include(s => s.Course)
-                .AsNoTracking()
-                .ToListAsync();
-
-            SectionRegistrations = new List<SectionRegistrationData>();
-            foreach (var section in SectionsList)
-            {
-                var sectionRegistry = await _context.SectionStudents.Where(sr => sr.SectionId == section.SectionId).ToListAsync();
-                var isEnrolled = await _context.SectionStudents.Where(ss => ss.SectionId == section.SectionId).Where(ss => ss.StudentId == StudentId).FirstOrDefaultAsync();
-                char registrationStatus;
-                if (isEnrolled != null) //Meaning this student is already registered in this section
+                var courses = _context.Courses.Where(c => c.CourseId == studSection.CourseId);
+                foreach (var course in courses)
                 {
-                    registrationStatus = 'R';
+                    studSection.Course = course;
                 }
-                else if (sectionRegistry.Count() >= section.SectionCapacity) //Meaning the class is at full capacity
-                {
-                    registrationStatus = 'F';
-                }
-                else //Meaning the student is not enrolled in this class, and the class is not full
-                {
-                    registrationStatus = 'N';
-                }
-                SectionRegistrations.Add(new SectionRegistrationData(section, sectionRegistry, registrationStatus));
             }
+
+            foreach (var section in sectionsList)
+            {
+                var assignments = _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToList();
+
+                if (assignments != null)
+                {
+                    section.Assignments = assignments;
+                }
+
+            }
+            // Create Cookie in session of sections the user has
+            string separatedSections = "";
+            foreach (var section in SectionsArray)
+            {
+                foreach (var assignment in section.Assignments)
+                {
+                    int courseNo = assignment.Section.Course.CourseNumber;
+                    string code = assignment.Section.Course.CourseCode;
+                    assignment.Section = new Sections();
+                    assignment.Section.Course = new Models.Courses();
+                    assignment.Section.Course.CourseNumber = courseNo;
+                    assignment.Section.Course.CourseCode = code;
+                }
+                section.SectionStudents = null;
+                section.Course.Sections = null;
+                section.Instructor.InstructorSections = null;
+                separatedSections = separatedSections + ":::" + JsonConvert.SerializeObject(section);
+            }
+            Session.setSections(HttpContext.Session, separatedSections);
+        }
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
+            var register = new StudentRegister(_context);
+            SectionRegistrations = register.GetSectionRegistration((int)id, HttpContext.Session);
 
             isError = false;
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
             return Page();
         }
 
-        public async Task<IActionResult> OnPostRegisterAsync(int studentId, int sectionId)
+        public async Task<IActionResult> OnPostRegisterAsync(int sectionId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
+            int studentId = (int)Session.getUserId(HttpContext.Session);
+            var register = new StudentRegister(_context);
+            var result = register.RegisterStudent(studentId, sectionId);
+
+            if (result == 0)
+            {
+                return RedirectToPage("./Index");
+            }
+            else isError = true;
+
+            SectionRegistrations = register.GetSectionRegistration((int)id, HttpContext.Session);
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
-            var doesExist = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
-            var sectionList = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).ToListAsync();
 
-            if (user == null)
+            switch (result)
             {
-                RegisterError = "Invalid Student Account.";
-                isError = true;
-                return Page();
+                case (1):
+                    RegisterError = "Invalid Student Account.";
+                    break;
+                case (2):
+                    RegisterError = "Invalid Class.";
+                    break;
+                case (3):
+                    RegisterError = "You are already registered in the class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
+                    break;
+                case (4):
+                    RegisterError = "The class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + " is full.";
+                    break;
+                default:
+                    break;
             }
-            else if (section == null)
-            {
-                RegisterError = "Invalid Class.";
-                isError = true;
-                return Page();
-            }
-            else if (doesExist != null)
-            {
-                RegisterError = "You are already registered in the class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
-                isError = true;
-                return Page();
-            }
-            else if (section.SectionCapacity < sectionList.Count())
-            {
-                RegisterError = "The class: " + section.Course.CourseCode + " " + section.Course.CourseNumber + " is full.";
-                isError = true;
-                return Page();
-            }
-            else
-            {
-                isError = false;
-                RegisterError = string.Empty;
-            }
-
-            SectionStudents sectionStudents = new SectionStudents
-            {
-                StudentId = studentId,
-                SectionId = sectionId
-            };
-
-            _context.SectionStudents.Add(sectionStudents);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return RedirectToPage("./Index", new { id = studentId });
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostDropAsync(int studentId, int sectionId)
+        public async Task<IActionResult> OnPostDropAsync(int sectionId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == studentId);
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
+            if (path != "") return RedirectToPage(path);
+
+            int studentId = (int)Session.getUserId(HttpContext.Session);
+            var register = new StudentRegister(_context);
+
+            var result = register.DropStudent(studentId, sectionId);
+
+            if (result == 0)
+            {
+                return RedirectToPage("./Index");
+            }
+            else isError = true;
+
+            SectionRegistrations = register.GetSectionRegistration((int)id, HttpContext.Session);
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
-            var sectionStudents = await _context.SectionStudents.Where(ss => ss.SectionId == sectionId).Where(ss => ss.StudentId == studentId).FirstOrDefaultAsync();
 
-            if (user == null)
+            switch (result)
             {
-                RegisterError = "Invalid Student Account.";
-                isError = true;
-                return Page();
+                case (1):
+                    RegisterError = "Invalid Student Account.";
+                    break;
+                case (2):
+                    RegisterError = "Invalid Class.";
+                    break;
+                case (3):
+                    RegisterError = "You are not registered for the course: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
+                    break;
+                default:
+                    break;
             }
-            else if (section == null)
-            {
-                RegisterError = "Invalid Class.";
-                isError = true;
-                return Page();
-            }
-            else if (sectionStudents == null)
-            {
-                RegisterError = "You are not registered for the course: " + section.Course.CourseCode + " " + section.Course.CourseNumber + ".";
-                isError = true;
-                return Page();
-            }
-            else
-            {
-                isError = false;
-                RegisterError = string.Empty;
-            }
-
-            _context.SectionStudents.Remove(sectionStudents);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return RedirectToPage("./Index", new { id = studentId });
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
+            return Page();
         }
-
     }
 }

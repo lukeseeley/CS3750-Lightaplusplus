@@ -21,9 +21,6 @@ namespace Lightaplusplus.Pages.Courses
         }
 
         [BindProperty]
-        public Users Users { get; set; }
-
-        [BindProperty]
         public int id { get; set; }
 
         [BindProperty]
@@ -58,49 +55,26 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public string CreditError { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if(id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
 
             this.id = (int)id;
             CourseCreditHours = 3;
-            Users = user;
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {   
-            //Handle security checks first
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var id = Session.getUserId(HttpContext.Session);
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
 
             //Handle Validation checks
             var errors = false;
@@ -131,7 +105,7 @@ namespace Lightaplusplus.Pages.Courses
 
             myAdder.addCourse(CourseCode, CourseNumber, CourseName, CourseDescription, CourseDepartment, CourseCreditHours);
 
-            return RedirectToPage("/Courses/Index", new { id = id });
+            return RedirectToPage("/Courses/Index");
         }
     }
 }

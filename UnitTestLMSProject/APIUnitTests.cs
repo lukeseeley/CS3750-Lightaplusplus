@@ -37,7 +37,7 @@ namespace UnitTestLMSProject
             myCard.cardNumber = "4242424242424242";
             myCard.cvc = "111";
             myCard.exp_month = "12";
-            myCard.exp_year = "2022";
+            myCard.exp_year = "2019";
 
             // Perform operations
             string isSuccessful = PaymentProcessor.processPayment(myCard, -20.00);

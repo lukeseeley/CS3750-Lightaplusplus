@@ -82,7 +82,6 @@
                 <form method="post" enctype="multipart/form-data">
                     <input asp-page-handler="DownloadFile" type="submit" class="file" value="@Model.FilePath">
 
-                    <input asp-for="HiddenId" type="text" hidden>
                     <input asp-for="HiddenSubmissionId" type="text" hidden>
                 </form>
             </div>
@@ -99,18 +98,18 @@
                 </div>
                 
                 <button class="btn btn-success" disabled>Submitted Grade &#10003;</button>
-                <a class="btn btn-primary" asp-page="/Courses/Grades/Submissions" asp-route-id="@Model.Users.ID" asp-route-sectionId="@Model.SectionId" asp-route-assignmentId="@Model.AssignmentId">Return to List</a>
+                <a class="btn btn-primary" asp-page="/Courses/Grades/Submissions" asp-route-sectionId="@Model.SectionId" asp-route-assignmentId="@Model.AssignmentId">Return to List</a>
             }
             else
             {
                 <div class=" form-group">
                     <label asp-for="GradeValue" class="control-label">Points Earned <em>(Out of @Model.Submissions.Assignment.AssignmentMaxPoints)</em></label>
-                    <input asp-for="GradeValue" class="form-control" type="number" style="max-width: 150px" required />
+                    <input asp-for="GradeValue" class="form-control" type="number" min="0" max="@Model.MaxGrade" maxlength="@Model.MaxGrade.ToString().Length" style="max-width: 150px" required />
                     <span asp-validation-for="GradeValue" class="text-danger">@Model.GradeValueError</span>
                 </div>
                 
                 <button class="btn btn-primary">Submit Grade</button>
-                <a class="btn btn-danger" asp-page="/Courses/Grades/Submissions" asp-route-id="@Model.Users.ID" asp-route-sectionId="@Model.SectionId" asp-route-assignmentId="@Model.AssignmentId">Cancel</a>
+                <a class="btn btn-danger" asp-page="/Courses/Grades/Submissions" asp-route-sectionId="@Model.SectionId" asp-route-assignmentId="@Model.AssignmentId">Cancel</a>
             }
         </form>
     </div>

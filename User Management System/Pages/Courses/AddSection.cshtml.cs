@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Lightaplusplus.BisLogic;
 using Lightaplusplus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Lightaplusplus.Pages.Courses
 {
@@ -18,9 +20,6 @@ namespace Lightaplusplus.Pages.Courses
         {
             _context = context;
         }
-
-        [BindProperty]
-        public Users Users { get; set; }
         
         [BindProperty]
         public int InstructorId { get; set; }
@@ -68,34 +67,60 @@ namespace Lightaplusplus.Pages.Courses
         [BindProperty]
         public string CapacityError { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public void setSectionInfo(int id)
         {
-            if (id == null)
+            var sections = _context.Sections.Where(i => i.InstructorId == id);
+
+            var SectionsArray = new Sections[sections.Count()];
+            int iter = 0;
+            foreach (var section in sections)
             {
-                return RedirectToPage("/Index");
+                SectionsArray[iter] = section;
+                iter++;
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+            foreach (var section in SectionsArray)
+            {
+                var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
+                foreach (var course in courses)
+                {
+                    section.Course = course;
+                }
+            }
+            // Create Cookie in session of sections the user has
+            string separatedSections = "";
+            foreach (var section in SectionsArray)
+            {
+                section.SectionStudents = null; // This has an infinite loop
+                section.Course.Sections = null; // This has an infinite loop
+                //section.Instructor.InstructorSections = null; // This has an infinite loop
+                separatedSections = separatedSections + ":::" + JsonConvert.SerializeObject(section);
+            }
+            Session.setSections(HttpContext.Session, separatedSections);
+        }
 
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id }); //Todo: Redirect to courses overview page instead
-            }
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
 
             InstructorId = (int)id;
-            Users = user;
 
             CourseList = await _context.Courses.ToListAsync();
-
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
             return Page();
         }
 
         public async Task<IActionResult> OnGetSearch(string courseSearch)
         {
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+
             List<string> courseList = new List<string>();
             CourseList = await _context.Courses.ToListAsync();
 
@@ -107,28 +132,14 @@ namespace Lightaplusplus.Pages.Courses
             return new JsonResult(courseList);
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            ///////Handle security level checks first
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (user == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (user.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
+            var id = Session.getUserId(HttpContext.Session);
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
 
             Sections.InstructorId = (int)id;
 
-            ///////Handle validation checks now
             //Course Check
             int CourseId = 0;
             var course = Course.Split(" ");
@@ -211,8 +222,9 @@ namespace Lightaplusplus.Pages.Courses
 
             _context.Sections.Add(Sections);
             await _context.SaveChangesAsync();
-
-            return RedirectToPage("/Courses/", new { id = id });
+            // Update session cookie
+            setSectionInfo(int.Parse(id.ToString()));
+            return RedirectToPage("/Welcome");
         }
     }
 }

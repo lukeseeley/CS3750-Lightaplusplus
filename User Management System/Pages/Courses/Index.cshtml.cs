@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using System.ComponentModel.DataAnnotations;
+using Lightaplusplus.BisLogic;
+using Newtonsoft.Json;
 
 namespace Lightaplusplus.Pages
 {
@@ -19,49 +21,120 @@ namespace Lightaplusplus.Pages
             _context = context;
         }
 
-        public Users Users { get; set; }
-
         [BindProperty]
         public int id { get; set; }
 
         [BindProperty]
         public Sections[] sectionsTaught { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public void setSectionInfo(int id, char type)
         {
-            if (id == null)
+            //var output = JsonConvert.SerializeObject(assignmentEvents);
+            if (type == 'S')
             {
-                return RedirectToPage("/Index");
-            }
+                // get all the sections the student is in
+                var StudentSections = _context.SectionStudents.Where(ss => ss.StudentId == id).ToList();
 
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
+                var SectionsArray = new Sections[StudentSections.Count()];
 
-            if (Users == null)
-            {
-                return RedirectToPage("/Index");
-            }
-            if (Users.usertype != 'I') //Ensure that only an instructor can add a new course
-            {
-                return RedirectToPage("/Welcome", new { id = id });
-            }
-            var sections = _context.Sections.Where(i => i.InstructorId == Users.ID);
-
-            sectionsTaught = new Sections[sections.Count()];
-            int iter = 0;
-            foreach (var section in sections)
-            {
-                sectionsTaught[iter] = section;
-                iter++;
-            }
-
-            foreach (var section in sectionsTaught)
-            {
-                var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
-                foreach (var course in courses)
+                // put the sections in a list
+                List<Sections> sectionsList = new List<Sections>();
+                foreach (var section in StudentSections)
                 {
-                    section.Course = course;
+                    var sections = _context.Sections.Include(s => s.Instructor).Where(s => s.SectionId == section.SectionId).FirstOrDefault();
+                    sectionsList.Add(sections);
                 }
+
+                // put the list into SectionsArray
+                int i = 0;
+                foreach (var section in sectionsList)
+                {
+                    SectionsArray[i] = section;
+                    i++;
+                }
+                // get the course information
+                foreach (var studSection in SectionsArray)
+                {
+                    var courses = _context.Courses.Where(c => c.CourseId == studSection.CourseId);
+                    foreach (var course in courses)
+                    {
+                        studSection.Course = course;
+                    }
+                }
+
+                foreach (var section in sectionsList)
+                {
+                    var assignments = _context.Assignments.Where(a => a.SectionId == section.SectionId).Include(a => a.Section).ThenInclude(s => s.Course).ToList();
+
+                    if (assignments != null)
+                    {
+                        section.Assignments = assignments;
+                    }
+
+                }
+                // Create Cookie in session of sections the user has
+                string separatedSections = "";
+                foreach (var section in SectionsArray)
+                {
+                    foreach (var assignment in section.Assignments)
+                    {
+                        int courseNo = assignment.Section.Course.CourseNumber;
+                        string code = assignment.Section.Course.CourseCode;
+                        assignment.Section = new Sections();
+                        assignment.Section.Course = new Models.Courses();
+                        assignment.Section.Course.CourseNumber = courseNo;
+                        assignment.Section.Course.CourseCode = code;
+                    }
+                    section.SectionStudents = null;
+                    section.Course.Sections = null;
+                    section.Instructor.InstructorSections = null;
+                    separatedSections = separatedSections + ":::" + JsonConvert.SerializeObject(section);
+                }
+                Session.setSections(HttpContext.Session, separatedSections);
             }
+            else if (type == 'I')
+            {
+                var sections = _context.Sections.Where(i => i.InstructorId == id);
+
+                var SectionsArray = new Sections[sections.Count()];
+                int iter = 0;
+                foreach (var section in sections)
+                {
+                    SectionsArray[iter] = section;
+                    iter++;
+                }
+
+                foreach (var section in SectionsArray)
+                {
+                    var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
+                    foreach (var course in courses)
+                    {
+                        section.Course = course;
+                    }
+                }
+                // Create Cookie in session of sections the user has
+                string separatedSections = "";
+                foreach (var section in SectionsArray)
+                {
+                    section.SectionStudents = null; // This has an infinite loop
+                    section.Course.Sections = null; // This has an infinite loop
+                    section.Instructor.InstructorSections = null; // This has an infinite loop
+                    separatedSections = separatedSections + ":::" + JsonConvert.SerializeObject(section);
+                }
+                Session.setSections(HttpContext.Session, separatedSections);
+            }
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
+            if (path != "") return RedirectToPage(path);
+
+            sectionsTaught = Session.getSections(HttpContext.Session).ToArray();
             return Page();
         }
     }

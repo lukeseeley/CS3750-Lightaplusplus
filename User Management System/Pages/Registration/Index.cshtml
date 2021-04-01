@@ -34,7 +34,6 @@
         <div class="alert alert-danger" role="alert">
             <strong>Error:</strong>
             @Model.RegisterError
-            Return to registration <a class="alert-link" asp-page="/Registration/Index" asp-route-id="@Model.StudentId">here</a>.
         </div>
     }
 
@@ -88,7 +87,7 @@
                         @Html.DisplayFor(modelItem => item.Section.SectionLocation)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.StudentRegistry.Count) / @Html.DisplayFor(modelItem => item.Section.SectionCapacity)
+                        @Html.DisplayFor(modelItem => item.StudentRegistry) / @Html.DisplayFor(modelItem => item.Section.SectionCapacity)
                     </td>
                     <td>
                         @{
@@ -97,7 +96,6 @@
                                 <form asp-page-handler="Drop" method="post">
                                     <button class="btn btn-danger">Drop</button>
                                     <input name="sectionId" value="@item.Section.SectionId" hidden />
-                                    <input name="studentId" value="@Model.StudentId" hidden />
                                 </form>
                             }
                             else if (item.RegistrationStatus == 'F')
@@ -109,7 +107,6 @@
                                 <form asp-page-handler="Register" method="post">
                                     <button class="btn btn-primary">Register</button>
                                     <input name="sectionId" value="@item.Section.SectionId" hidden/>
-                                    <input name="studentId" value="@Model.StudentId" hidden/>
                                 </form>
                             }
                         }

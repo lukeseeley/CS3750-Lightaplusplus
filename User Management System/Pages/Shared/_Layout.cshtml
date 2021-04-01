@@ -36,55 +36,55 @@
 </head>
 <body>
     <div class="row">
-        @if (Context.Request.Query.ContainsKey("id")) @*We will eventually need to replace these conditions once we are using a state object, instead passing user id by the url*@ 
+        @if (ViewData["UserId"] != null)
         {
             <div class="col-1 d-flex flex-column h-100 align-content-center">
                 <nav class="navbar text-center position-fixed col-1 d-flex flex-column h-100 align-content-center">
                     @*<component type="typeof(Components.NavComponent)" render-mode="Static"/>*@
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Welcome" asp-route-id="@Context.Request.Query["id"]">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Welcome">Home</a>
                         </li>
-                       @if (Model.Users.usertype == 'S')
+                       @if ((string)ViewData["UserType"] == "S")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Registration/Index" asp-route-id="@Context.Request.Query["id"]">Registration</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Registration/Index">Registration</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/StudentPayment" asp-route-id="@Context.Request.Query["id"]">Payment</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/StudentPayment">Payment</a>
                             </li>
                         }
-                        else if (Model.Users.usertype == 'I')
+                        else if ((string)ViewData["UserType"] == "I")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Courses/Index" asp-route-id="@Context.Request.Query["id"]">Courses</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Courses/Index">Courses</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Calendar" asp-route-id="@Context.Request.Query["id"]">Calender</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Calendar">Calender</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Grades</a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Help</a>
-                        </li>
+                        </li>*@
                     </ul>
                 </nav>
             </div>
         }
-        <div class="container @(Context.Request.Query.ContainsKey("id") ? "col-11 m-0" : "col-12")">
+        <div class="container @(ViewData["UserId"] != null ? "col-11 m-0" : "col-12")">
             <header>
                 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                     <div class="container mw-100">
-                        <a class="navbar-brand" asp-area="" asp-page="/Index">Lighta++</a>
+                        <a class="navbar-brand" asp-area="" asp-page="/Welcome">Lighta++</a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                             <ul class="navbar-nav @*flex-grow-1*@ ml-auto">
-                                @if (Context.Request.Query.ContainsKey("id"))
+                                @if (ViewData["UserId"] != null)
                                 {
                                     <li>
                                         <button onclick="dropdownFunction()" class="bell-button">
@@ -98,7 +98,10 @@
                                         </div>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-page="/Profile" asp-route-id="@Context.Request.Query["id"]"><i class="fas fa-user-circle"></i> Profile</a>
+                                        <a class="nav-link text-dark" asp-page="/Profile"><i class="fas fa-user-circle"></i> Profile</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-page="/Signout">Sign Out</a>
                                     </li>
                                 }
                                 else

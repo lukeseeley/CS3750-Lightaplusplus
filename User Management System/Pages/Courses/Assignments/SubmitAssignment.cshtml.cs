@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Lightaplusplus.BisLogic;
 using Lightaplusplus.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,8 +24,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             _environment = environment;
         }
 
-        public Users Users { get; set; }
-
         public AssignmentSubmissions Submissions { get; set; }
 
         public int SectionId { get; set; }
@@ -33,8 +32,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
         public Models.Assignments Assignments { get; set; }
 
-        [BindProperty]
-        public int HiddenId { get; set; }
         [BindProperty]
         public int HiddenAssignmentId { get; set; }
         [BindProperty]
@@ -56,29 +53,25 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         [BindProperty]
         public bool Submitted { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int sectionId, int? id, int assignmentId)
+        public async Task<IActionResult> OnGetAsync(int sectionId, int assignmentId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+            var path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
+
             SectionId = sectionId;
             AssignmentId = assignmentId;
             Success = 0;
 
-            if (id == null)
-            {
-                return RedirectToPage("/Index");
-            }
-
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
             Submissions = await _context.AssignmentSubmissions.FirstOrDefaultAsync(s => s.StudentId == id && s.AssignmentId == assignmentId);
 
-            if(Assignments == null)
+            if(Assignments == null || Assignments.SectionId != sectionId)
             {
-                return RedirectToPage("/Courses/Index", new { id });
-            }
-
-            if (Users == null)
-            {
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Courses/View/Index", new { sectionId });
             }
 
             try
@@ -94,7 +87,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                     }
                     else if(Assignments.AssignmentSubmissionType == 'F')
                     {
-                        FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.ID.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length-4,4);
+                        FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - id.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length-4,4);
                     }
                 }
                 else
@@ -105,20 +98,26 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             }
             catch { }
 
-            this.HiddenId = (int)id;
             this.HiddenAssignmentId = assignmentId;
             this.HiddenSectionId = sectionId;
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUploadAsync()
+        public async Task<IActionResult> OnPostUploadAsync(int sectionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
+            var redirectpath = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (redirectpath != "") return RedirectToPage(redirectpath);
+
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
             SectionId = HiddenSectionId;
             try
             {
-                string path = FileUpload.FileName.Substring(0, FileUpload.FileName.Length - 4) + Users.ID.ToString() + Assignments.AssignmentId.ToString() + FileUpload.FileName.Substring(FileUpload.FileName.Length - 4, 4);
+                string path = FileUpload.FileName.Substring(0, FileUpload.FileName.Length - 4) + id.ToString() + Assignments.AssignmentId.ToString() + FileUpload.FileName.Substring(FileUpload.FileName.Length - 4, 4);
                 var file = Path.Combine(_environment.ContentRootPath, "Assignments", path);
                 using (var fileStream = new FileStream(file, FileMode.Create))
                 {
@@ -126,7 +125,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                 }
                 AssignmentSubmissions assignment = new AssignmentSubmissions();
                 assignment.AssignmentId = HiddenAssignmentId;
-                assignment.StudentId = HiddenId;
+                assignment.StudentId = (int)id;
                 assignment.SubmissionDateTime = DateTime.Now;
                 assignment.Submission = path; 
 
@@ -140,7 +139,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             {
                 Success = 2;
                 Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
-                Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
                 SectionId = HiddenSectionId;
 
                 return Page();
@@ -151,14 +149,21 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             return Page();
         }
 
-        public async Task<IActionResult> OnPostTextAsync()
+        public async Task<IActionResult> OnPostTextAsync(int sectionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
+            var path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (path != "") return RedirectToPage(path);
 
             try
             {
                 AssignmentSubmissions assignment = new AssignmentSubmissions();
                 assignment.AssignmentId = HiddenAssignmentId;
-                assignment.StudentId = HiddenId;
+                assignment.StudentId = (int)id;
                 assignment.SubmissionDateTime = DateTime.Now;
                 assignment.Submission = Assignment;
 
@@ -171,7 +176,6 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             {
                 Success = 2;
                 Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
-                Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
                 SectionId = HiddenSectionId;
 
                 return Page();
@@ -180,25 +184,31 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             Success = 1;
 
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
             SectionId = HiddenSectionId;
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostDownloadFileAsync()
+        public async Task<IActionResult> OnPostDownloadFileAsync(int sectionId)
         {
+            var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
+            var redirectpath = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
+            if (redirectpath != "") return RedirectToPage(redirectpath);
+
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == HiddenId);
             SectionId = HiddenSectionId;
 
-            Submissions = await _context.AssignmentSubmissions.FirstOrDefaultAsync(s => s.StudentId == HiddenId && s.AssignmentId == HiddenAssignmentId);
+            Submissions = await _context.AssignmentSubmissions.FirstOrDefaultAsync(s => s.StudentId == id && s.AssignmentId == HiddenAssignmentId);
 
             string path = Path.Combine(_environment.ContentRootPath, "Assignments", Submissions.Submission);
 
             byte[] bytes = System.IO.File.ReadAllBytes(path);
 
-            string fileName = Submissions.Submission.Substring(0, Submissions.Submission.Length - Users.ID.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
+            string fileName = Submissions.Submission.Substring(0, Submissions.Submission.Length - id.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
 
             return File(bytes, "application/octet-stream", fileName);         
         }
