@@ -106,7 +106,7 @@ namespace Lightaplusplus.Pages.Registration
             if (path != "") return RedirectToPage(path);
 
             var register = new StudentRegister(_context);
-            SectionRegistrations = register.GetSectionRegistration((int)id);
+            SectionRegistrations = register.GetSectionRegistration((int)id, HttpContext.Session);
 
             isError = false;
             // Update session cookie
@@ -134,7 +134,7 @@ namespace Lightaplusplus.Pages.Registration
             }
             else isError = true;
 
-            SectionRegistrations = register.GetSectionRegistration((int)id);
+            SectionRegistrations = register.GetSectionRegistration((int)id, HttpContext.Session);
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
             switch (result)
@@ -180,7 +180,7 @@ namespace Lightaplusplus.Pages.Registration
             }
             else isError = true;
 
-            SectionRegistrations = register.GetSectionRegistration((int)id);
+            SectionRegistrations = register.GetSectionRegistration((int)id, HttpContext.Session);
             var section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == sectionId);
 
             switch (result)

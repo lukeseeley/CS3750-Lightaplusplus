@@ -1,0 +1,29 @@
+write 4 unit test
+	check if student can register for a course
+	instructor can create an assigment or not
+		N assigment, instructor creates one and now its n + 1
+	we come up with 2 others
+		student submits an assigment
+
+submissions button next to view on instructor assignments
+	will show all submissions for that assigment
+		student name, when submitted, grade if graded, right most button grade
+			click button take to individual submisson
+				assigmnet title
+				descrip
+				submission date
+				text entry: show data students entered, text box for points and button to submit
+				file submission: same as text, grade is between 0 and maximum points
+	bottom of page will graph or chart and will update as you grade
+		d3.js, chart.js, google chart js
+		will show aggrigate the data somehow, and build a chart and graph that it makes sense
+			make it understandalbe within 5-10 sec
+
+calendar
+	instructor
+		will show when he needs to be in class non-clickable
+	student
+		will show when he needs to be in class	
+		assigments will apear on due date and clickable
+	
+	

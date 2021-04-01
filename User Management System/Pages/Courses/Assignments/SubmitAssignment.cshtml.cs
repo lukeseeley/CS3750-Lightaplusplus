@@ -106,6 +106,10 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         public async Task<IActionResult> OnPostUploadAsync(int sectionId)
         {
             var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
             var redirectpath = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
             if (redirectpath != "") return RedirectToPage(redirectpath);
 
@@ -148,6 +152,10 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         public async Task<IActionResult> OnPostTextAsync(int sectionId)
         {
             var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
             var path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
             if (path != "") return RedirectToPage(path);
 
@@ -184,6 +192,10 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         public async Task<IActionResult> OnPostDownloadFileAsync(int sectionId)
         {
             var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
+
             var redirectpath = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
             if (redirectpath != "") return RedirectToPage(redirectpath);
 

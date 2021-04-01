@@ -6,11 +6,11 @@
 
     <div class="row d-flex justify-content-between" style="margin-top: 20px">
         <h4>Assignments</h4>
-        @if((string)ViewData["UserType"] == "I")
+        @if ((string)ViewData["UserType"] == "I")
         {
             <div>
-                <a asp-page="/Courses/Assignments/AddAssignment" 
-                   asp-route-sectionId="@Model.SectionId" 
+                <a asp-page="/Courses/Assignments/AddAssignment"
+                   asp-route-sectionId="@Model.SectionId"
                    class="btn btn-primary">Create Assignment</a>
             </div>
         }
@@ -32,49 +32,49 @@
                 <tbody id="section-table-body">
                     @foreach (var assignment in Model.Assignments)
                     {
-                    <tr>
-                        <td>@assignment.AssignmentTitle</td>
-                        @if (@assignment.AssignmentDueDateTime.Year == DateTime.Today.Year)
-                        {
-                            <td>@assignment.AssignmentDueDateTime.ToString("MMMM d") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
-                        }
-                        else
-                        {
-                            <td>@assignment.AssignmentDueDateTime.ToString("MMMM d, yyyy") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
-                        }
-                        <td>@assignment.AssignmentMaxPoints</td>
-                        <td>
-                            <div>
-                                @if ((string)ViewData["UserType"] == "S")
-                                {
-                                    @*TODO: Change link to <class="btn btn-success">Submitted<>
-                                        if assignment has been submitted*@
-                                    <a asp-page="/Courses/Assignments/SubmitAssignment"
-                                       asp-route-sectionId="@Model.SectionId"
-                                       asp-route-assignmentId="@assignment.AssignmentId"
-                                       class="btn btn-primary">Submit</a>
-                                }
-                                else
-                                {
-                                    <a asp-page="/Courses/Assignments/SubmitAssignment"
-                                       asp-route-sectionId="@Model.SectionId"
-                                       asp-route-assignmentId="@assignment.AssignmentId"
-                                       class="btn btn-primary">View Assignment</a>
-                                }
-                            </div>
-                        </td>
-                        <td>
-                            <div>
-                                @if ((string)ViewData["UserType"] == "I")
-                                {
-                                    <a asp-page="/Courses/Grades/Submissions"
-                                       asp-route-sectionId="@Model.SectionId"                        
-                                       asp-route-assignmentId="@assignment.AssignmentId"
-                                       class="btn btn-primary">View Submissions</a>
-                                }
-                            </div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>@assignment.AssignmentTitle</td>
+                            @if (@assignment.AssignmentDueDateTime.Year == DateTime.Today.Year)
+                            {
+                                <td>@assignment.AssignmentDueDateTime.ToString("MMMM d") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
+                            }
+                            else
+                            {
+                                <td>@assignment.AssignmentDueDateTime.ToString("MMMM d, yyyy") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
+                            }
+                            <td>@assignment.AssignmentMaxPoints</td>
+                            <td>
+                                <div>
+                                    @if ((string)ViewData["UserType"] == "S")
+                                    {
+                                        @*TODO: Change link to <class="btn btn-success">Submitted<>
+                                            if assignment has been submitted*@
+                                        <a asp-page="/Courses/Assignments/SubmitAssignment"
+                                           asp-route-sectionId="@Model.SectionId"
+                                           asp-route-assignmentId="@assignment.AssignmentId"
+                                           class="btn btn-primary">Submit</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-page="/Courses/Assignments/SubmitAssignment"
+                                           asp-route-sectionId="@Model.SectionId"
+                                           asp-route-assignmentId="@assignment.AssignmentId"
+                                           class="btn btn-primary">View Assignment</a>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @if ((string)ViewData["UserType"] == "I")
+                                    {
+                                        <a asp-page="/Courses/Grades/Submissions"
+                                           asp-route-sectionId="@Model.SectionId"
+                                           asp-route-assignmentId="@assignment.AssignmentId"
+                                           class="btn btn-primary">View Submissions</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
                     }
                 </tbody>
 
@@ -88,3 +88,28 @@
 
 
 }
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <title>ColumnChart</title>
+</head>
+
+<body>
+    <form method="post">
+        <div>@Html.Raw(Model.ChartJson)</div>
+    </form>
+    @if (Model.UserType == "I")
+    {
+        <form method="post">
+            <div>@Html.Raw(Model.ChartJson)</div>
+            <div>@Html.Raw(Model.ChartJson2)</div>
+        </form>
+    }
+</body>
+
+
+</html>

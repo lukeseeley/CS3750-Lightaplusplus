@@ -134,25 +134,7 @@ namespace Lightaplusplus.Pages
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
             if (path != "") return RedirectToPage(path);
 
-            //var sections = _context.Sections.Where(i => i.InstructorId == id);
-
             sectionsTaught = Session.getSections(HttpContext.Session).ToArray();
-            /*sectionsTaught = new Sections[sections.Count()];
-            int iter = 0;
-            foreach (var section in sections)
-            {
-                sectionsTaught[iter] = section;
-                iter++;
-            }
-
-            foreach (var section in sectionsTaught)
-            {
-                var courses = _context.Courses.Where(c => c.CourseId == section.CourseId);
-                foreach (var course in courses)
-                {
-                    section.Course = course;
-                }
-            }*/
             return Page();
         }
     }
