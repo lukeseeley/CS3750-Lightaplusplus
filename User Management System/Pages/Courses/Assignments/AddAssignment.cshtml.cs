@@ -84,6 +84,9 @@ namespace Lightaplusplus.Pages.Courses
         public async Task<IActionResult> OnPostAsync(int sectionId)
         {
             var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'I');
             if (path != "") return RedirectToPage(path);
             path = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
@@ -115,9 +118,6 @@ namespace Lightaplusplus.Pages.Courses
             Assignments.AssignmentSubmissionType = AssignmentSubmissionType;
 
             myAdder.AddAssignment(SectionId, AssignmentTitle, AssignmentDescription, DueDate.Date.Add(DueTime.TimeOfDay), (int)AssignmentMaxPoints, AssignmentSubmissionType);
-
-            _context.Assignments.Add(Assignments);
-            await _context.SaveChangesAsync();
 
             return RedirectToPage("/Courses/View/Index", new { sectionId = SectionId });
         }
