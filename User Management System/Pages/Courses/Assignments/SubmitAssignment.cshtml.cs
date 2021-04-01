@@ -154,6 +154,11 @@ namespace Lightaplusplus.Pages.Courses.Assignments
 
             Success = 1;
 
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
+
             return Page();
         }
 
@@ -194,6 +199,11 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
             SectionId = HiddenSectionId;
 
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
+
             return Page();
         }
 
@@ -217,6 +227,11 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             byte[] bytes = System.IO.File.ReadAllBytes(path);
 
             string fileName = Submissions.Submission.Substring(0, Submissions.Submission.Length - id.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             return File(bytes, "application/octet-stream", fileName);         
         }

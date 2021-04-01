@@ -204,7 +204,11 @@ namespace Lightaplusplus.Pages
                 notValid = false;
                 return Page();
             }
-            
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             _context.Attach(Users).State = EntityState.Modified;
 
@@ -221,6 +225,11 @@ namespace Lightaplusplus.Pages
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
             var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             // check to see if the field is blank
             if (FileUpload != null)

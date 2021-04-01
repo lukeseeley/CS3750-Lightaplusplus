@@ -190,6 +190,11 @@ namespace Lightaplusplus.Pages
 
                 setSectionInfo(User.ID, User.usertype);
 
+                if ((string)ViewData["UserType"] == "S")
+                {
+                    Notifications = new Notifications(HttpContext.Session, _context);
+                }
+
                 return RedirectToPage("./Welcome");
             }
 

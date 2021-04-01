@@ -112,6 +112,11 @@ namespace Lightaplusplus.Pages
 
             Session.setUser(HttpContext.Session, user);
 
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
+
             return RedirectToPage("./Welcome");
         }
 
