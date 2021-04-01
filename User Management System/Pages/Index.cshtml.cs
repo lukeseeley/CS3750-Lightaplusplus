@@ -170,6 +170,7 @@ namespace Lightaplusplus.Pages
                     User.LastLoginTime = User.CurrentLoginTime;
                     User.CurrentLoginTime = DateTime.Now;
                 }
+                Notifications.SetUserObject(HttpContext.Session, "user", User);
 
                 _context.Users.Update(User);
                 await _context.SaveChangesAsync();
