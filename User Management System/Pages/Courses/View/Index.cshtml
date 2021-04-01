@@ -99,9 +99,13 @@
 </head>
 
 <body>
-    <form method="post">
-        <div>@Html.Raw(Model.ChartJson)</div>
-    </form>
+    @if (Model.UserType == "S")
+    {
+        <form method="post">
+            <h4>Current Grade: @Model.FinalGrade</h4>
+            <div>@Html.Raw(Model.ChartJson)</div>
+        </form>
+    }
     @if (Model.UserType == "I")
     {
         <form method="post">

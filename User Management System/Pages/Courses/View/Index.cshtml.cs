@@ -74,7 +74,8 @@ namespace Lightaplusplus.Pages.Courses.View
 
                 if(maxPoints > 0)
                 {
-                    FinalGrade = (currPoints / maxPoints) * 100;
+                    FinalGrade = ((double)currPoints / (double)maxPoints) * 100;
+                    FinalGrade = Math.Round(FinalGrade, 2);
                 }
             }
 
