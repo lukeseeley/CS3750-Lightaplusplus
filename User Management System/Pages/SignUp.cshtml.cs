@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Lightaplusplus.Models;
 using Lightaplusplus.BisLogic;
+using Newtonsoft.Json;
 
 namespace Lightaplusplus.Pages
 {
@@ -106,6 +107,20 @@ namespace Lightaplusplus.Pages
             Users.password = encryptor.encrypt(Users.password);
             Users.CurrentLoginTime = DateTime.Now;
             _context.Users.Add(Users);
+            Session.setSections(HttpContext.Session, ":::");
+            //Create All Sections Cookie
+            List<Sections> allSections = new List<Sections>();
+            allSections = _context.Sections.Include(s => s.Instructor).Include(s => s.Course).AsNoTracking().ToList();
+            string sepAll = "";
+            foreach (var section in allSections)
+            {
+                section.Assignments = null;
+                section.SectionStudents = null;
+                section.Course.Sections = null;
+                section.Instructor.InstructorSections = null;
+                sepAll = sepAll + ":::" + JsonConvert.SerializeObject(section);
+            }
+            Session.setAllSections(HttpContext.Session, sepAll);
             await _context.SaveChangesAsync();
 
             var user = _context.Users.FirstOrDefault(u => u.email == Email);
