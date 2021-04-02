@@ -34,7 +34,7 @@ namespace Lightaplusplus.Pages.Courses.View
 
         public Sections Section { get; set; }
 
-        public List<Models.Assignments> Assignments { get; set; }
+        public AssignmentCollection AssignmentG { get; set; }
 
         [BindProperty]
         public Notifications Notifications { get; set; }
@@ -52,27 +52,19 @@ namespace Lightaplusplus.Pages.Courses.View
 
             Section = await _context.Sections.Include(s => s.Course).FirstOrDefaultAsync(s => s.SectionId == SectionId);
 
-            Assignments = await _context.Assignments.Where(a => a.SectionId == SectionId).ToListAsync();
+            AssignmentG = new AssignmentCollection(HttpContext.Session, _context, sectionId);
 
             UserType = userType;
 
             if (userType == "S")
             {
-                var grades = await _context.Grades.Where(g => g.StudentId == id).ToListAsync();
-
                 int maxPoints = 0;
                 int currPoints = 0;
 
-                foreach (var a in Assignments)
+                foreach (var a in AssignmentG.getGradedAssignments())
                 {
-                    foreach (var g in grades)
-                    {
-                        if (a.AssignmentId == g.AssignmentId)
-                        {
-                            maxPoints += (int)a.AssignmentMaxPoints;
-                            currPoints += g.GradeValue;
-                        }
-                    }
+                    maxPoints += (int)a.Assignment.AssignmentMaxPoints;
+                    currPoints += a.Grade.GradeValue;
                 }
 
                 if(maxPoints > 0)
@@ -96,11 +88,11 @@ namespace Lightaplusplus.Pages.Courses.View
 
                 foreach (var a in grade)
                 {
-                    foreach (var g in Assignments)
+                    foreach (var g in AssignmentG.AssignmentGradeList)
                     {
-                        if (a.AssignmentId == g.AssignmentId)
+                        if (a.AssignmentId == g.Assignment.AssignmentId)
                         {
-                            maxPoint += (int)g.AssignmentMaxPoints;
+                            maxPoint += (int)g.Assignment.AssignmentMaxPoints;
                             currPoint += a.GradeValue;
                         }
                     }

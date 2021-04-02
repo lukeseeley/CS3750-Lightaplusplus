@@ -54,6 +54,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
         public bool Submitted { get; set; }
 
         [BindProperty]
+        public int? Grade { get; set; }
+
+        [BindProperty]
         public Notifications Notifications { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int sectionId, int assignmentId)
@@ -92,6 +95,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                     {
                         FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - id.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length-4,4);
                     }
+
+                    var grade = await _context.Grades.FirstOrDefaultAsync(g => g.AssignmentId == assignmentId && g.StudentId == id);
+                    Grade = grade.GradeValue;
                 }
                 else
                 {
@@ -207,7 +213,7 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             return Page();
         }
 
-        public async Task<IActionResult> OnPostDownloadFileAsync(int sectionId)
+        public async Task<IActionResult> OnPostDownloadFileAsync(int sectionId, int assignmentId)
         {
             var id = Session.getUserId(HttpContext.Session);
             var userType = Session.getUserType(HttpContext.Session);
@@ -217,10 +223,10 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             var redirectpath = UserValidator.validateUser(_context, HttpContext.Session, new KeyPairId("Sec", sectionId));
             if (redirectpath != "") return RedirectToPage(redirectpath);
 
-            Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == HiddenAssignmentId);
+            Assignments = await _context.Assignments.FirstOrDefaultAsync(a => a.AssignmentId == assignmentId);
             SectionId = HiddenSectionId;
 
-            Submissions = await _context.AssignmentSubmissions.FirstOrDefaultAsync(s => s.StudentId == id && s.AssignmentId == HiddenAssignmentId);
+            Submissions = await _context.AssignmentSubmissions.FirstOrDefaultAsync(s => s.StudentId == id && s.AssignmentId == assignmentId);
 
             string path = Path.Combine(_environment.ContentRootPath, "Assignments", Submissions.Submission);
 
@@ -232,6 +238,9 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             {
                 Notifications = new Notifications(HttpContext.Session, _context);
             }
+
+            var grade = await _context.Grades.FirstOrDefaultAsync(g => g.AssignmentId == assignmentId && g.StudentId == id);
+            Grade = grade.GradeValue;
 
             return File(bytes, "application/octet-stream", fileName);         
         }

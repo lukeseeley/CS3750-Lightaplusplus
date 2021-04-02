@@ -4,7 +4,7 @@
     <h1>@Model.Section.Course.CourseCode @Model.Section.Course.CourseNumber </h1>
     <h2>@Model.Section.Course.CourseName</h2>
 
-    <div class="row d-flex justify-content-between" style="margin-top: 20px">
+    <div class="row d-flex justify-content-between align-content-center" style="margin-top: 20px">
         <h4>Assignments</h4>
         @if ((string)ViewData["UserType"] == "I")
         {
@@ -14,9 +14,15 @@
                    class="btn btn-primary">Create Assignment</a>
             </div>
         }
+        else
+        {
+            <div class="alert alert-primary">
+                Total: @Model.FinalGrade %
+            </div>
+        }
     </div>
     <div class="row">
-        @if (Model.Assignments.Count > 0)
+        @if (Model.AssignmentG.AssignmentGradeList.Count > 0)
         {
             <table class="table table-hover" style="margin-top: 20px">
                 <thead>
@@ -30,51 +36,67 @@
                 </thead>
 
                 <tbody id="section-table-body">
-                    @foreach (var assignment in Model.Assignments)
+                    @foreach (var assignment in Model.AssignmentG.AssignmentGradeList)
                     {
-                        <tr>
-                            <td>@assignment.AssignmentTitle</td>
-                            @if (@assignment.AssignmentDueDateTime.Year == DateTime.Today.Year)
-                            {
-                                <td>@assignment.AssignmentDueDateTime.ToString("MMMM d") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
-                            }
-                            else
-                            {
-                                <td>@assignment.AssignmentDueDateTime.ToString("MMMM d, yyyy") at @assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
-                            }
-                            <td>@assignment.AssignmentMaxPoints</td>
-                            <td>
-                                <div>
-                                    @if ((string)ViewData["UserType"] == "S")
+                    <tr>
+                        <td>@assignment.Assignment.AssignmentTitle</td>
+                        @if (@assignment.Assignment.AssignmentDueDateTime.Year == DateTime.Today.Year)
+                        {
+                            <td>@assignment.Assignment.AssignmentDueDateTime.ToString("MMMM d") at @assignment.Assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
+                        }
+                        else
+                        {
+                            <td>@assignment.Assignment.AssignmentDueDateTime.ToString("MMMM d, yyyy") at @assignment.Assignment.AssignmentDueDateTime.ToString("h:mm tt")</td>
+                        }
+                        @if (assignment.Grade == null)
+                        {
+                            <td>@assignment.Assignment.AssignmentMaxPoints</td>
+                        }
+                        else
+                        {
+                            <td>@assignment.Grade.GradeValue / @assignment.Assignment.AssignmentMaxPoints</td>
+                        }
+                        <td>
+                            <div>
+                                @if ((string)ViewData["UserType"] == "S")
+                                {
+                                    if (assignment.Submitted)
                                     {
-                                        @*TODO: Change link to <class="btn btn-success">Submitted<>
-                                            if assignment has been submitted*@
                                         <a asp-page="/Courses/Assignments/SubmitAssignment"
                                            asp-route-sectionId="@Model.SectionId"
-                                           asp-route-assignmentId="@assignment.AssignmentId"
-                                           class="btn btn-primary">Submit</a>
+                                           asp-route-assignmentId="@assignment.Assignment.AssignmentId"
+                                           class="btn btn-success">Submitted &#10003;</a>
                                     }
                                     else
                                     {
                                         <a asp-page="/Courses/Assignments/SubmitAssignment"
                                            asp-route-sectionId="@Model.SectionId"
-                                           asp-route-assignmentId="@assignment.AssignmentId"
-                                           class="btn btn-primary">View Assignment</a>
+                                           asp-route-assignmentId="@assignment.Assignment.AssignmentId"
+                                           class="btn btn-primary">Submit</a>
                                     }
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    @if ((string)ViewData["UserType"] == "I")
-                                    {
-                                        <a asp-page="/Courses/Grades/Submissions"
-                                           asp-route-sectionId="@Model.SectionId"
-                                           asp-route-assignmentId="@assignment.AssignmentId"
-                                           class="btn btn-primary">View Submissions</a>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
+
+                                }
+                                else
+                                {
+                                    <a asp-page="/Courses/Assignments/SubmitAssignment"
+                                       asp-route-sectionId="@Model.SectionId"
+                                       asp-route-assignmentId="@assignment.Assignment.AssignmentId"
+                                       class="btn btn-primary">View Assignment</a>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                @if ((string)ViewData["UserType"] == "I")
+                                {
+                                    <a asp-page="/Courses/Grades/Submissions"
+                                       asp-route-sectionId="@Model.SectionId"
+                                       asp-route-assignmentId="@assignment.Assignment.AssignmentId"
+                                       class="btn btn-primary">View Submissions</a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
                     }
                 </tbody>
 
@@ -102,7 +124,6 @@
     @if (Model.UserType == "S")
     {
         <form method="post">
-            <h4>Current Grade: @Model.FinalGrade</h4>
             <div>@Html.Raw(Model.ChartJson)</div>
         </form>
     }
