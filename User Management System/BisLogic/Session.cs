@@ -14,6 +14,14 @@ namespace Lightaplusplus.BisLogic
         {
             session.SetInt32("UserId", user.ID);
             session.SetString("UserType", user.usertype.ToString());
+            if(user.CurrentLoginTime != null)
+            {
+                session.SetString("UserCurrentLogin", user.CurrentLoginTime.ToString());
+            }
+            if(user.LastLoginTime != null)
+            {
+                session.SetString("UserLastLogin", user.LastLoginTime.ToString());
+            }
         }
 
         public static int? getUserId(this ISession session)
@@ -24,6 +32,22 @@ namespace Lightaplusplus.BisLogic
         public static string getUserType(this ISession session)
         {
             return session.GetString("UserType");
+        }
+
+        public static DateTime? getUserCurrentLogin(this ISession session)
+        {
+            var login = session.GetString("UserCurrentLogin");
+            if (login == null) return null;
+
+            return (DateTime?)DateTime.Parse(login);
+        }
+
+        public static DateTime? getUserLastLogin(this ISession session)
+        {
+            var login = session.GetString("UserLastLogin");
+            if (login == null) return null;
+
+            return (DateTime?)DateTime.Parse(login);
         }
 
         public static void setSections(this ISession session, string sections)

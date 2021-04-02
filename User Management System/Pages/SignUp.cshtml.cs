@@ -112,6 +112,7 @@ namespace Lightaplusplus.Pages
 
             Session.setUser(HttpContext.Session, user);
 
+
             return RedirectToPage("./Welcome");
         }
 

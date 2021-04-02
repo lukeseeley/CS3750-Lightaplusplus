@@ -7,32 +7,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css" />
-    <link rel="stylesheet" href="~/css/Dropdown.css" />
     <script src="https://kit.fontawesome.com/62e23687bf.js"></script>
     <script language="JavaScript" type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
     <script language="JavaScript" type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script language="JavaScript" type="text/javascript" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script language="JavaScript" type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        // Shows the dropdown list when user clicks on bell
-        function dropdownFunction() {
-            document.getElementById("dropdown-list").classList.toggle("show");
-        }
-
-        // Closes the list when user clicks away from list
-        window.onclick = function (event) {
-            if (!event.target.matches('.bell-button')) {
-                var dropdowns = document.getElementsByClassName("bell-list");
-                var i;
-                for (i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body>
     <div class="row">
@@ -45,7 +24,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Welcome">Home</a>
                         </li>
-                       @if ((string)ViewData["UserType"] == "S")
+                        @if ((string)ViewData["UserType"] == "S")
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Registration/Index">Registration</a>
@@ -67,8 +46,8 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Grades</a>
                         </li>
                         @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Help</a>
-                        </li>*@
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Help</a>
+                            </li>*@
                     </ul>
                 </nav>
             </div>
@@ -86,23 +65,51 @@
                             <ul class="navbar-nav @*flex-grow-1*@ ml-auto">
                                 @if (ViewData["UserId"] != null)
                                 {
+                                    if ((string)ViewData["UserType"] == "S")
+                                    {
                                     <li>
-                                        <button onclick="dropdownFunction()" class="bell-button">
-                                            <i class="fas fa-bell fa-fw"></i>
-                                        </button>
-                                        <div id="dropdown-list" class="bell-list">
-                                            <a href="#">Assignment 1 graded</a>
-                                            <a href="#">Assignment 2 posted</a>
-                                            <a href="#">dummy item 3</a>
-                                            <a href="#">dummy item 4</a>
+                                        <div class="dropdown">
+                                            @if (Model.Notifications.NotificationList.Count > 0)
+                                            {
+                                                <button id="notifications-button" class="btn" type="button" data-toggle="dropdown">
+                                                    <i class="fas fa-bell fa-fw" style="color:red"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    @foreach (var item in Model.Notifications.NotificationList)
+                                                    {
+                                                        if (item.Type == 'A')
+                                                        {
+                                                            <a class="dropdown-item"
+                                                               href="@item.Link">@item.NotificationTitle was created for @item.CourseName.
+                                                                                 @item.NotificationDate</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="dropdown-item"
+                                                               href="@item.Link">@item.NotificationTitle was graded for @item.CourseName. 
+                                                                        @item.NotificationDate</a>
+                                                        }
+                                                    }
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <button id="notifications-button" class="btn" type="button" data-toggle="dropdown">
+                                                    <i class="fas fa-bell fa-fw"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item">No Notifications</a>
+                                                </div>
+                                            }
                                         </div>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-page="/Profile"><i class="fas fa-user-circle"></i> Profile</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-page="/Signout">Sign Out</a>
-                                    </li>
+                                    }
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-page="/Profile"><i class="fas fa-user-circle"></i> Profile</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-page="/Signout">Sign Out</a>
+                                </li>
                                 }
                                 else
                                 {

@@ -27,6 +27,7 @@ namespace Lightaplusplus.BisLogic
                 AssignmentMaxPoints = AssignmentMaxPoints,
                 AssignmentSubmissionType = AssignmentSubmissionType
             };
+            newAssignment.AssignmentCreationDate = DateTime.Now;
             _context.Assignments.Add(newAssignment);
             _context.SaveChanges();
             return;

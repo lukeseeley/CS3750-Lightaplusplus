@@ -79,6 +79,9 @@ namespace Lightaplusplus.Pages
         [BindProperty]
         public List<UserLinks> Links { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -110,6 +113,11 @@ namespace Lightaplusplus.Pages
                 var link = new UserLinks();
                 link.UserId = (int)id;
                 Links.Add(link);
+            }
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
             }
 
             this.id = (int)id;
@@ -196,7 +204,11 @@ namespace Lightaplusplus.Pages
                 notValid = false;
                 return Page();
             }
-            
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             _context.Attach(Users).State = EntityState.Modified;
 
@@ -213,6 +225,11 @@ namespace Lightaplusplus.Pages
             Users = await _context.Users.FirstOrDefaultAsync(m => m.ID == id);
 
             var image = await _context.UserPictures.FirstOrDefaultAsync(p => p.UserID == id);
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             // check to see if the field is blank
             if (FileUpload != null)

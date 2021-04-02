@@ -30,6 +30,9 @@ namespace Lightaplusplus.Pages
 
         public List<Assignments> TodoAssignments { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -170,6 +173,11 @@ namespace Lightaplusplus.Pages
                     }
                     sectionEvents[j] = myEvent;
                 }
+            }
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
             }
 
             return Page();

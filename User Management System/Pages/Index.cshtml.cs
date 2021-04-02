@@ -174,7 +174,6 @@ namespace Lightaplusplus.Pages
             } 
             else
             {
-                Session.setUser(HttpContext.Session, User);
                 if(User.CurrentLoginTime == null)
                 {
                     User.CurrentLoginTime = DateTime.Now;
@@ -184,6 +183,7 @@ namespace Lightaplusplus.Pages
                     User.LastLoginTime = User.CurrentLoginTime;
                     User.CurrentLoginTime = DateTime.Now;
                 }
+                Session.setUser(HttpContext.Session, User);
 
                 _context.Users.Update(User);
                 await _context.SaveChangesAsync();

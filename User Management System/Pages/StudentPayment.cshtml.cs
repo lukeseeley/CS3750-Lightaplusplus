@@ -53,6 +53,10 @@ namespace Lightaplusplus.Pages
         public string ErrorPaymentAmount { get; set; }
 
         public string Message { get; set; }
+
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -67,6 +71,8 @@ namespace Lightaplusplus.Pages
 
             Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 
+            Notifications = new Notifications(HttpContext.Session, _context);
+
             return Page();
         }
 
@@ -75,6 +81,8 @@ namespace Lightaplusplus.Pages
             var id = Session.getUserId(HttpContext.Session);
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
             if (path != "") return RedirectToPage(path);
+
+            Notifications = new Notifications(HttpContext.Session, _context);
 
             Payments = await _context.Payments.Where(p => p.UserId == (int)id).ToListAsync();
 
@@ -250,6 +258,8 @@ namespace Lightaplusplus.Pages
             {
                 paymentTotal += payment.PaymentAmount;
             }
+
+            Notifications = new Notifications(HttpContext.Session, _context);
 
             return (enrollmentTotal * 100) - (int)paymentTotal;
         } 

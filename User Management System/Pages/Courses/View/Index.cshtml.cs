@@ -36,6 +36,9 @@ namespace Lightaplusplus.Pages.Courses.View
 
         public List<Models.Assignments> Assignments { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int sectionId)
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -264,6 +267,11 @@ namespace Lightaplusplus.Pages.Courses.View
 
                 // set chart rendering json
                 ChartJson2 = column2.Render();
+            }
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
             }
 
             return Page();

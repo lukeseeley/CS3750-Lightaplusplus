@@ -172,7 +172,6 @@
           "System.Core": "4.0.0.0",
           "System.Data.Common": "4.2.2.0",
           "System.Data.DataSetExtensions.Reference": "4.0.1.0",
-          "System.Data.DataSetExtensions": "4.0.1.0",
           "System.Data": "4.0.0.0",
           "System.Diagnostics.Contracts": "4.0.4.0",
           "System.Diagnostics.Debug.Reference": "4.1.2.0",
@@ -3252,7 +3251,6 @@
         "compileOnly": true
       },
       "System.Data.DataSetExtensions.Reference/4.0.1.0": {
-      "System.Data.DataSetExtensions/4.0.1.0": {
         "compile": {
           "System.Data.DataSetExtensions.dll": {}
         },
@@ -5939,7 +5937,6 @@
       "sha512": ""
     },
     "System.Data.DataSetExtensions.Reference/4.0.1.0": {
-    "System.Data.DataSetExtensions/4.0.1.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

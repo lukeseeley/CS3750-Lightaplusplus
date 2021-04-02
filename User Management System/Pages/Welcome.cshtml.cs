@@ -30,6 +30,9 @@ namespace Lightaplusplus.Pages
 
         public List<Assignments> TodoAssignments { get; set; }
 
+        [BindProperty]
+        public Notifications Notifications { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var id = Session.getUserId(HttpContext.Session);
@@ -172,6 +175,11 @@ namespace Lightaplusplus.Pages
 
             //Now sort to soonest
             TodoAssignments.Sort((a1, a2) => DateTime.Compare(a1.AssignmentDueDateTime, a2.AssignmentDueDateTime));
+
+            if ((string)ViewData["UserType"] == "S")
+            {
+                Notifications = new Notifications(HttpContext.Session, _context);
+            }
 
             return Page();
         }

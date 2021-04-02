@@ -9882,19 +9882,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Thell\\.nuget\\packages\\": {}
+    "C:\\Users\\luke\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
+      "projectUniqueName": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
       "projectName": "UnitTestLMSProject",
-      "projectPath": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
-      "packagesPath": "C:\\Users\\Thell\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\UnitTestLMSProject\\obj\\",
+      "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\UnitTestLMSProject.csproj",
+      "packagesPath": "C:\\Users\\luke\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\UnitTestLMSProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Thell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\luke\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -9908,8 +9908,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\Lighta++.csproj": {
-              "projectPath": "C:\\Users\\Thell\\OneDrive\\Documents\\CS 3750\\LMS\\CS3750\\User Management System\\Lighta++.csproj"
+            "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj": {
+              "projectPath": "C:\\Users\\luke\\Documents\\GitHub\\CS3750\\User Management System\\Lighta++.csproj"
             }
           }
         }
