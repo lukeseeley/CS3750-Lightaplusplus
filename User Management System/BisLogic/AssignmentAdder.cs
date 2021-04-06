@@ -33,14 +33,13 @@ namespace Lightaplusplus.BisLogic
             return;
         }
 
-        public bool CheckAssignment(string AssignmentTitle, string AssignmentDescription, int AssignmentMaxPoints)
+        public bool CheckAssignment(string AssignmentTitle, int SectionId)
         {
             try
             {
                 var assignment = _context.Assignments
                     .Where(t => t.AssignmentTitle == AssignmentTitle)
-                    .Where(d => d.AssignmentDescription == AssignmentDescription)
-                    .Where(p => p.AssignmentMaxPoints == AssignmentMaxPoints)
+                    .Where(d => d.SectionId == SectionId)
                     .First();
                 return assignment != null;
             }
@@ -49,6 +48,17 @@ namespace Lightaplusplus.BisLogic
                 // log exception
                 return false;
             }
+        }
+
+        public void RemoveAssignmet(string AssignmentTitle, int SectionId)
+        {
+            while (CheckAssignment(AssignmentTitle, SectionId))
+            {
+                _context.Assignments.Remove(_context.Assignments.Where(t => t.AssignmentTitle == AssignmentTitle).Where(s => s.SectionId == SectionId).First());
+                _context.SaveChanges();
+            }
+
+            return;
         }
     }
 }

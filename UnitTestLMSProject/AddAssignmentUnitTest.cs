@@ -24,8 +24,24 @@ namespace UnitTestLMSProject
             myAdder.AddAssignment(1006, "Midterm 1", "First Test", DateTime.Now, 600, 'T');
 
             // Analyze results
-            Assert.IsTrue(myAdder.CheckAssignment("Midterm 1", "First Test", 600));
-            Assert.IsFalse(myAdder.CheckAssignment("Midterm 1", "Second Test", 600)); // Make sure it's not just telling us everything is true
+            Assert.IsTrue(myAdder.CheckAssignment("Midterm 1", 1006));
+            Assert.IsFalse(myAdder.CheckAssignment("Midterm 2", 1006)); // Make sure it's not just telling us everything is true
+        }
+
+        [TestMethod]
+        public void RemoveAssignmentTest()
+        {
+            // Preparation or setup
+            var options = new DbContextOptionsBuilder<Lightaplusplus.Data.Lightaplusplus_SystemContext>();
+            options.UseSqlServer(UnitTestConfig.ConnectionString);
+            var context = new Lightaplusplus.Data.Lightaplusplus_SystemContext(options.Options);
+            AssignmentAdder myAdder = new AssignmentAdder(context);
+
+            // Perform operations
+            myAdder.RemoveAssignmet("Midterm 1", 1006);
+
+            // Analyze results
+            Assert.IsFalse(myAdder.CheckAssignment("Midterm 1", 1006));
         }
     }
 }
