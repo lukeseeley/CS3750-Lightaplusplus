@@ -87,17 +87,20 @@ namespace Lightaplusplus.Pages.Courses.Assignments
                     Display = false;
                     Submitted = true;
 
-                    if(Assignments.AssignmentSubmissionType == 'T')
+                    if (Assignments.AssignmentSubmissionType == 'T')
                     {
                         Assignment = Submissions.Submission;
                     }
-                    else if(Assignments.AssignmentSubmissionType == 'F')
+                    else if (Assignments.AssignmentSubmissionType == 'F')
                     {
-                        FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - id.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length-4,4);
+                        FilePath = Submissions.Submission.Substring(0, Submissions.Submission.Length - id.ToString().Length - Assignments.AssignmentId.ToString().Length - 4) + Submissions.Submission.Substring(Submissions.Submission.Length - 4, 4);
                     }
 
                     var grade = await _context.Grades.FirstOrDefaultAsync(g => g.AssignmentId == assignmentId && g.StudentId == id);
-                    Grade = grade.GradeValue;
+                    if (grade != null)
+                    {
+                        Grade = grade.GradeValue;
+                    }
                 }
                 else
                 {
@@ -240,7 +243,10 @@ namespace Lightaplusplus.Pages.Courses.Assignments
             }
 
             var grade = await _context.Grades.FirstOrDefaultAsync(g => g.AssignmentId == assignmentId && g.StudentId == id);
-            Grade = grade.GradeValue;
+            if (grade != null)
+            {
+                Grade = grade.GradeValue;
+            }
 
             return File(bytes, "application/octet-stream", fileName);         
         }
