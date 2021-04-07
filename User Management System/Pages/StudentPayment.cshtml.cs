@@ -78,7 +78,11 @@ namespace Lightaplusplus.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             var id = Session.getUserId(HttpContext.Session);
+            var userType = Session.getUserType(HttpContext.Session);
+            ViewData["UserId"] = id;
+            ViewData["UserType"] = userType;
             var path = UserValidator.validateUser(_context, HttpContext.Session, 'S');
             if (path != "") return RedirectToPage(path);
 

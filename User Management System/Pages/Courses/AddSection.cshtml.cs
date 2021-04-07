@@ -224,7 +224,7 @@ namespace Lightaplusplus.Pages.Courses
             await _context.SaveChangesAsync();
             // Update session cookie
             setSectionInfo(int.Parse(id.ToString()));
-            return RedirectToPage("/Welcome");
+            return RedirectToPage("/Courses/Index");
         }
     }
 }
