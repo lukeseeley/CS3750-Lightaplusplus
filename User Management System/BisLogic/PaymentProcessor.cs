@@ -17,7 +17,7 @@ namespace Lightaplusplus.BisLogic
         /// <summary>
         /// Stripe Secret
         /// </summary>
-        static private string secret = "sk_test_51IOyT2GsHQoDsRIPdQtyVoAL3hrGvoo5gv1Tig3Ab0hVmNqp9hagIzFdWXYNnpCm73KGvqboPVvHbhfuQ3btf0kc00NMejcBMV";
+        static private string secret = "sk_test_51Ibb6wKdwLyGwDK05YJMqkDPmYjMHzI2UJjz0ZAckIpSbo2eooXocka6cNjXrDuwEV0b3bJC3jAS08Bfd64ev7dA006rtERhp3";
 
         /// <summary>
         /// processPayment takes a CreditCard object and a double (the amount being paid) as arguments, and returns whether the charge was successful or not.
