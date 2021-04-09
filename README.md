@@ -1,1 +1,2 @@
 # CS3750 - The Elon Muskers
+This was the project for my CS 3750 Software Engineering 2 class. Which was an ongoing project that we worked on over the course of the semester. Our project is ASP.net razor page based project. Our project is our own Learning Management System, or LMS, which is like Canvas, or Blackboard. I was sort of the de facto leader of the group, helping the group with the work as was neccessary.
